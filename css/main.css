@@ -9,3 +9,21 @@
 @import url('./testimonials.css');
 @import url('./pricing.css');
 @import url('./footer.css');
+
+/* main.css: only global base styles and variables */
+:root {
+    --primary-blue: #2A6DFF;
+    --primary-blue-hover: #1a5ce5;
+    --dark-gray: #2d3748;
+    --light-gray: #f7fafc;
+    --success-green: #48bb78;
+    --warning-yellow: #ecc94b;
+    --error-red: #f56565;
+    --gradient-start: #2A6DFF;
+    --gradient-end: #1a5ce5;
+}
+body {
+    background: linear-gradient(135deg, var(--light-gray), #e2e8f0);
+    min-height: 100vh;
+    line-height: 1.6;
+}
