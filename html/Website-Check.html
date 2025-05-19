@@ -210,10 +210,79 @@
                 if (text.trim() === 'success') {
                     form.style.display = 'none';
                     document.getElementById('contactSuccess').style.display = 'block';
+                    startConfetti();
                 } else {
                     alert('Fehler beim Senden. Bitte versuchen Sie es später erneut.');
                 }
             };
+        }
+
+        // Konfetti-Animation
+        function startConfetti() {
+            if (document.getElementById('confetti-canvas')) return;
+            const canvas = document.createElement('canvas');
+            canvas.id = 'confetti-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = 0;
+            canvas.style.left = 0;
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = 3000;
+            document.body.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            let W = window.innerWidth, H = window.innerHeight;
+            canvas.width = W; canvas.height = H;
+            let confetti = [];
+            for(let i=0;i<150;i++) {
+                confetti.push({
+                    x: Math.random()*W,
+                    y: Math.random()*-H,
+                    r: 6+Math.random()*8,
+                    d: 4+Math.random()*6,
+                    color: `hsl(${Math.random()*360},90%,60%)`,
+                    tilt: Math.random()*10-10,
+                    tiltAngle: 0,
+                    tiltAngleIncremental: (Math.random()*0.07)+.05
+                });
+            }
+            function draw() {
+                ctx.clearRect(0,0,W,H);
+                confetti.forEach(c => {
+                    ctx.beginPath();
+                    ctx.lineWidth = c.r;
+                    ctx.strokeStyle = c.color;
+                    ctx.moveTo(c.x + c.tilt + c.r/3, c.y);
+                    ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r);
+                    ctx.stroke();
+                });
+                update();
+            }
+            function update() {
+                for(let i=0;i<confetti.length;i++) {
+                    let c = confetti[i];
+                    c.y += (Math.cos(c.d)+3+c.r/2)/2;
+                    c.tiltAngle += c.tiltAngleIncremental;
+                    c.tilt = Math.sin(c.tiltAngle- (i%3)) * 15;
+                    if(c.y > H) {
+                        confetti[i] = {
+                            x: Math.random()*W,
+                            y: -10,
+                            r: c.r,
+                            d: c.d,
+                            color: c.color,
+                            tilt: c.tilt,
+                            tiltAngle: c.tiltAngle,
+                            tiltAngleIncremental: c.tiltAngleIncremental
+                        };
+                    }
+                }
+            }
+            let animation = setInterval(draw, 16);
+            setTimeout(() => {
+                clearInterval(animation);
+                if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+            }, 3500);
         }
     </script>
 </body>
