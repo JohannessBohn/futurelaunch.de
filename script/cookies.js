@@ -11,7 +11,7 @@ window.addEventListener("load", function () {
             message: "Diese Website verwendet Cookies, um Ihnen das beste Erlebnis zu bieten.",
             dismiss: "Verstanden",
             link: "Mehr erfahren",
-            href: "/datenschutz" // Link zur Datenschutzerklärung
+            href: "/html/datenschutz" // Link zur Datenschutzerklärung
         }
     });
 });
