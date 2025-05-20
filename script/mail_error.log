@@ -1,0 +1,106 @@
+[2025-05-20 07:41:33] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => dsadsad
+)
+
+[2025-05-20 07:41:33] Attempting to send email to info@futurelaunch.de from Johannesbohn03@gmail.com
+[2025-05-20 07:41:34] E-Mail Fehler: E-Mail konnte nicht gesendet werden: SMTP authentication failed
+[2025-05-20 07:41:34] Stack Trace: #0 {main}
+[2025-05-20 07:41:35] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => dsadsad
+)
+
+[2025-05-20 07:41:35] Attempting to send email to info@futurelaunch.de from Johannesbohn03@gmail.com
+[2025-05-20 07:41:35] E-Mail Fehler: E-Mail konnte nicht gesendet werden: SMTP authentication failed
+[2025-05-20 07:41:35] Stack Trace: #0 {main}
+[2025-05-20 07:42:59] === Starting new mail attempt ===
+[2025-05-20 07:42:59] PHP Version: 8.2.12
+[2025-05-20 07:42:59] Server Software: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+[2025-05-20 07:42:59] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => dsadsad
+)
+
+[2025-05-20 07:42:59] Testing SMTP connection...
+[2025-05-20 07:43:28] === Starting new mail attempt ===
+[2025-05-20 07:43:28] PHP Version: 8.2.12
+[2025-05-20 07:43:28] Server Software: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+[2025-05-20 07:43:28] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => dsadsad
+)
+
+[2025-05-20 07:43:28] Attempting to send email to info@futurelaunch.de from Johannesbohn03@gmail.com
+[2025-05-20 07:43:28] E-Mail Fehler: E-Mail konnte nicht gesendet werden: SMTP authentication failed
+[2025-05-20 07:43:28] Stack Trace: #0 {main}
+[2025-05-20 07:44:18] === Starting new mail attempt ===
+[2025-05-20 07:44:18] PHP Version: 8.2.12
+[2025-05-20 07:44:18] Server Software: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+[2025-05-20 07:44:18] Document Root: C:/xampp/htdocs
+[2025-05-20 07:44:18] Script Path: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script\send-contact.php
+[2025-05-20 07:44:18] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => dsadsad
+)
+
+[2025-05-20 07:44:18] Attempting to send email to info@futurelaunch.de from Johannesbohn03@gmail.com
+[2025-05-20 07:44:19] E-Mail Fehler: E-Mail konnte nicht gesendet werden: SMTP authentication failed
+[2025-05-20 07:44:19] Stack Trace: #0 {main}
+[2025-05-20 07:44:20] === Starting new mail attempt ===
+[2025-05-20 07:44:20] PHP Version: 8.2.12
+[2025-05-20 07:44:20] Server Software: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+[2025-05-20 07:44:20] Document Root: C:/xampp/htdocs
+[2025-05-20 07:44:20] Script Path: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script\send-contact.php
+[2025-05-20 07:44:20] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => dsadsad
+)
+
+[2025-05-20 07:44:20] Attempting to send email to info@futurelaunch.de from Johannesbohn03@gmail.com
+[2025-05-20 07:44:20] E-Mail Fehler: E-Mail konnte nicht gesendet werden: SMTP authentication failed
+[2025-05-20 07:44:20] Stack Trace: #0 {main}
+[2025-05-20 07:48:13] === Starting new mail attempt ===
+[2025-05-20 07:48:13] PHP Version: 8.2.12
+[2025-05-20 07:48:13] Server Software: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+[2025-05-20 07:48:13] Document Root: C:/xampp/htdocs
+[2025-05-20 07:48:13] Script Path: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script\send-contact.php
+[2025-05-20 07:48:13] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => dsadsad
+)
+
+[2025-05-20 07:48:13] Saved message to CSV file: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+[2025-05-20 07:48:13] Attempting to send email to your.gmail@gmail.com from Johannesbohn03@gmail.com
+[2025-05-20 07:48:14] E-Mail Fehler: E-Mail konnte nicht gesendet werden: SMTP authentication failed
+[2025-05-20 07:48:14] Stack Trace: #0 {main}
+[2025-05-20 07:48:14] Returning success response because message was saved to CSV
+[2025-05-20 07:50:25] === Starting new mail attempt ===
+[2025-05-20 07:50:25] PHP Version: 8.2.12
+[2025-05-20 07:50:25] Server Software: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+[2025-05-20 07:50:25] Document Root: C:/xampp/htdocs
+[2025-05-20 07:50:25] Script Path: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script\send-contact.php
+[2025-05-20 07:50:25] Received form data: Array
+(
+    [name] => Johannes Bohn
+    [email] => Johannesbohn03@gmail.com
+    [message] => asddsaasd
+)
+
+[2025-05-20 07:50:25] Saved message to CSV file: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+[2025-05-20 07:50:25] Attempting to send email to johannesbohn03@gmail.com from Johannesbohn03@gmail.com
+[2025-05-20 07:50:26] E-Mail erfolgreich gesendet an johannesbohn03@gmail.com von Johannesbohn03@gmail.com

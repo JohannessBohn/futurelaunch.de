@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professionelle Website-Analyse | FutureLaunch</title>
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <!-- Chart.js for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6de5;
+            --secondary: #23d5ab;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="rgba(255,255,255,0.05)" /></svg>');
+            background-size: 80px;
+            z-index: 1;
+            animation: backgroundMove 60s linear infinite;
+        }
+        
+        @keyframes backgroundMove {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 1000px 1000px;
+            }
+        }
+        
+        header .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-content {
+            text-align: center;
+        }
+        
+        .header-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .header-content h1::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: white;
+            border-radius: 2px;
+        }
+        
+        .header-content p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .section-title p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-icon::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            top: -50%;
+            left: -50%;
+            transform: rotate(45deg);
+            transition: all 0.3s;
+        }
+        
+        .card:hover .card-icon::before {
+            top: 100%;
+            left: 100%;
+        }
+        
+        .card-icon i {
+            color: white;
+            font-size: 28px;
+        }
+        
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-container label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            position: relative;
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        
+        .col {
+            flex: 1;
+            padding: 0 15px;
+            min-width: 300px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+        
+        .score-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .score-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) calc(var(--score) * 1%), #e0e0e0 0);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .score-circle::before {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .score-value {
+            position: relative;
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .score-label {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .score-description {
+            color: #666;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .recommendation-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(74, 109, 229, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .recommendation-content h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .recommendation-content p {
+            color: #666;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        footer p {
+            opacity: 0.7;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(74, 109, 229, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(74, 109, 229, 0.4);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .animated-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 40px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-label {
+            font-size: 18px;
+            color: #666;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .header-content h1 {
+                font-size: 36px;
+            }
+            
+            .header-content p {
+                font-size: 18px;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Add sparkle effect */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: white;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1 data-aos="fade-down">Professionelle Website-Analyse</h1>
+                <p data-aos="fade-up" data-aos-delay="200">Detaillierte Auswertung und Optimierungsvorschläge für Ihre Online-Präsenz</p>
+                <a href="#contact" class="cta-button pulse-animation" data-aos="zoom-in" data-aos-delay="400">Jetzt optimieren</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Performance Section -->
+    <section id="performance">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-aos="fade-up">Performance-Analyse</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Detaillierte Bewertung der Ladezeiten und Website-Performance</p>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="card" data-aos="fade-right">
+                        <div class="card-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3>Ladezeitanalyse</h3>
+                        <p>Die Ladezeit Ihrer Website beeinflusst direkt die Nutzererfahrung und SEO-Rankings.</p>
+                        
+                        <div class="progress-container">
+                            <label>
+                                <span>First Contentful Paint</span>
+                                <span>2.1s</span>
+                            </label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="background-color: #f39c12; --width: 65%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <label>
+                                <span>Time to Interactive</span>
+                                <span>3.8s</span>
+                            </label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="background-color: #e74c3c; --width: 40%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <label>
+                                <span>Largest Contentful Paint</span>
+                                <span>2.8s</span>
+                            </label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="background-color: #f39c12; --width: 55%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card" data-aos="fade-left">
+                        <div class="card-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Mobile Performance</h3>
+                        <p>Die mobile Geschwindigkeit ist entscheidend, da über 60% der Nutzer mobil zugreifen.</p>
+                        
+                        <div class="chart-container">
+                            <canvas id="mobilePerformanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEO Score Section -->
+    <section id="seo" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-aos="fade-up">SEO-Bewertung</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Analyse der Suchmaschinenoptimierung Ihrer Website</p>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="score-card" data-aos="flip-left">
+                        <div class="score-circle" style="--score: 68;">
+                            <span class="score-value count">68</span>
+                        </div>
+                        <h3 class="score-label">SEO Score</h3>
+                        <p class="score-description">Ihr SEO-Score liegt im mittleren Bereich. Mit gezielten Optimierungen können Sie Ihre Sichtbarkeit deutlich verbessern.</p>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card" data-aos="fade-up">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>SEO-Faktoren im Detail</h3>
+                        
+                        <div class="progress-container">
+                            <label>
+                                <span>Meta-Beschreibungen</span>
+                                <span>72%</span>
+                            </label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="background-color: #2ecc71; --width: 72%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <label>
+                                <span>Titel-Tags</span>
+                                <span>85%</span>
+                            </label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="background-color: #2ecc71; --width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <label>
+                                <span>Content-Qualität</span>
+                                <span>61%</span>
+                            </label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="background-color: #f39c12; --width: 61%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <label>
+                                <span>Backlinks</span>
+                                <span>38%</span>
+                            </label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="background-color: #e74c3c; --width: 38%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-container" data-aos="fade-up">
+                <div class="stat-item">
+                    <div class="animated-number count">45</div>
+                    <div class="stat-label">Indexierte Seiten</div>
+                </div>
+                <div class="stat-item">
+                    <div class="animated-number count">23</div>
+                    <div class="stat-label">Backlinks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="animated-number count">106</div>
+                    <div class="stat-label">SEO-Keywords</div>
+                </div>
+                <div class="stat-item">
+                    <div class="animated-number count">74</div>
+                    <div class="stat-label">Domain Authority</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section id="recommendations">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-aos="fade-up">Optimierungsvorschläge</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Konkrete Maßnahmen zur Verbesserung Ihrer Website</p>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="card" data-aos="fade-right">
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Bildkomprimierung</h4>
+                                <p>Optimieren Sie die Bildgrößen, um die Ladezeiten zu verbessern. Potenzial zur Reduzierung der Dateigröße um bis zu 62%.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>JavaScript-Optimierung</h4>
+                                <p>Minimieren und Bundle der JavaScript-Dateien könnte die Ladezeit um 1.2 Sekunden verbessern.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Browser-Caching</h4>
+                                <p>Implementieren Sie ein besseres Caching-System für statische Inhalte, um wiederholte Besuche zu beschleunigen.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card" data-aos="fade-left">
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Keyword-Optimierung</h4>
+                                <p>Fokussieren Sie sich auf relevantere Keywords in Ihren Hauptüberschriften und Meta-Beschreibungen.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Internes Linking</h4>
+                                <p>Verbessern Sie die Struktur Ihrer internen Links, um die Crawlability und Nutzerführung zu optimieren.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Mobile Responsiveness</h4>
+                                <p>Optimieren Sie die Benutzeroberfläche für mobile Geräte, insbesondere die Navigation und Formulare.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-aos="fade-up">Optimieren Sie Ihre Website</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Kontaktieren Sie uns für eine detaillierte Beratung und Umsetzung der Optimierungen</p>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="card" data-aos="zoom-in">
+                        <div class="card-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Kontakt aufnehmen</h3>
+                        <p>Unser Expertenteam steht Ihnen zur Verfügung, um Ihre Website zu analysieren und zu optimieren.</p>
+                        <a href="Website-Check.html" class="cta-button">Jetzt anfragen</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 FutureLaunch - Professionelle Webentwicklung und Optimierung</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- AOS Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Loading overlay
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                loadingOverlay.style.opacity = '0';
+                setTimeout(function() {
+                    loadingOverlay.style.display = 'none';
+                }, 500);
+            }, 800);
+        });
+        
+        // Initialize AOS Animation
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+        
+        // Initialize Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Performance Chart
+            const mobileCtx = document.getElementById('mobilePerformanceChart').getContext('2d');
+            const mobileChart = new Chart(mobileCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Ladezeit', 'Interaktivität', 'Visuelles Rendering', 'SEO', 'Contentgröße'],
+                    datasets: [{
+                        label: 'Mobile Performance',
+                        data: [65, 40, 70, 85, 55],
+                        backgroundColor: 'rgba(74, 109, 229, 0.2)',
+                        borderColor: 'rgb(74, 109, 229)',
+                        pointBackgroundColor: 'rgb(74, 109, 229)',
+                        pointBorderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+
+            // Animate progress bars
+            const progressBars = document.querySelectorAll('.progress-fill');
+            setTimeout(() => {
+                progressBars.forEach(bar => {
+                    const width = getComputedStyle(bar).getPropertyValue('--width');
+                    bar.style.width = width;
+                });
+            }, 500);
+            
+            // Animate numbers
+            const countElements = document.querySelectorAll('.count');
+            countElements.forEach(el => {
+                const target = parseInt(el.innerText);
+                let count = 0;
+                const duration = 2000; // ms
+                const frameRate = 30; // fps
+                const increment = target / (duration / 1000 * frameRate);
+                
+                const counter = setInterval(() => {
+                    count += increment;
+                    if (count >= target) {
+                        el.innerText = target;
+                        clearInterval(counter);
+                    } else {
+                        el.innerText = Math.floor(count);
+                    }
+                }, 1000 / frameRate);
+            });
+            
+            // Add sparkle effect
+            document.addEventListener('mousemove', function(e) {
+                if (Math.random() > 0.97) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.top = e.pageY + 'px';
+                    sparkle.style.left = e.pageX + 'px';
+                    document.body.appendChild(sparkle);
+                    
+                    sparkle.style.animation = 'pulse 0.8s forwards';
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(sparkle);
+                    }, 800);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
