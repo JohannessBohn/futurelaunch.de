@@ -3,52 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professionelle Website-Analyse | FutureLaunch</title>
-    <!-- AOS Animation Library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-    <!-- Chart.js for charts -->
+    <link rel="stylesheet" href="../css/main.css">
+    <title>Website Analyse Tool | FutureLaunch</title>
+
+    <!-- Cookies -->
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+
+    <!-- Social Media-logos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- AOS for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <!-- Confetti animation -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
-        :root {
-            --primary: #4a6de5;
-            --secondary: #23d5ab;
-            --dark: #121212;
-            --light: #f8f9fa;
-            --danger: #e74c3c;
-            --success: #2ecc71;
-            --warning: #f39c12;
+        /* Tool-specific styles */
+        .analysis-tool {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding-top: 80px; /* Add padding to push content below header */
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
+
+        /* Header adjustments */
         header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Hero Section */
+        .hero-section {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 80px 0;
+            padding: 100px 0;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
-        
-        header::before {
+
+        .hero-section::before {
             content: "";
             position: absolute;
             top: 0;
@@ -57,369 +60,506 @@
             height: 100%;
             background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="rgba(255,255,255,0.05)" /></svg>');
             background-size: 80px;
-            z-index: 1;
             animation: backgroundMove 60s linear infinite;
+            pointer-events: none;
         }
-        
-        @keyframes backgroundMove {
-            0% {
-                background-position: 0 0;
-            }
-            100% {
-                background-position: 1000px 1000px;
-            }
-        }
-        
-        header .container {
+
+        .hero-content {
             position: relative;
-            z-index: 2;
+            z-index: 1;
         }
-        
-        .header-content {
-            text-align: center;
-        }
-        
-        .header-content h1 {
+
+        .hero-content h1 {
             font-size: 48px;
             margin-bottom: 20px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            position: relative;
-            display: inline-block;
+            font-weight: 700;
         }
-        
-        .header-content h1::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background-color: white;
-            border-radius: 2px;
-        }
-        
-        .header-content p {
+
+        .hero-content p {
             font-size: 20px;
-            max-width: 800px;
-            margin: 0 auto 30px;
+            margin-bottom: 40px;
             opacity: 0.9;
         }
-        
-        section {
-            padding: 80px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-            position: relative;
-        }
-        
-        .section-title h2 {
-            font-size: 36px;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        
-        .section-title p {
-            max-width: 600px;
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 800px;
             margin: 0 auto;
-            color: #666;
         }
-        
-        .card {
-            background-color: white;
+
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin-bottom: 30px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
         }
-        
-        .card:hover {
+
+        .feature:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
         }
-        
-        .card-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
+
+        .feature i {
+            font-size: 24px;
+            margin-bottom: 10px;
         }
-        
-        .card-icon::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.1);
-            top: -50%;
-            left: -50%;
-            transform: rotate(45deg);
-            transition: all 0.3s;
+
+        .feature span {
+            display: block;
+            font-weight: 500;
         }
-        
-        .card:hover .card-icon::before {
-            top: 100%;
-            left: 100%;
-        }
-        
-        .card-icon i {
-            color: white;
-            font-size: 28px;
-        }
-        
-        .card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        .card p {
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .progress-container {
-            margin-bottom: 20px;
-        }
-        
-        .progress-container label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            border-radius: 5px;
-            position: relative;
-            width: 0;
-            transition: width 1.5s ease-in-out;
-        }
-        
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0 -15px;
-        }
-        
-        .col {
-            flex: 1;
-            padding: 0 15px;
-            min-width: 300px;
-        }
-        
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin-bottom: 30px;
-        }
-        
-        .score-card {
-            text-align: center;
-            padding: 40px 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-        }
-        
-        .score-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .score-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary) calc(var(--score) * 1%), #e0e0e0 0);
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .score-circle::before {
-            content: "";
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background-color: white;
-            border-radius: 50%;
-        }
-        
-        .score-value {
-            position: relative;
-            font-size: 48px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
-        .score-label {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .score-description {
-            color: #666;
-        }
-        
-        .recommendation-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-        
-        .recommendation-icon {
-            flex-shrink: 0;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(74, 109, 229, 0.1);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-        }
-        
-        .recommendation-content h4 {
-            font-size: 18px;
-            margin-bottom: 5px;
-            color: var(--primary);
-        }
-        
-        .recommendation-content p {
-            color: #666;
-        }
-        
-        footer {
-            background-color: var(--dark);
-            color: white;
+
+        /* Tool Section */
+        .tool-section {
             padding: 60px 0;
-            text-align: center;
         }
-        
-        footer p {
-            opacity: 0.7;
+
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
         }
-        
-        .cta-button {
-            display: inline-block;
+
+        /* URL Input */
+        .input-container {
+            margin-bottom: 40px;
+        }
+
+        .url-input {
+            display: flex;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .url-input input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .url-input input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,109,229,0.1);
+        }
+
+        .scan-button {
             padding: 15px 30px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 10px 20px rgba(74, 109, 229, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(74, 109, 229, 0.4);
-        }
-        
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        
-        .animated-number {
-            font-size: 48px;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .stats-container {
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-top: 40px;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .stat-item {
+
+        .scan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,109,229,0.2);
+        }
+
+        /* Progress Section */
+        .progress-container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .progress-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .status-text {
             text-align: center;
-            padding: 20px;
-        }
-        
-        .stat-label {
+            color: var(--primary);
+            font-weight: 500;
             font-size: 18px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
             color: #666;
         }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .row {
-                flex-direction: column;
-            }
-            
-            .header-content h1 {
-                font-size: 36px;
-            }
-            
-            .header-content p {
-                font-size: 18px;
-            }
-            
-            section {
-                padding: 60px 0;
-            }
+
+        .step i {
+            font-size: 24px;
+            opacity: 0.3;
+            transition: all 0.3s ease;
         }
-        
-        /* Loading Animation */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+
+        .step.active i {
+            opacity: 1;
+            color: var(--success);
+        }
+
+        /* Results Section */
+        .results-container {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .results-container.visible {
+            opacity: 1;
+        }
+
+        .scores-overview {
+            margin-bottom: 60px;
+        }
+
+        .scores-overview h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .score-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .score-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .score-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .score-circle {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .score-chart {
+            transform: rotate(-90deg);
             width: 100%;
             height: 100%;
-            background-color: var(--dark);
+        }
+
+        .score-chart path {
+            fill: none;
+            stroke-width: 2.8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease, stroke 1s ease;
+        }
+
+        .score-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #666;
+            display: block;
+        }
+
+        .score-details {
+            margin-top: 20px;
+        }
+
+        .score-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .score-details li {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        .score-details li.error {
+            color: var(--danger);
+            text-align: center;
+            font-style: italic;
+        }
+
+        .score-details li:last-child {
+            border-bottom: none;
+        }
+
+        /* Recommendations Section */
+        .recommendations-section {
+            margin-top: 60px;
+        }
+
+        .recommendations-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .recommendation-item {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .priority-badge.hoch {
+            background-color: rgba(231,76,60,0.1);
+            color: var(--danger);
+        }
+
+        .priority-badge.mittel {
+            background-color: rgba(243,156,18,0.1);
+            color: var(--warning);
+        }
+
+        .priority-badge.niedrig {
+            background-color: rgba(46,204,113,0.1);
+            color: var(--success);
+        }
+
+        .recommendation-item h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .action-list {
+            margin-top: 20px;
+        }
+
+        .action-list li {
+            display: flex;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .action-list i {
+            color: var(--success);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            margin-top: 80px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .contact-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .contact-header i {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .contact-header h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .contact-header p {
+            opacity: 0.9;
+        }
+
+        #contactForm {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,109,229,0.1);
+        }
+
+        .form-group input[readonly] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,109,229,0.2);
+        }
+
+        .form-messages {
+            padding: 0 40px 40px;
+        }
+
+        .success-message,
+        .error-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .success-message {
+            background-color: rgba(46,204,113,0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .error-message {
+            background-color: rgba(231,76,60,0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            margin-right: 8px;
         }
         
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255,255,255,0.1);
-            border-top: 5px solid var(--secondary);
-            border-radius: 50%;
+        .loading-spinner i {
             animation: spin 1s linear infinite;
         }
         
@@ -427,264 +567,245 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Add sparkle effect */
-        .sparkle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background-color: white;
-            opacity: 0.8;
-            pointer-events: none;
+
+        /* Add these styles for the metrics */
+        .text-success {
+            color: var(--success);
+        }
+        .text-warning {
+            color: var(--warning);
+        }
+        .text-danger {
+            color: var(--danger);
         }
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+
+<script src="../script/cookies.js" defer></script>
+
+<!-- Header Section -->
+<header>
+    <div class="container header-container">
+        <a href="index.html" class="logo">
+            <img src="../assets/2.jpg" alt="FutureLaunch Logo" class="logo-image"/>
+            Future<span>Launch</span>
+        </a>
+        <div class="menu-toggle">&#9776;</div>
+        <ul class="nav-links">
+            <li><a href="index.html#services">Dienstleistungen</a></li>
+            <li><a href="index.html#process">Prozess</a></li>
+            <li><a href="index.html#case-studies">Referenzen</a></li>
+            <li><a href="index.html#pricing">Preise</a></li>
+            <li><a href="index.html#contact" class="cta-button">Kontakt</a></li>
+        </ul>
     </div>
+</header>
 
-    <!-- Header Section -->
-    <header>
+<!-- Main Content -->
+<main class="analysis-tool">
+    <!-- Hero Section -->
+    <section class="hero-section">
         <div class="container">
-            <div class="header-content">
-                <h1 data-aos="fade-down">Professionelle Website-Analyse</h1>
-                <p data-aos="fade-up" data-aos-delay="200">Detaillierte Auswertung und Optimierungsvorschläge für Ihre Online-Präsenz</p>
-                <a href="#contact" class="cta-button pulse-animation" data-aos="zoom-in" data-aos-delay="400">Jetzt optimieren</a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Performance Section -->
-    <section id="performance">
-        <div class="container">
-            <div class="section-title">
-                <h2 data-aos="fade-up">Performance-Analyse</h2>
-                <p data-aos="fade-up" data-aos-delay="200">Detaillierte Bewertung der Ladezeiten und Website-Performance</p>
-            </div>
-            
-            <div class="row">
-                <div class="col">
-                    <div class="card" data-aos="fade-right">
-                        <div class="card-icon">
-                            <i class="fas fa-tachometer-alt"></i>
-                        </div>
-                        <h3>Ladezeitanalyse</h3>
-                        <p>Die Ladezeit Ihrer Website beeinflusst direkt die Nutzererfahrung und SEO-Rankings.</p>
-                        
-                        <div class="progress-container">
-                            <label>
-                                <span>First Contentful Paint</span>
-                                <span>2.1s</span>
-                            </label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="background-color: #f39c12; --width: 65%"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <label>
-                                <span>Time to Interactive</span>
-                                <span>3.8s</span>
-                            </label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="background-color: #e74c3c; --width: 40%"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <label>
-                                <span>Largest Contentful Paint</span>
-                                <span>2.8s</span>
-                            </label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="background-color: #f39c12; --width: 55%"></div>
-                            </div>
-                        </div>
+            <div class="hero-content" data-aos="fade-up">
+                <h1>Website Analyse Tool</h1>
+                <p>Erhalten Sie eine umfassende Analyse Ihrer Website in wenigen Minuten</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Performance</span>
                     </div>
-                </div>
-                
-                <div class="col">
-                    <div class="card" data-aos="fade-left">
-                        <div class="card-icon">
-                            <i class="fas fa-mobile-alt"></i>
-                        </div>
-                        <h3>Mobile Performance</h3>
-                        <p>Die mobile Geschwindigkeit ist entscheidend, da über 60% der Nutzer mobil zugreifen.</p>
-                        
-                        <div class="chart-container">
-                            <canvas id="mobilePerformanceChart"></canvas>
-                        </div>
+                    <div class="feature">
+                        <i class="fas fa-search"></i>
+                        <span>SEO</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mobile</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Sicherheit</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SEO Score Section -->
-    <section id="seo" style="background-color: #f8f9fa;">
+    <!-- Analysis Tool Section -->
+    <section class="tool-section">
         <div class="container">
-            <div class="section-title">
-                <h2 data-aos="fade-up">SEO-Bewertung</h2>
-                <p data-aos="fade-up" data-aos-delay="200">Analyse der Suchmaschinenoptimierung Ihrer Website</p>
-            </div>
-            
-            <div class="row">
-                <div class="col">
-                    <div class="score-card" data-aos="flip-left">
-                        <div class="score-circle" style="--score: 68;">
-                            <span class="score-value count">68</span>
-                        </div>
-                        <h3 class="score-label">SEO Score</h3>
-                        <p class="score-description">Ihr SEO-Score liegt im mittleren Bereich. Mit gezielten Optimierungen können Sie Ihre Sichtbarkeit deutlich verbessern.</p>
-                    </div>
-                </div>
-                
-                <div class="col">
-                    <div class="card" data-aos="fade-up">
-                        <div class="card-icon">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <h3>SEO-Faktoren im Detail</h3>
-                        
-                        <div class="progress-container">
-                            <label>
-                                <span>Meta-Beschreibungen</span>
-                                <span>72%</span>
-                            </label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="background-color: #2ecc71; --width: 72%"></div>
+            <div class="tool-container" data-aos="fade-up">
+                <!-- URL Input Form -->
+                <div class="input-container">
+                    <form id="analyzeForm" onsubmit="scanWebsite(event)">
+                        <div class="url-input">
+                            <div class="input-wrapper">
+                                <i class="fas fa-globe"></i>
+                                <input type="url" 
+                                       placeholder="https://ihre-website.de" 
+                                       required
+                                       pattern="https?://.+"
+                                       title="Bitte geben Sie eine gültige URL ein (beginnend mit http:// oder https://)"
+                                >
                             </div>
+                            <button type="submit" class="scan-button">
+                                <i class="fas fa-search"></i>
+                                Website analysieren
+                            </button>
                         </div>
-                        
-                        <div class="progress-container">
-                            <label>
-                                <span>Titel-Tags</span>
-                                <span>85%</span>
-                            </label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="background-color: #2ecc71; --width: 85%"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <label>
-                                <span>Content-Qualität</span>
-                                <span>61%</span>
-                            </label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="background-color: #f39c12; --width: 61%"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-container">
-                            <label>
-                                <span>Backlinks</span>
-                                <span>38%</span>
-                            </label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="background-color: #e74c3c; --width: 38%"></div>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-            </div>
-            
-            <div class="stats-container" data-aos="fade-up">
-                <div class="stat-item">
-                    <div class="animated-number count">45</div>
-                    <div class="stat-label">Indexierte Seiten</div>
-                </div>
-                <div class="stat-item">
-                    <div class="animated-number count">23</div>
-                    <div class="stat-label">Backlinks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="animated-number count">106</div>
-                    <div class="stat-label">SEO-Keywords</div>
-                </div>
-                <div class="stat-item">
-                    <div class="animated-number count">74</div>
-                    <div class="stat-label">Domain Authority</div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Recommendations Section -->
-    <section id="recommendations">
-        <div class="container">
-            <div class="section-title">
-                <h2 data-aos="fade-up">Optimierungsvorschläge</h2>
-                <p data-aos="fade-up" data-aos-delay="200">Konkrete Maßnahmen zur Verbesserung Ihrer Website</p>
-            </div>
-            
-            <div class="row">
-                <div class="col">
-                    <div class="card" data-aos="fade-right">
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <i class="fas fa-image"></i>
-                            </div>
-                            <div class="recommendation-content">
-                                <h4>Bildkomprimierung</h4>
-                                <p>Optimieren Sie die Bildgrößen, um die Ladezeiten zu verbessern. Potenzial zur Reduzierung der Dateigröße um bis zu 62%.</p>
-                            </div>
+                <!-- Progress Section -->
+                <div class="progress-container" style="display: none;">
+                    <div class="progress-wrapper">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="scanProgress"></div>
                         </div>
-                        
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <div class="recommendation-content">
-                                <h4>JavaScript-Optimierung</h4>
-                                <p>Minimieren und Bundle der JavaScript-Dateien könnte die Ladezeit um 1.2 Sekunden verbessern.</p>
-                            </div>
+                        <div class="status-text" id="scanStatus">Initialisiere Analyse...</div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step" data-step="1">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Erreichbarkeit</span>
                         </div>
-                        
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <i class="fas fa-server"></i>
-                            </div>
-                            <div class="recommendation-content">
-                                <h4>Browser-Caching</h4>
-                                <p>Implementieren Sie ein besseres Caching-System für statische Inhalte, um wiederholte Besuche zu beschleunigen.</p>
-                            </div>
+                        <div class="step" data-step="2">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Performance</span>
+                        </div>
+                        <div class="step" data-step="3">
+                            <i class="fas fa-check-circle"></i>
+                            <span>SEO</span>
+                        </div>
+                        <div class="step" data-step="4">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Mobile</span>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col">
-                    <div class="card" data-aos="fade-left">
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <i class="fas fa-chart-line"></i>
+
+                <!-- Results Section -->
+                <div class="results-container" id="results" style="display: none;">
+                    <!-- Score Overview -->
+                    <div class="scores-overview">
+                        <h2>Analyse-Ergebnisse</h2>
+                        <div class="score-cards">
+                            <div class="score-card" id="performanceScore" data-aos="flip-left">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">Performance</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="performanceMetrics"></ul>
+                                </div>
                             </div>
-                            <div class="recommendation-content">
-                                <h4>Keyword-Optimierung</h4>
-                                <p>Fokussieren Sie sich auf relevantere Keywords in Ihren Hauptüberschriften und Meta-Beschreibungen.</p>
+
+                            <div class="score-card" id="seoScore" data-aos="flip-left" data-aos-delay="100">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">SEO</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="seoMetrics"></ul>
+                                </div>
+                            </div>
+
+                            <div class="score-card" id="mobileScore" data-aos="flip-left" data-aos-delay="200">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">Mobile</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="mobileMetrics"></ul>
+                                </div>
+                            </div>
+
+                            <div class="score-card" id="securityScore" data-aos="flip-left" data-aos-delay="300">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">Sicherheit</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="securityMetrics"></ul>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <i class="fas fa-link"></i>
+                    </div>
+
+                    <!-- Recommendations Section -->
+                    <div class="recommendations-section" id="recommendations">
+                        <h2>Optimierungsempfehlungen</h2>
+                        <div class="recommendations-grid"></div>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div class="contact-section" data-aos="fade-up">
+                        <div class="contact-card">
+                            <div class="contact-header">
+                                <i class="fas fa-hands-helping"></i>
+                                <h3>Professionelle Unterstützung gewünscht?</h3>
+                                <p>Lassen Sie uns gemeinsam Ihre Website optimieren. Unser Expertenteam steht Ihnen zur Verfügung.</p>
                             </div>
-                            <div class="recommendation-content">
-                                <h4>Internes Linking</h4>
-                                <p>Verbessern Sie die Struktur Ihrer internen Links, um die Crawlability und Nutzerführung zu optimieren.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <i class="fas fa-mobile-alt"></i>
-                            </div>
-                            <div class="recommendation-content">
-                                <h4>Mobile Responsiveness</h4>
-                                <p>Optimieren Sie die Benutzeroberfläche für mobile Geräte, insbesondere die Navigation und Formulare.</p>
+                            
+                            <form id="contactForm" onsubmit="submitContact(event)">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <i class="fas fa-user"></i>
+                                        Name
+                                    </label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email">
+                                        <i class="fas fa-envelope"></i>
+                                        E-Mail
+                                    </label>
+                                    <input type="email" id="email" name="email" value="johannesbohn03@gmail.com" required readonly>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="message">
+                                        <i class="fas fa-comment"></i>
+                                        Nachricht
+                                    </label>
+                                    <textarea id="message" name="message" rows="4" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="submit-button">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Nachricht senden
+                                </button>
+                            </form>
+                            
+                            <div class="form-messages">
+                                <div id="contactSuccess" class="success-message"></div>
+                                <div id="contactError" class="error-message"></div>
                             </div>
                         </div>
                     </div>
@@ -692,142 +813,459 @@
             </div>
         </div>
     </section>
+</main>
 
-    <!-- Contact Section -->
-    <section id="contact" style="background-color: #f8f9fa;">
-        <div class="container">
-            <div class="section-title">
-                <h2 data-aos="fade-up">Optimieren Sie Ihre Website</h2>
-                <p data-aos="fade-up" data-aos-delay="200">Kontaktieren Sie uns für eine detaillierte Beratung und Umsetzung der Optimierungen</p>
-            </div>
-            
-            <div class="row">
-                <div class="col">
-                    <div class="card" data-aos="zoom-in">
-                        <div class="card-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <h3>Kontakt aufnehmen</h3>
-                        <p>Unser Expertenteam steht Ihnen zur Verfügung, um Ihre Website zu analysieren und zu optimieren.</p>
-                        <a href="Website-Check.html" class="cta-button">Jetzt anfragen</a>
-                    </div>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-about">
+                <a href="#" class="footer-logo">Future<span>Launch</span></a>
+                <p>Wir sind Ihr Partner für maßgeschneiderte Softwarelösungen im B2B-Bereich. Unser erfahrenes Team
+                    hilft Ihnen, Ihre Geschäftsprozesse zu digitalisieren und zu optimieren.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-link instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
+            <div class="footer-links-col">
+                <h4 class="footer-heading">Dienstleistungen</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Webentwicklung</a></li>
+                    <li><a href="#">App-Entwicklung</a></li>
+                    <li><a href="#">Business Software</a></li>
+                    <li><a href="#">API Entwicklung</a></li>
+                    <li><a href="#">KI & Big Data</a></li>
+                </ul>
+            </div>
+            <div class="footer-links-col">
+                <h4 class="footer-heading">Unternehmen</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Über uns</a></li>
+                    <li><a href="#">Karriere</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-subscribe">
+                <h4 class="footer-heading">Newsletter</h4>
+                <p>Abonnieren Sie unseren Newsletter für aktuelle Neuigkeiten und Trends.</p>
+                <form>
+                    <input type="email" placeholder="Ihre E-Mail-Adresse">
+                    <button type="submit">&#10148;</button>
+                </form>
+                <p>Wir respektieren Ihre Privatsphäre und geben Ihre Daten nicht weiter.</p>
+            </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 FutureLaunch - Professionelle Webentwicklung und Optimierung</p>
+        <div class="copyright">
+            &copy; 2025 FutureLaunch. Alle Rechte vorbehalten.
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <!-- Scripts -->
-    <!-- AOS Animation Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>
-        // Loading overlay
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                loadingOverlay.style.opacity = '0';
-                setTimeout(function() {
-                    loadingOverlay.style.display = 'none';
-                }, 500);
-            }, 800);
-        });
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+
+    async function scanWebsite(event) {
+        event.preventDefault();
+        const form = event.target;
+        const url = form.querySelector('input[type="url"]').value;
+        const progressContainer = document.querySelector('.progress-container');
+        const status = document.getElementById('scanStatus');
+        const progress = document.getElementById('scanProgress');
+        const resultsContainer = document.getElementById('results');
+        const submitButton = form.querySelector('.scan-button');
         
-        // Initialize AOS Animation
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
+        // Show progress container and hide results
+        progressContainer.style.display = 'block';
+        resultsContainer.style.display = 'none';
+        resultsContainer.classList.remove('visible');
         
-        // Initialize Charts
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile Performance Chart
-            const mobileCtx = document.getElementById('mobilePerformanceChart').getContext('2d');
-            const mobileChart = new Chart(mobileCtx, {
-                type: 'radar',
-                data: {
-                    labels: ['Ladezeit', 'Interaktivität', 'Visuelles Rendering', 'SEO', 'Contentgröße'],
-                    datasets: [{
-                        label: 'Mobile Performance',
-                        data: [65, 40, 70, 85, 55],
-                        backgroundColor: 'rgba(74, 109, 229, 0.2)',
-                        borderColor: 'rgb(74, 109, 229)',
-                        pointBackgroundColor: 'rgb(74, 109, 229)',
-                        pointBorderColor: '#fff'
-                    }]
+        // Disable submit button and show loading animation
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <div class="loading-spinner">
+                <i class="fas fa-circle-notch fa-spin"></i>
+            </div>
+            Analysiere...
+        `;
+        
+        try {
+            // Reset progress
+            progress.style.width = '0%';
+            status.style.color = 'var(--primary)';
+            status.textContent = 'Starte Analyse...';
+            
+            // Add timeout to fetch
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 30000);
+            
+            const response = await fetch('http://localhost:8080/LeqendAIO/futurelaunch.de/script/scan-website.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    elements: {
-                        line: {
-                            borderWidth: 3
-                        }
-                    },
-                    scales: {
-                        r: {
-                            angleLines: {
-                                display: true
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 100
-                        }
+                body: JSON.stringify({ url }),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeout);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Process progress updates
+                if (data.progress_updates) {
+                    for (const update of data.progress_updates) {
+                        progress.style.width = update.progress + '%';
+                        status.textContent = update.status;
+                        // Add a small delay between updates for visual effect
+                        await new Promise(resolve => setTimeout(resolve, 100));
                     }
                 }
-            });
-
-            // Animate progress bars
-            const progressBars = document.querySelectorAll('.progress-fill');
-            setTimeout(() => {
-                progressBars.forEach(bar => {
-                    const width = getComputedStyle(bar).getPropertyValue('--width');
-                    bar.style.width = width;
-                });
-            }, 500);
-            
-            // Animate numbers
-            const countElements = document.querySelectorAll('.count');
-            countElements.forEach(el => {
-                const target = parseInt(el.innerText);
-                let count = 0;
-                const duration = 2000; // ms
-                const frameRate = 30; // fps
-                const increment = target / (duration / 1000 * frameRate);
                 
-                const counter = setInterval(() => {
-                    count += increment;
-                    if (count >= target) {
-                        el.innerText = target;
-                        clearInterval(counter);
-                    } else {
-                        el.innerText = Math.floor(count);
-                    }
-                }, 1000 / frameRate);
+                // Update results with animation
+                updateAnalysisResults(data);
+                
+                // Show results section with animation
+                resultsContainer.style.display = 'block';
+                setTimeout(() => {
+                    resultsContainer.classList.add('visible');
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            } else {
+                throw new Error(data.error || 'Ein Fehler ist aufgetreten');
+            }
+        } catch (error) {
+            progress.style.width = '0%';
+            status.textContent = error.name === 'AbortError' 
+                ? 'Zeitüberschreitung: Die Analyse hat zu lange gedauert.' 
+                : 'Fehler: ' + error.message;
+            status.style.color = 'var(--danger)';
+            resultsContainer.style.display = 'none';
+        } finally {
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="fas fa-search"></i> Website analysieren';
+        }
+    }
+
+    function updateScanStatus(progress) {
+        const status = document.getElementById('scanStatus');
+        if (progress < 25) {
+            status.textContent = 'Prüfe Website-Erreichbarkeit...';
+        } else if (progress < 50) {
+            status.textContent = 'Analysiere Performance...';
+        } else if (progress < 75) {
+            status.textContent = 'Prüfe SEO & Mobile...';
+        } else if (progress < 85) {
+            status.textContent = 'Prüfe Sicherheit...';
+        } else if (progress < 95) {
+            status.textContent = 'Erstelle Empfehlungen...';
+        } else {
+            status.textContent = 'Analyse abgeschlossen!';
+        }
+    }
+
+    function updateAnalysisResults(data) {
+        // Update score circles with animation
+        updateScoreCircle('performanceScore', data.scores.performance);
+        updateScoreCircle('seoScore', data.scores.seo);
+        updateScoreCircle('mobileScore', data.scores.mobile);
+        updateScoreCircle('securityScore', data.scores.security);
+
+        // Update metrics for each category
+        updateMetrics('performanceMetrics', data.details.performance);
+        updateMetrics('seoMetrics', data.details.seo);
+        updateMetrics('mobileMetrics', data.details.mobile);
+        updateMetrics('securityMetrics', data.details.security);
+
+        // Update recommendations
+        updateRecommendations(data.recommendations);
+    }
+
+    function updateScoreCircle(elementId, score) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const circle = element.querySelector('.score-circle');
+        const value = element.querySelector('.score-value');
+        const path = circle.querySelector('.score-fill');
+        
+        // Calculate the circumference
+        const radius = 15.9155; // From the SVG viewBox
+        const circumference = 2 * Math.PI * radius;
+        
+        // Animate the score
+        let currentScore = 0;
+        const duration = 1500;
+        const steps = 60;
+        const increment = score / steps;
+        
+        const animation = setInterval(() => {
+            currentScore += increment;
+            if (currentScore >= score) {
+                currentScore = score;
+                clearInterval(animation);
+            }
+            
+            value.textContent = Math.round(currentScore);
+            
+            // Calculate the dash values
+            const percent = currentScore / 100;
+            const dashArray = `${circumference * percent} ${circumference * (1 - percent)}`;
+            path.style.strokeDasharray = dashArray;
+            
+            // Update color based on score
+            path.style.stroke = getScoreColor(currentScore);
+        }, duration / steps);
+    }
+
+    function updateMetrics(elementId, data) {
+        const container = document.getElementById(elementId);
+        if (!container || !data) return;
+
+        container.innerHTML = '';
+        
+        if (data.error) {
+            container.innerHTML = `<li class="error">Fehler: ${data.error}</li>`;
+            return;
+        }
+
+        // Add specific metrics based on category
+        switch(elementId) {
+            case 'performanceMetrics':
+                if (data.total_time) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Antwortzeit</span>
+                            <span>${(data.total_time * 1000).toFixed(0)}ms</span>
+                        </li>`;
+                }
+                if (data.size) {
+                    const size = data.size;
+                    const unit = size > 1024 * 1024 ? 'MB' : 'KB';
+                    const value = size > 1024 * 1024 ? 
+                        (size / (1024 * 1024)).toFixed(2) : 
+                        (size / 1024).toFixed(2);
+                    container.innerHTML += `
+                        <li>
+                            <span>Gesamtgröße</span>
+                            <span>${value} ${unit}</span>
+                        </li>`;
+                }
+                if (data.speed) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Download-Geschwindigkeit</span>
+                            <span>${(data.speed / 1024).toFixed(2)} KB/s</span>
+                        </li>`;
+                }
+                break;
+
+            case 'seoMetrics':
+                if (data.title) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Title-Tag</span>
+                            <span class="${data.title.optimal ? 'text-success' : 'text-warning'}">
+                                ${data.title.length} Zeichen
+                                ${data.title.optimal ? '✓' : '⚠️'}
+                            </span>
+                        </li>`;
+                }
+                if (data.meta_description) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Meta Description</span>
+                            <span class="${data.meta_description.optimal ? 'text-success' : 'text-warning'}">
+                                ${data.meta_description.length} Zeichen
+                                ${data.meta_description.optimal ? '✓' : '⚠️'}
+                            </span>
+                        </li>`;
+                }
+                break;
+
+            case 'mobileMetrics':
+                container.innerHTML += `
+                    <li>
+                        <span>Viewport Meta-Tag</span>
+                        <span>${data.viewport ? '✓' : '✗'}</span>
+                    </li>
+                    <li>
+                        <span>Responsive Design</span>
+                        <span>${data.responsive ? '✓' : '✗'}</span>
+                    </li>`;
+                break;
+
+            case 'securityMetrics':
+                container.innerHTML += `
+                    <li>
+                        <span>HTTPS</span>
+                        <span>${data.secure ? '✓ Aktiv' : '✗ Inaktiv'}</span>
+                    </li>
+                    <li>
+                        <span>SSL-Zertifikat</span>
+                        <span>${data.cert_valid ? '✓ Gültig' : '✗ Ungültig'}</span>
+                    </li>`;
+                break;
+        }
+    }
+
+    function updateRecommendations(recommendations) {
+        const container = document.querySelector('.recommendations-grid');
+        if (!container || !recommendations) return;
+
+        container.innerHTML = '';
+        
+        recommendations.forEach((rec, index) => {
+            const div = document.createElement('div');
+            div.className = 'recommendation-item';
+            div.setAttribute('data-aos', 'fade-up');
+            div.setAttribute('data-aos-delay', (index * 100).toString());
+            
+            div.innerHTML = `
+                <div class="priority-badge ${rec.priority}">${rec.priority}</div>
+                <h4>${rec.title}</h4>
+                <ul class="action-list">
+                    ${rec.actions.map(action => `
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            ${action}
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            
+            container.appendChild(div);
+        });
+        
+        // Refresh AOS for new elements
+        AOS.refresh();
+    }
+
+    function getScoreColor(score) {
+        if (score >= 80) return 'var(--success)';
+        if (score >= 60) return 'var(--warning)';
+        return 'var(--danger)';
+    }
+
+    async function submitContact(event) {
+        event.preventDefault();
+        const form = event.target;
+        const submitButton = form.querySelector('.submit-button');
+        const errorDiv = document.getElementById('contactError');
+        const successDiv = document.getElementById('contactSuccess');
+        
+        // Hide previous messages
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+        
+        // Disable submit button and show loading state
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <div class="loading-spinner">
+                <i class="fas fa-circle-notch fa-spin"></i>
+            </div>
+            Senden...
+        `;
+        
+        try {
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                message: form.message.value
+            };
+            
+            const response = await fetch('http://localhost:8080/LeqendAIO/futurelaunch.de/script/send-contact.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
             });
             
-            // Add sparkle effect
-            document.addEventListener('mousemove', function(e) {
-                if (Math.random() > 0.97) {
-                    const sparkle = document.createElement('div');
-                    sparkle.className = 'sparkle';
-                    sparkle.style.top = e.pageY + 'px';
-                    sparkle.style.left = e.pageX + 'px';
-                    document.body.appendChild(sparkle);
-                    
-                    sparkle.style.animation = 'pulse 0.8s forwards';
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(sparkle);
-                    }, 800);
-                }
-            });
+            const data = await response.json();
+            
+            if (data.success) {
+                // Show success message with animation
+                successDiv.textContent = data.message;
+                successDiv.style.display = 'block';
+                
+                // Trigger confetti animation
+                triggerConfetti();
+                
+                // Reset form
+                form.reset();
+                
+                // Keep the email field set
+                form.email.value = 'johannesbohn03@gmail.com';
+            } else {
+                throw new Error(data.error || 'Ein unerwarteter Fehler ist aufgetreten');
+            }
+        } catch (error) {
+            // Show error message
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = 'block';
+        } finally {
+            // Reset submit button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Nachricht senden';
+        }
+    }
+
+    function triggerConfetti() {
+        // First burst
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
         });
-    </script>
+
+        // Multiple bursts with different colors
+        setTimeout(() => {
+            confetti({
+                particleCount: 50,
+                spread: 100,
+                origin: { x: 0.2, y: 0.6 },
+                colors: ['#4A6DE5', '#FF6B6B', '#4ECB71']
+            });
+            confetti({
+                particleCount: 50,
+                spread: 100,
+                origin: { x: 0.8, y: 0.6 },
+                colors: ['#4A6DE5', '#FF6B6B', '#4ECB71']
+            });
+        }, 250);
+
+        // Final burst
+        setTimeout(() => {
+            confetti({
+                particleCount: 75,
+                spread: 140,
+                origin: { y: 0.6 },
+                colors: ['#4A6DE5', '#FF6B6B', '#4ECB71', '#FFD93D'],
+                ticks: 200
+            });
+        }, 500);
+    }
+
+    // Handle mobile menu toggle
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.toggle('active');
+    });
+</script>
+
 </body>
-</html> 
+</html>

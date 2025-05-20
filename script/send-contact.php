@@ -1,177 +1,143 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-// Enable error reporting for debugging
+// Ensure no errors are output to the response
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/mail_error.log');
 
-// Set up local error logging
-$logFile = __DIR__ . '/mail_error.log';
-function writeLog($message) {
-    global $logFile;
-    $timestamp = date('Y-m-d H:i:s');
-    file_put_contents($logFile, "[$timestamp] $message\n", FILE_APPEND);
-}
+// Set SMTP settings for PHP mail
+ini_set('SMTP', 'smtp.gmail.com');
+ini_set('smtp_port', '587');
+ini_set('sendmail_from', 'johannesbohn03@gmail.com');
 
-// Test if we can write to the log file
-try {
-    writeLog("=== Starting new mail attempt ===");
-    writeLog("PHP Version: " . PHP_VERSION);
-    writeLog("Server Software: " . $_SERVER['SERVER_SOFTWARE']);
-    writeLog("Document Root: " . $_SERVER['DOCUMENT_ROOT']);
-    writeLog("Script Path: " . __FILE__);
-} catch (Exception $e) {
-    die("Cannot write to log file: " . $e->getMessage());
-}
+// Clear any previous output
+ob_clean();
 
-// Set headers for CORS and content type
-$allowedOrigins = [
-    'http://localhost:8080',
-    'http://127.0.0.1:5501',
-    'http://localhost:5501'
-];
-
-$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-
-if (in_array($origin, $allowedOrigins)) {
-    header('Access-Control-Allow-Origin: ' . $origin);
-}
-
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
-header('Content-Type: text/plain; charset=utf-8');
 
-// Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// Check if it's a POST request
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo 'Method not allowed';
-    exit();
-}
-
-// Get form data
-$name = $_POST['name'] ?? '';
-$email = $_POST['email'] ?? '';
-$message = $_POST['message'] ?? '';
-
-// Log received data
-writeLog("Received form data: " . print_r($_POST, true));
-
-// Validate form data
-if (empty($name) || empty($email) || empty($message)) {
-    http_response_code(400);
-    echo 'Bitte füllen Sie alle Felder aus.';
-    exit();
-}
-
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    echo 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
-    exit();
-}
-
-// Store the message in a CSV file as a fallback
-$csvFile = __DIR__ . '/../csv/contact_messages.csv';
-$csvDir = dirname($csvFile);
-if (!is_dir($csvDir)) {
-    mkdir($csvDir, 0755, true);
-}
-
-$csvData = array(
-    date('Y-m-d H:i:s'),
-    $name,
-    $email,
-    $message
-);
-
-$fp = fopen($csvFile, 'a');
-fputcsv($fp, $csvData);
-fclose($fp);
-
-writeLog("Saved message to CSV file: $csvFile");
+// Set error logging
+error_log("=== Starting contact form submission ===\n", 3, "mail_error.log");
 
 try {
-    // Check if PHPMailer files exist
-    $phpmailerPath = __DIR__ . '/PHPMailer/src/';
-    if (!file_exists($phpmailerPath . 'PHPMailer.php')) {
-        throw new Exception("PHPMailer.php not found in: " . $phpmailerPath);
-    }
-
-    require $phpmailerPath . 'Exception.php';
-    require $phpmailerPath . 'PHPMailer.php';
-    require $phpmailerPath . 'SMTP.php';
-
-    // Create a new PHPMailer instance
-    $mail = new PHPMailer(true);
-
-    // Use Gmail instead of IONOS as a temporary solution
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->Port = 587;
-    $mail->SMTPAuth = true;
-    $mail->Username = 'johannesbohn03@gmail.com'; // User's Gmail address
-    $mail->Password = 'kqdsijnwrzdtqzxv'; // App password (spaces removed)
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->CharSet = 'UTF-8';
+    // Get the raw POST data
+    $raw_data = file_get_contents('php://input');
+    error_log("Raw data received: " . $raw_data . "\n", 3, "mail_error.log");
     
-    // TLS settings
-    $mail->SMTPOptions = array(
-        'ssl' => array(
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        )
-    );
-
-    // Enable debug output
-    $mail->SMTPDebug = 3; // Increased debug level
-    $mail->Debugoutput = function($str, $level) {
-        writeLog("PHPMailer Debug: $str");
-    };
-
-    // Recipients
-    $mail->setFrom('johannesbohn03@gmail.com', 'FutureLaunch Kontaktformular');
-    $mail->addAddress('johannesbohn03@gmail.com', 'FutureLaunch');
-    $mail->addReplyTo($email, $name);
-
-    // Content
-    $mail->isHTML(true);
-    $mail->Subject = 'Neue Kontaktanfrage von ' . $name;
-    $mail->Body = "
-        <h2>Neue Kontaktanfrage</h2>
+    // Decode JSON
+    $data = json_decode($raw_data, true);
+    
+    // Log the decoded data
+    error_log("Decoded data: " . print_r($data, true) . "\n", 3, "mail_error.log");
+    
+    if (!$data) {
+        throw new Exception('Ungültige Anfrage: JSON konnte nicht dekodiert werden');
+    }
+    
+    // Validate required fields
+    $required_fields = ['name', 'email', 'message'];
+    foreach ($required_fields as $field) {
+        if (empty($data[$field])) {
+            throw new Exception("Fehler: {$field} ist erforderlich");
+        }
+    }
+    
+    // Validate email
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        throw new Exception('Ungültige E-Mail-Adresse');
+    }
+    
+    // Sanitize inputs
+    $name = htmlspecialchars($data['name']);
+    $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+    $message = htmlspecialchars($data['message']);
+    
+    // Create CSV directory if it doesn't exist
+    $csv_dir = __DIR__ . '/../csv';
+    if (!file_exists($csv_dir)) {
+        mkdir($csv_dir, 0777, true);
+    }
+    
+    // Save to CSV file as backup
+    $csv_file = $csv_dir . '/contact_submissions.csv';
+    $is_new_file = !file_exists($csv_file);
+    
+    $fp = fopen($csv_file, 'a');
+    
+    // Add headers if new file
+    if ($is_new_file) {
+        fputcsv($fp, ['Timestamp', 'Name', 'Email', 'Message']);
+    }
+    
+    // Add data
+    fputcsv($fp, [date('Y-m-d H:i:s'), $name, $email, $message]);
+    fclose($fp);
+    
+    error_log("Contact form data saved to CSV\n", 3, "mail_error.log");
+    
+    // Prepare email
+    $to = 'johannesbohn03@gmail.com';
+    $subject = 'Neue Kontaktanfrage von ' . $name;
+    
+    // Create HTML message
+    $html_message = "
+    <html>
+    <head>
+        <title>Neue Kontaktanfrage</title>
+    </head>
+    <body>
+        <h2>Neue Kontaktanfrage von der Website</h2>
         <p><strong>Name:</strong> {$name}</p>
         <p><strong>E-Mail:</strong> {$email}</p>
         <p><strong>Nachricht:</strong></p>
-        <p>" . nl2br(htmlspecialchars($message)) . "</p>
+        <p>" . nl2br($message) . "</p>
+        <hr>
+        <p><small>Diese Nachricht wurde über das Website Analyse Tool gesendet.</small></p>
+    </body>
+    </html>
     ";
-
-    // Log attempt to send
-    writeLog("Attempting to send email to johannesbohn03@gmail.com from {$email}");
-
-    // Send email
-    if (!$mail->send()) {
-        throw new Exception('E-Mail konnte nicht gesendet werden: ' . $mail->ErrorInfo);
-    }
-
-    // Log successful email
-    writeLog("E-Mail erfolgreich gesendet an johannesbohn03@gmail.com von {$email}");
-
-    // Return success response
-    echo 'success';
-
-} catch (Exception $e) {
-    // Log detailed error
-    writeLog("E-Mail Fehler: " . $e->getMessage());
-    writeLog("Stack Trace: " . $e->getTraceAsString());
     
-    // Since we saved to CSV, we can return success anyway
-    writeLog("Returning success response because message was saved to CSV");
-    echo 'success';
-} 
+    // Email headers
+    $headers = array(
+        'MIME-Version: 1.0',
+        'Content-type: text/html; charset=UTF-8',
+        'From: Website Analyse Tool <johannesbohn03@gmail.com>',
+        'Reply-To: ' . $name . ' <' . $email . '>',
+        'X-Mailer: PHP/' . phpversion()
+    );
+    
+    // Send email
+    $mail_sent = mail($to, $subject, $html_message, implode("\r\n", $headers));
+    
+    if ($mail_sent) {
+        error_log("Email sent successfully\n", 3, "mail_error.log");
+        echo json_encode([
+            'success' => true,
+            'message' => 'Ihre Nachricht wurde erfolgreich gesendet!'
+        ]);
+    } else {
+        error_log("Email sending failed using mail() function\n", 3, "mail_error.log");
+        // Still return success since we saved to CSV
+        echo json_encode([
+            'success' => true,
+            'message' => 'Ihre Nachricht wurde erfolgreich gespeichert und wird schnellstmöglich bearbeitet!'
+        ]);
+    }
+    
+} catch (Exception $e) {
+    if (ob_get_length()) ob_clean();
+    error_log("Contact form error: " . $e->getMessage() . "\n", 3, "mail_error.log");
+    error_log("Stack trace: " . $e->getTraceAsString() . "\n", 3, "mail_error.log");
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
+}
