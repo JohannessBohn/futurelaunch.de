@@ -64,24 +64,27 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    animation: fadeIn 1s ease-out;
 }
 
 .logo {
     display: flex;
     align-items: center;
     text-decoration: none;
+    color: #333;
     font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-.logo span {
-    color: var(--secondary);
+    font-weight: bold;
 }
 
 .logo-image {
+    width: 40px;
     height: 40px;
     margin-right: 10px;
+    animation: logoRotate 1.5s ease-out;
+}
+
+.logo span {
+    color: #0066cc;
 }
 
 /* Navigation */
@@ -280,7 +283,7 @@ footer {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
@@ -290,4 +293,20 @@ footer {
 
 .fade-in {
     animation: fadeIn 0.6s ease forwards;
+}
+
+/* Logo Animation */
+@keyframes logoRotate {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2) rotate(180deg);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+    }
 }
