@@ -77,9 +77,10 @@ header {
 }
 
 .logo-image {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     margin-right: 10px;
+    object-fit: contain;
     animation: logoRotate 1.5s ease-out;
 }
 
@@ -332,8 +333,9 @@ footer {
 }
 
 .loading-logo {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
     animation: pulseAndRotate 1s ease-in-out infinite;
 }
 
@@ -347,4 +349,73 @@ footer {
     100% {
         transform: scale(0.8) rotate(360deg);
     }
+}
+
+/* Contact Form Styles */
+.contact-form {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 109, 229, 0.1);
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.contact-form button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contact-form button:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+}
+
+/* Update Pricing Features */
+.pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.pricing-features li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.pricing-features li:last-child {
+    border-bottom: none;
 }
