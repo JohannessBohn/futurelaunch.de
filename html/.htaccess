@@ -1,0 +1,9 @@
+# Redirect all requests from /html/ to root
+RewriteEngine On
+RewriteBase /html/
+
+# Redirect index.html to root
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Redirect all other files to root
+RewriteRule ^(.+)$ /$1 [R=301,L] 
