@@ -200,3 +200,60 @@ Decoded data: Array
 
 Contact form data saved to CSV
 Email sent successfully
+=== Starting contact form submission ===
+Raw data received: {"name":"Johannes Bohns","email":"johannesbohn03@gmail.com","message":"dadsa"}
+Decoded data: Array
+(
+    [name] => Johannes Bohns
+    [email] => johannesbohn03@gmail.com
+    [message] => dadsa
+)
+
+Contact form data saved to CSV
+[22-May-2025 09:25:30 Europe/Berlin] PHP Warning:  mail(): SMTP server response: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. a640c23a62f3a-ad52d44205asm1042799066b.100 - gsmtp in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 117
+Email sending failed using mail() function
+=== Starting contact form submission ===
+Raw data received: {"name":"Johannes Bohn","email":"johannesbohn03@gmail.com","message":"Hallo test\n"}
+Decoded data: Array
+(
+    [name] => Johannes Bohn
+    [email] => johannesbohn03@gmail.com
+    [message] => Hallo test
+
+)
+
+Contact form data saved to CSV
+[22-May-2025 09:26:05 Europe/Berlin] PHP Warning:  mail(): SMTP server response: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. a640c23a62f3a-ad52d4383f8sm1026800966b.113 - gsmtp in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 117
+Email sending failed using mail() function
+[22-May-2025 09:38:20 Europe/Berlin] PHP Warning:  require(vendor/autoload.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 9
+[22-May-2025 09:38:20 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'vendor/autoload.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php:9
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 9
+[22-May-2025 09:40:05 Europe/Berlin] PHP Warning:  require(vendor/autoload.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 9
+[22-May-2025 09:40:05 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'vendor/autoload.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php:9
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 9
+[22-May-2025 09:40:05 Europe/Berlin] PHP Warning:  require(vendor/autoload.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 9
+[22-May-2025 09:40:05 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'vendor/autoload.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php:9
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\futurelaunch.de\script\send-contact.php on line 9
+PHPMailer not found - please install via Composer or manually
+PHPMailer not found - please install via Composer or manually
+=== Starting contact form submission ===
+Raw data received: {"name":"Johannes Bohn","email":"johannesbohn03@gmail.com","message":"dadasd"}
+Decoded data: Array
+(
+    [name] => Johannes Bohn
+    [email] => johannesbohn03@gmail.com
+    [message] => dadasd
+)
+
+Contact form data saved to CSV
+Email sent successfully

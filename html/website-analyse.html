@@ -907,7 +907,7 @@
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 30000);
             
-            const response = await fetch('http://localhost:8080/LeqendAIO/futurelaunch.de/script/scan-website.php', {
+            const response = await fetch('../script/scan-website.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1188,7 +1188,7 @@
                 message: form.message.value
             };
             
-            const response = await fetch('http://localhost:8080/LeqendAIO/futurelaunch.de/script/send-contact.php', {
+            const response = await fetch('../script/send-contact.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

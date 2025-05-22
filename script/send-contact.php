@@ -5,13 +5,15 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/mail_error.log');
 
-// Set SMTP settings for PHP mail
-ini_set('SMTP', 'smtp.gmail.com');
-ini_set('smtp_port', '587');
-ini_set('sendmail_from', 'johannesbohn03@gmail.com');
+// Include Composer's autoloader
+require __DIR__ . '/vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 // Clear any previous output
-ob_clean();
+if (ob_get_length()) ob_clean();
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -59,13 +61,12 @@ try {
     $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
     $message = htmlspecialchars($data['message']);
     
-    // Create CSV directory if it doesn't exist
+    // Save to CSV file as backup
     $csv_dir = __DIR__ . '/../csv';
     if (!file_exists($csv_dir)) {
         mkdir($csv_dir, 0777, true);
     }
     
-    // Save to CSV file as backup
     $csv_file = $csv_dir . '/contact_submissions.csv';
     $is_new_file = !file_exists($csv_file);
     
@@ -82,48 +83,60 @@ try {
     
     error_log("Contact form data saved to CSV\n", 3, "mail_error.log");
     
-    // Prepare email
-    $to = 'johannesbohn03@gmail.com';
-    $subject = 'Neue Kontaktanfrage von ' . $name;
-    
-    // Create HTML message
-    $html_message = "
-    <html>
-    <head>
-        <title>Neue Kontaktanfrage</title>
-    </head>
-    <body>
-        <h2>Neue Kontaktanfrage von der Website</h2>
-        <p><strong>Name:</strong> {$name}</p>
-        <p><strong>E-Mail:</strong> {$email}</p>
-        <p><strong>Nachricht:</strong></p>
-        <p>" . nl2br($message) . "</p>
-        <hr>
-        <p><small>Diese Nachricht wurde über das Website Analyse Tool gesendet.</small></p>
-    </body>
-    </html>
-    ";
-    
-    // Email headers
-    $headers = array(
-        'MIME-Version: 1.0',
-        'Content-type: text/html; charset=UTF-8',
-        'From: Website Analyse Tool <johannesbohn03@gmail.com>',
-        'Reply-To: ' . $name . ' <' . $email . '>',
-        'X-Mailer: PHP/' . phpversion()
-    );
-    
-    // Send email
-    $mail_sent = mail($to, $subject, $html_message, implode("\r\n", $headers));
-    
-    if ($mail_sent) {
+    // Create a new PHPMailer instance
+    $mail = new PHPMailer(true);
+
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'johannesbohn03@gmail.com';
+        $mail->Password = 'tsqs axin ztun bggs';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+        $mail->CharSet = 'UTF-8';
+
+        // Recipients
+        $mail->setFrom('johannesbohn03@gmail.com', 'Website Analyse Tool');
+        $mail->addAddress('johannesbohn03@gmail.com', 'Johannes Bohn');
+        $mail->addReplyTo($email, $name);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Neue Kontaktanfrage von ' . $name;
+        $mail->Body = "
+        <html>
+        <head>
+            <title>Neue Kontaktanfrage</title>
+            <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                h2 { color: #4A6DE5; }
+                .message { background: #f9f9f9; padding: 15px; border-radius: 5px; }
+                hr { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+                .footer { font-size: 12px; color: #666; }
+            </style>
+        </head>
+        <body>
+            <h2>Neue Kontaktanfrage von der Website</h2>
+            <p><strong>Name:</strong> {$name}</p>
+            <p><strong>E-Mail:</strong> {$email}</p>
+            <p><strong>Nachricht:</strong></p>
+            <div class='message'>" . nl2br($message) . "</div>
+            <hr>
+            <p class='footer'>Diese Nachricht wurde über das Website Analyse Tool gesendet.</p>
+        </body>
+        </html>";
+        $mail->AltBody = "Neue Kontaktanfrage\n\nName: {$name}\nE-Mail: {$email}\n\nNachricht:\n{$message}";
+
+        $mail->send();
         error_log("Email sent successfully\n", 3, "mail_error.log");
         echo json_encode([
             'success' => true,
             'message' => 'Ihre Nachricht wurde erfolgreich gesendet!'
         ]);
-    } else {
-        error_log("Email sending failed using mail() function\n", 3, "mail_error.log");
+    } catch (Exception $e) {
+        error_log("Email sending failed: " . $mail->ErrorInfo . "\n", 3, "mail_error.log");
         // Still return success since we saved to CSV
         echo json_encode([
             'success' => true,
