@@ -12,29 +12,387 @@
 
     <!-- Social Media-logos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 <body>
+    <script src="/script/cookies.js" defer></script>
 
-<script src="/script/cookies.js" defer></script>
+    <!-- Header Section -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="/assets/2.jpg" alt="FutureLaunch Logo" class="logo-image"/>
+                Future<span>Launch</span>
+            </a>
+            <div class="menu-toggle">&#9776;</div>
+            <ul class="nav-links">
+                <li><a href="#services">Dienstleistungen</a></li>
+                <li><a href="#process">Prozess</a></li>
+                <li><a href="#case-studies">Referenzen</a></li>
+                <li><a href="#pricing">Preise</a></li>
+                <li><a href="#contact" class="cta-button">Kontakt</a></li>
+                <li><a href="/website-analyse" class="cta-button">Website Analyse</a></li>
+            </ul>
+        </div>
+    </header>
 
-<!-- Header Section -->
-<header>
-    <div class="container header-container">
-        <a href="/" class="logo">
-            <img src="/assets/2.jpg" alt="FutureLaunch Logo" class="logo-image"/>
-            Future<span>Launch</span>
-        </a>
-        <div class="menu-toggle">&#9776;</div>
-        <ul class="nav-links">
-            <li><a href="#services">Dienstleistungen</a></li>
-            <li><a href="#process">Prozess</a></li>
-            <li><a href="#case-studies">Referenzen</a></li>
-            <li><a href="#pricing">Preise</a></li>
-            <li><a href="#contact" class="cta-button">Kontakt</a></li>
-            <li><a href="/website-analyse" class="cta-button">Website Analyse</a></li>
-        </ul>
-    </div>
-</header>
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div style="background-color: #ff3a3a; color: white; display: inline-block; padding: 8px 20px; border-radius: 30px; font-weight: bold; margin-bottom: 15px; animation: pulse 2s infinite;">
+                    NEU ERÖFFNET: 30% ERÖFFNUNGSRABATT
+                </div>
+                <h1>Maßgeschneiderte Softwarelösungen für Ihr Unternehmen</h1>
+                <p>FutureLaunch bietet innovative B2B Code-Dienstleistungen, die Ihr Unternehmen auf die nächste Stufe
+                    bringen.</p>
+                <div class="hero-buttons">
+                    <a href="/website-analyse" class="button button-primary">KOSTENLOSE Website-Analyse</a>
+                    <a href="#contact" class="button button-secondary">Nachricht senden</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-[Rest of the content from html/index.html with updated paths] 
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Unsere Leistungen</h2>
+                <p>Innovative Softwarelösungen, die Ihr Unternehmen voranbringen. Entdecken Sie unser Angebot.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-code"></i></div>
+                    <h3>Webentwicklung</h3>
+                    <p>Moderne, responsive Websites und Webanwendungen, die genau auf Ihre Geschäftsbedürfnisse zugeschnitten sind.</p>
+                    <a href="#contact" class="learn-more">Mehr erfahren &rarr;</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>App-Entwicklung</h3>
+                    <p>Native und Cross-Plattform Apps für iOS und Android – leistungsstark, intuitiv und benutzerfreundlich.</p>
+                    <a href="#contact" class="learn-more">Mehr erfahren &rarr;</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-robot"></i></div>
+                    <h3>KI & Big Data</h3>
+                    <p>Implementierung von künstlicher Intelligenz und datengetriebenen Lösungen zur Optimierung Ihrer Prozesse.</p>
+                    <a href="#contact" class="learn-more">Mehr erfahren &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process">
+        <div class="container">
+            <div class="section-header">
+                <h2>Unser Prozess</h2>
+                <p>Wir folgen einem bewährten Prozess, um Ihnen die bestmögliche Lösung zu bieten.</p>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Beratung</h3>
+                    <p>Wir analysieren Ihre Anforderungen und Ziele, um ein klares Verständnis Ihrer Bedürfnisse zu entwickeln.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Konzeption</h3>
+                    <p>Wir erstellen ein maßgeschneidertes Konzept, das genau auf Ihre Geschäftsanforderungen zugeschnitten ist.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Entwicklung</h3>
+                    <p>Unser Team entwickelt Ihre Lösung mit modernsten Technologien und Best Practices.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Test & Launch</h3>
+                    <p>Wir testen gründlich und stellen sicher, dass alles einwandfrei funktioniert, bevor wir launchen.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>Support</h3>
+                    <p>Auch nach dem Launch stehen wir Ihnen mit kontinuierlichem Support und Wartung zur Seite.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container about-container">
+            <div class="about-image">
+                <img src="/assets/1.jpg" alt="Über FutureLaunch">
+            </div>
+            <div class="about-content">
+                <h2>Über FutureLaunch</h2>
+                <p>FutureLaunch ist Ihr innovativer Partner für maßgeschneiderte Softwarelösungen im B2B-Bereich. Wir helfen Unternehmen dabei, ihre Geschäftsprozesse effizienter zu gestalten und digitale Potenziale voll auszuschöpfen.</p>
+                <p>Mit unserem erfahrenen Team bieten wir individuelle Beratung, modernste Technologien und einen klar strukturierten Entwicklungsprozess, der genau auf Ihre Bedürfnisse abgestimmt ist.</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Zufriedene Kunden (Startphase)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Abgeschlossene Projekte</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3+</div>
+                        <div class="stat-label">Erfahrene Experten</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section id="case-studies">
+        <div class="container">
+            <div class="section-header">
+                <h2>Unsere Erfolgsgeschichten</h2>
+                <p>Erfahren Sie, wie wir anderen Unternehmen geholfen haben, ihre Ziele zu erreichen.</p>
+            </div>
+            <div class="case-studies-grid">
+                <div class="case-study-card">
+                    <div class="case-study-image">
+                        <img src="/assets/3.png" alt="Platzhalter">
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-tag">Baugewerbe</div>
+                        <h3>Kroll & Kroll GbR</h3>
+                        <p>Herr Kroll hat uns das Vertrauen geschenkt, seine Internetpräsenz zu gestalten und weiterzuentwickeln. Gemeinsam konnten wir seine Online-Sichtbarkeit deutlich verbessern.</p>
+                        <a href="https://kroll-bauelemente.de" class="learn-more">Seite besichtigen &rarr;</a>
+                    </div>
+                </div>
+                <div class="case-study-card">
+                    <div class="case-study-image">
+                        <img src="/assets/3.png" alt="Platzhalter">
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-tag">Baugewerbe</div>
+                        <h3>Kroll & Kroll GbR</h3>
+                        <p>Herr Kroll hat uns das Vertrauen geschenkt, seine Internetpräsenz zu gestalten und weiterzuentwickeln. Gemeinsam konnten wir seine Online-Sichtbarkeit deutlich verbessern.</p>
+                        <a href="https://kroll-bauelemente.de" class="learn-more">Seite besichtigen &rarr;</a>
+                    </div>
+                </div>
+                <div class="case-study-card">
+                    <div class="case-study-image">
+                        <img src="/assets/3.png" alt="Platzhalter">
+                    </div>
+                    <div class="case-study-content">
+                        <div class="case-study-tag">Baugewerbe</div>
+                        <h3>Kroll & Kroll GbR</h3>
+                        <p>Herr Kroll hat uns das Vertrauen geschenkt, seine Internetpräsenz zu gestalten und weiterzuentwickeln. Gemeinsam konnten wir seine Online-Sichtbarkeit deutlich verbessern.</p>
+                        <a href="https://kroll-bauelemente.de" class="learn-more">Seite besichtigen &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Was unsere zukünftigen Kunden sagen könnten</h2>
+                <p>Wir sind ein junges Team mit viel Leidenschaft und frischen Ideen. Da wir gerade erst starten, haben wir noch keine abgeschlossenen Projekte – aber wir freuen uns darauf, bald auch Ihre Erfolgsgeschichte zu schreiben!</p>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonial-slide active">
+                    <div class="testimonial-content">
+                        <p>"FutureLaunch zeigt viel Engagement und Transparenz – genau das, was wir uns von einem zuverlässigen Partner wünschen. Wir sind gespannt auf die Zusammenarbeit!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/assets/4.jpg" alt="Musterkunde">
+                        </div>
+                        <div class="author-name">Musterkunde</div>
+                        <div class="author-position">CEO, Beispiel GmbH</div>
+                    </div>
+                </div>
+                <div class="testimonial-controls">
+                    <div class="testimonial-dot active"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Unsere Pakete</h2>
+                <p>Sonderpreise zur Neueröffnung - Sparen Sie jetzt 30%!</p>
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; margin-top: 20px; border-left: 4px solid #0066cc; text-align: left;">
+                    <strong>Eröffnungsangebot:</strong> Alle Preise sind bereits um 30% reduziert! Angebot gültig bis zum 30.06.2025.
+                </div>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Basis</h3>
+                        <div class="price">
+                            <span class="original-price">1.999€</span>
+                            <span class="current-price">1.399€</span>
+                            <span class="period">/ Projekt</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Individuelle Beratung</li>
+                        <li>Responsive Website</li>
+                        <li>CMS-Integration</li>
+                        <li>SEO-Grundoptimierung</li>
+                        <li>3 Monate Support</li>
+                    </ul>
+                    <a href="#contact" class="button button-primary">Anfrage senden</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-header">
+                        <div class="featured-badge">Bestseller</div>
+                        <h3>Business</h3>
+                        <div class="price">
+                            <span class="original-price">3.999€</span>
+                            <span class="current-price">2.799€</span>
+                            <span class="period">/ Projekt</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Alles aus Basis</li>
+                        <li>Individuelle Funktionen</li>
+                        <li>API-Integration</li>
+                        <li>Umfassende SEO</li>
+                        <li>12 Monate Support</li>
+                    </ul>
+                    <a href="#contact" class="button button-primary">Anfrage senden</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                        <div class="price">
+                            <span class="original-price">Ab 6.999€</span>
+                            <span class="current-price">Ab 4.899€</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Alles aus Business</li>
+                        <li>Individuelle Software</li>
+                        <li>KI-Integration</li>
+                        <li>Automatisierte Prozesse</li>
+                        <li>Unbegrenzter Support</li>
+                    </ul>
+                    <a href="#contact" class="button button-primary">Anfrage senden</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Kontaktieren Sie uns</h2>
+                <p>Nutzen Sie jetzt unsere Eröffnungsangebote und sichern Sie sich 30% Rabatt!</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="info-box">
+                        <h3>Neueröffnungs-Bonus</h3>
+                        <p>Kontaktieren Sie uns jetzt und erhalten Sie als einer unserer ersten Kunden:</p>
+                        <ul>
+                            <li>✓ 30% Rabatt auf alle Dienstleistungen</li>
+                            <li>✓ Kostenlose SEO-Analyse</li>
+                            <li>✓ 3 Monate zusätzlichen Support</li>
+                        </ul>
+                    </div>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p>Musterstraße 123, 10115 Berlin, Deutschland</p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <p>+49 30 12345678</p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <p>johannesbohn03@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm" action="/script/send-contact.php" method="POST">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Ihr Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Ihre E-Mail" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Ihre Nachricht" required></textarea>
+                        </div>
+                        <button type="submit" class="button button-primary">Nachricht senden</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <a href="#" class="footer-logo">Future<span>Launch</span></a>
+                    <p>Wir sind Ihr Partner für maßgeschneiderte Softwarelösungen im B2B-Bereich. Unser erfahrenes Team
+                        hilft Ihnen, Ihre Geschäftsprozesse zu digitalisieren und zu optimieren.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-col">
+                    <h4 class="footer-heading">Dienstleistungen</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Webentwicklung</a></li>
+                        <li><a href="#">App-Entwicklung</a></li>
+                        <li><a href="#">Business Software</a></li>
+                        <li><a href="#">API Entwicklung</a></li>
+                        <li><a href="#">KI & Big Data</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-col">
+                    <h4 class="footer-heading">Unternehmen</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Über uns</a></li>
+                        <li><a href="#">Karriere</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-subscribe">
+                    <h4 class="footer-heading">Newsletter</h4>
+                    <p>Abonnieren Sie unseren Newsletter für aktuelle Neuigkeiten und Trends.</p>
+                    <form>
+                        <input type="email" placeholder="Ihre E-Mail-Adresse">
+                        <button type="submit">&#10148;</button>
+                    </form>
+                    <p>Wir respektieren Ihre Privatsphäre und geben Ihre Daten nicht weiter.</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 FutureLaunch. Alle Rechte vorbehalten.
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
