@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>404 - Seite nicht gefunden | FutureLaunch</title>
+    <style>
+        .error-container {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0;
+            line-height: 1;
+        }
+        .error-message {
+            font-size: 2rem;
+            margin: 1rem 0 2rem;
+            color: #666;
+        }
+        .back-home {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+        .back-home:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="/assets/2.jpg" alt="FutureLaunch Logo" class="logo-image"/>
+                Future<span>Launch</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Oops! Diese Seite wurde nicht gefunden.</p>
+        <a href="/" class="back-home">Zurück zur Startseite</a>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 FutureLaunch. Alle Rechte vorbehalten.
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
