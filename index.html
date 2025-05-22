@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="/css/main.css">
     <title>FutureLaunch | Innovative B2B Code-Dienstleistungen</title>
 
@@ -14,6 +14,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
         body > *:not(.loading-screen) {
             opacity: 0;
             transition: opacity 0.5s;
@@ -21,13 +27,307 @@
         body.loaded > *:not(.loading-screen) {
             opacity: 1;
         }
+        
+        /* Loading Animation Improvements */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a192f 0%, #0e2747 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .loading-screen .content-wrapper {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loading-logo {
+            animation: pulse-scale 2s infinite ease-in-out;
+            max-width: 180px;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-text {
+            color: white;
+            font-size: 24px;
+            font-weight: 500;
+            opacity: 0;
+            animation: fade-in 1s forwards 0.5s;
+        }
+        
+        .loading-spinner {
+            margin-top: 25px;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+            align-self: center;
+        }
+        
+        @keyframes pulse-scale {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+        
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Pricing Section Improvements */
+        #pricing {
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+            padding: 80px 0;
+        }
+        
+        .pricing-grid {
+            gap: 25px;
+        }
+        
+        .pricing-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+            position: relative;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .pricing-header {
+            padding: 30px 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .pricing-card.featured {
+            transform: scale(1.05);
+            z-index: 2;
+            box-shadow: 0 15px 40px rgba(0, 102, 204, 0.15);
+            border: 2px solid #0066cc;
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.08) translateY(-5px);
+        }
+        
+        /* Fixed Bestseller Badge Styling */
+        .featured-badge {
+            position: absolute;
+            top: 15px;
+            right: 50%;
+            transform: translateX(50%);
+            background: #0066cc;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .price {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .original-price {
+            display: inline-block;
+            color: #dc3545;
+            font-size: 1.2rem;
+            position: relative;
+            margin-right: 5px;
+        }
+        
+        .original-price::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #dc3545;
+            top: 50%;
+            left: 0;
+            transform: rotate(-5deg);
+        }
+        
+        .current-price {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        
+        .period {
+            display: block;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .pricing-features {
+            list-style-type: none;
+            padding: 20px 25px;
+            margin: 0;
+        }
+        
+        .pricing-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f1f1;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .pricing-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #0066cc;
+            font-weight: bold;
+        }
+        
+        .pricing-card .button {
+            display: block;
+            margin: 20px auto;
+            width: 80%;
+            padding: 12px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card.featured .button {
+            background-color: #0066cc;
+            color: white;
+        }
+        
+        .pricing-card.featured .button:hover {
+            background-color: #0055b3;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .case-study-card p {
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .case-study-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            margin-top: auto;
+        }
+        
+        .case-study-features span {
+            padding: 4px 10px;
+            background: #f1f8ff;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #0066cc;
+        }
+        
+        .learn-more {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            margin-top: auto;
+        }
+        
+        .learn-more:hover {
+            text-decoration: underline;
+        }
+        
+        /* Next Project Card Styling */
+        .next-project {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .next-project-content {
+            padding: 40px 30px;
+            max-width: 80%;
+        }
+        
+        .next-project-icon {
+            font-size: 3rem;
+            color: #0066cc;
+            margin-bottom: 20px;
+        }
+        
+        .next-project-cta {
+            margin-top: 25px;
+        }
+        
+        .next-project .button {
+            padding: 12px 30px;
+        }
+
+        .contact-details {
+            margin-top: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .contact-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #f1f8ff;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
     <!-- Loading Screen -->
     <div class="loading-screen">
-        <img src="/assets/FutureLaunch.png" alt="FutureLaunch Logo" class="loading-logo">
-        <div class="welcome-text">Willkommen bei FutureLaunch</div>
+        <div class="content-wrapper">
+            <img src="/assets/FutureLaunch.png" alt="FutureLaunch Logo" class="loading-logo">
+            <div class="welcome-text">Willkommen bei FutureLaunch</div>
+            <div class="loading-spinner"></div>
+        </div>
     </div>
 
     <script>
@@ -38,8 +338,16 @@
                 document.body.classList.add('loaded');
                 setTimeout(function() {
                     document.querySelector('.loading-screen').style.display = 'none';
-                }, 500);
-            }, 1000);
+                }, 800); // Increased for smoother transition
+            }, 1800); // Slight increase to show the animation
+        });
+
+        // Prevent scrolling during loading
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.body.style.overflow = '';
+            }, 2000);
         });
 
         // Preload images
@@ -47,16 +355,43 @@
             '/assets/1.jpg',
             '/assets/FutureLaunch.png',
             '/assets/3.png',
-            '/assets/4.jpg'
+            '/assets/4.jpg',
+            '/assets/kroll-preview.jpg',
+            '/assets/bildungsplan-preview.jpg'
         ];
         
         imagesToPreload.forEach(src => {
             const img = new Image();
             img.src = src;
         });
+
+        // Cookie Consent Implementation
+        window.addEventListener('load', function() {
+            window.cookieconsent.initialise({
+                palette: {
+                    popup: {
+                        background: "#f8f9fa",
+                        text: "#212529"
+                    },
+                    button: {
+                        background: "#0066cc",
+                        text: "#ffffff"
+                    }
+                },
+                content: {
+                    message: "Diese Website verwendet Cookies, um Ihnen die bestmögliche Erfahrung zu bieten.",
+                    dismiss: "Verstanden",
+                    link: "Mehr erfahren",
+                    href: "/datenschutz.html"
+                },
+                dismissOnTimeout: false,
+                dismissOnScroll: false
+            });
+        });
     </script>
 
     <script src="/script/cookies.js" defer></script>
+    <script src="/script/form-handler.js" defer></script>
 
     <!-- Header Section -->
     <header>
@@ -72,7 +407,7 @@
                 <li><a href="#case-studies">Referenzen</a></li>
                 <li><a href="#pricing">Preise</a></li>
                 <li><a href="#contact" class="cta-button">Kontakt</a></li>
-                <li><a href="/website-analyse" class="cta-button">Website Analyse</a></li>
+                <li><a href="/website-analyse.html" class="cta-button">Website Analyse</a></li>
             </ul>
         </div>
     </header>
@@ -88,7 +423,7 @@
                 <p>FutureLaunch bietet innovative B2B Code-Dienstleistungen, die Ihr Unternehmen auf die nächste Stufe
                     bringen.</p>
                 <div class="hero-buttons">
-                    <a href="/website-analyse" class="button button-primary">KOSTENLOSE Website-Analyse</a>
+                    <a href="/website-analyse.html" class="button button-primary">KOSTENLOSE Website-Analyse</a>
                     <a href="#contact" class="button button-secondary">Nachricht senden</a>
                 </div>
             </div>
@@ -192,45 +527,70 @@
         </div>
     </section>
 
-    <!-- Case Studies Section -->
+    <!-- Case Studies Section - Enhanced -->
     <section id="case-studies">
         <div class="container">
             <div class="section-header">
                 <h2>Unsere Erfolgsgeschichten</h2>
-                <p>Erfahren Sie, wie wir anderen Unternehmen geholfen haben, ihre Ziele zu erreichen.</p>
+                <p>Erfahren Sie, wie wir anderen Unternehmen geholfen haben, ihre digitalen Ziele zu erreichen.</p>
             </div>
+            
             <div class="case-studies-grid">
+                <!-- Kroll Bauelemente Project -->
                 <div class="case-study-card">
                     <div class="case-study-image">
-                        <img src="/assets/3.png" alt="Platzhalter">
+                        <img src="/assets/kroll-preview.jpg" alt="Kroll & Kroll GbR Website" onerror="this.src='/assets/3.png'; this.onerror=null;">
+                        <div class="case-study-overlay">
+                            <a href="https://kroll-bauelemente.de" target="_blank" rel="noopener" class="view-site-btn">Website besuchen</a>
+                        </div>
                     </div>
                     <div class="case-study-content">
                         <div class="case-study-tag">Baugewerbe</div>
                         <h3>Kroll & Kroll GbR</h3>
-                        <p>Herr Kroll hat uns das Vertrauen geschenkt, seine Internetpräsenz zu gestalten und weiterzuentwickeln. Gemeinsam konnten wir seine Online-Sichtbarkeit deutlich verbessern.</p>
-                        <a href="https://kroll-bauelemente.de" class="learn-more">Seite besichtigen &rarr;</a>
+                        <p>Entwicklung einer modernen, responsiven Webpräsenz für ein etabliertes Bauunternehmen. Das Projekt umfasste ein kundenorientiertes Design, optimierte Mobile-Darstellung und umfassende SEO-Maßnahmen zur Steigerung der lokalen Sichtbarkeit.</p>
+                        <div class="case-study-features">
+                            <span>Responsive Design</span>
+                            <span>SEO-Optimierung</span>
+                            <span>Content-Management</span>
+                        </div>
+                        <a href="https://kroll-bauelemente.de" class="learn-more" target="_blank" rel="noopener">Seite besichtigen &rarr;</a>
                     </div>
                 </div>
+                
+                <!-- Bildungsplan Brandenburg Project -->
                 <div class="case-study-card">
                     <div class="case-study-image">
-                        <img src="/assets/3.png" alt="Platzhalter">
+                        <img src="/assets/bildungsplan-preview.jpg" alt="Bildungsplan Brandenburg Website" 
+                             onerror="this.src='/assets/bildungsplan-fallback.jpg'; this.onerror=null;"
+                             style="border: 3px solid #0066cc; box-sizing: border-box;">
+                        <div class="case-study-overlay">
+                            <a href="https://bildungsplan-brandenburg.de" target="_blank" rel="noopener" class="view-site-btn">Website besuchen</a>
+                        </div>
                     </div>
                     <div class="case-study-content">
-                        <div class="case-study-tag">Baugewerbe</div>
-                        <h3>Kroll & Kroll GbR</h3>
-                        <p>Herr Kroll hat uns das Vertrauen geschenkt, seine Internetpräsenz zu gestalten und weiterzuentwickeln. Gemeinsam konnten wir seine Online-Sichtbarkeit deutlich verbessern.</p>
-                        <a href="https://kroll-bauelemente.de" class="learn-more">Seite besichtigen &rarr;</a>
+                        <div class="case-study-tag">Bildungswesen</div>
+                        <h3>Bildungsplan Brandenburg</h3>
+                        <p>Konzeption und Umsetzung einer informativen Bildungsplattform für das Land Brandenburg. Mit besonderem Fokus auf Benutzerfreundlichkeit, Barrierefreiheit und strukturierte Informationsarchitektur für optimale Nutzererfahrung.</p>
+                        <div class="case-study-features">
+                            <span>Barrierefreiheit</span>
+                            <span>Komplexe Informationsstruktur</span>
+                            <span>Öffentlicher Sektor</span>
+                        </div>
+                        <a href="https://bildungsplan-brandenburg.de" class="learn-more" target="_blank" rel="noopener">Seite besichtigen &rarr;</a>
                     </div>
                 </div>
-                <div class="case-study-card">
-                    <div class="case-study-image">
-                        <img src="/assets/3.png" alt="Platzhalter">
-                    </div>
-                    <div class="case-study-content">
-                        <div class="case-study-tag">Baugewerbe</div>
-                        <h3>Kroll & Kroll GbR</h3>
-                        <p>Herr Kroll hat uns das Vertrauen geschenkt, seine Internetpräsenz zu gestalten und weiterzuentwickeln. Gemeinsam konnten wir seine Online-Sichtbarkeit deutlich verbessern.</p>
-                        <a href="https://kroll-bauelemente.de" class="learn-more">Seite besichtigen &rarr;</a>
+                
+                <!-- Next Project Container -->
+                <div class="case-study-card next-project">
+                    <div class="next-project-content">
+                        <div class="next-project-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Ihr Projekt als nächste Erfolgsgeschichte?</h3>
+                        <p>Lassen Sie uns gemeinsam Ihre digitale Vision verwirklichen. Profitieren Sie von unserer Expertise und werden Sie Teil unserer Erfolgsgeschichten.</p>
+                        <div class="next-project-cta">
+                            <a href="#contact" class="button button-primary">Projekt besprechen</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -295,8 +655,8 @@
                 </div>
 
                 <div class="pricing-card featured">
+                    <div class="featured-badge">Bestseller</div>
                     <div class="pricing-header">
-                        <div class="featured-badge">Bestseller</div>
                         <h3>Business</h3>
                         <div class="price">
                             <span class="original-price">3.999€</span>
@@ -320,6 +680,7 @@
                         <div class="price">
                             <span class="original-price">Ab 6.999€</span>
                             <span class="current-price">Ab 4.899€</span>
+                            <span class="period">/ Projekt</span>
                         </div>
                     </div>
                     <ul class="pricing-features">
@@ -340,36 +701,34 @@
         <div class="container">
             <div class="section-header">
                 <h2>Kontaktieren Sie uns</h2>
-                <p>Nutzen Sie jetzt unsere Eröffnungsangebote und sichern Sie sich 30% Rabatt!</p>
+                <p>Nutzen Sie unser Eröffnungsangebot und sichern Sie sich 30% Rabatt!</p>
             </div>
             <div class="contact-grid">
                 <div class="contact-info">
                     <div class="info-box">
                         <h3>Neueröffnungs-Bonus</h3>
-                        <p>Kontaktieren Sie uns jetzt und erhalten Sie als einer unserer ersten Kunden:</p>
-                        <ul>
-                            <li>✓ 30% Rabatt auf alle Dienstleistungen</li>
-                            <li>✓ Kostenlose SEO-Analyse</li>
-                            <li>✓ 3 Monate zusätzlichen Support</li>
-                        </ul>
+                        <p>Als einer unserer ersten Kunden erhalten Sie:</p>
+                        <p5 class="bonus-feature">🎁 30% Rabatt auf alle Dienstleistungen</p>
+                        <p5 class="bonus-feature">🔍 Kostenlose SEO-Analyse</p>
+                        <p class="bonus-feature">🛠️ 3 Monate zusätzlichen Support</p>
                     </div>
                     <div class="contact-details">
                         <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <p>Musterstraße 123, 10115 Berlin, Deutschland</p>
+                            <span class="contact-icon">📍</span>
+                            <span>Rückertstr. 20B, 14478 Potsdam</span>
                         </div>
                         <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <p>+49 30 12345678</p>
+                            <span class="contact-icon">📞</span>
+                            <span>+49 176 6213 2706</span>
                         </div>
                         <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <p>johannesbohn03@gmail.com</p>
+                            <span class="contact-icon">✉️</span>
+                            <span>johannesbohn03@gmail.com</span>
                         </div>
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="contactForm" action="/script/send-contact.php" method="POST">
+                    <form id="contactForm" onsubmit="return submitContactForm(event)">
                         <div class="form-group">
                             <input type="text" id="name" name="name" placeholder="Ihr Name" required>
                         </div>
@@ -379,7 +738,13 @@
                         <div class="form-group">
                             <textarea id="message" name="message" placeholder="Ihre Nachricht" required></textarea>
                         </div>
-                        <button type="submit" class="button button-primary">Nachricht senden</button>
+                        <button type="submit" class="button button-primary">
+                            <span class="button-text">Nachricht senden</span>
+                            <span class="button-loader" style="display: none;">
+                                <i class="fas fa-circle-notch fa-spin"></i> Wird gesendet...
+                            </span>
+                        </button>
+                        <div class="form-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px;"></div>
                     </form>
                 </div>
             </div>
@@ -436,5 +801,8 @@
             </div>
         </div>
     </footer>
+
+    <!-- Add confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>
-</html> 
+</html>
