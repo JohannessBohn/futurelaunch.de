@@ -12,11 +12,22 @@
 
     <!-- Social Media-logos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body > *:not(.loading-screen) {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        body.loaded > *:not(.loading-screen) {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Screen -->
     <div class="loading-screen">
         <img src="/assets/FutureLaunch.png" alt="FutureLaunch Logo" class="loading-logo">
+        <div class="welcome-text">Willkommen bei FutureLaunch</div>
     </div>
 
     <script>
@@ -24,6 +35,7 @@
         window.addEventListener('load', function() {
             setTimeout(function() {
                 document.querySelector('.loading-screen').classList.add('fade-out');
+                document.body.classList.add('loaded');
                 setTimeout(function() {
                     document.querySelector('.loading-screen').style.display = 'none';
                 }, 500);
@@ -33,7 +45,7 @@
         // Preload images
         const imagesToPreload = [
             '/assets/1.jpg',
-            '/assets/2.jpg',
+            '/assets/FutureLaunch.png',
             '/assets/3.png',
             '/assets/4.jpg'
         ];
