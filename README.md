@@ -1,27 +1,27 @@
 # 🚀 FutureLaunch.de
 
-> **Starte in die Zukunft des Webs!**
+> **Ihr Partner für digitale B2B-Vertriebslösungen!**
 
 ![FutureLaunch Banner](assets/banner.png)
 
 ## 💫 Das ist FutureLaunch
 
-FutureLaunch ist dein kreativer Partner für atemberaubende Web-Erlebnisse! Wir verwandeln deine Vision in digitale Realität - mit innovativem Design, leistungsstarker Technologie und einer Prise Magie.
+FutureLaunch ist Ihr Experte für digitale B2B-Vertriebslösungen. Wir optimieren Ihren Vertriebsprozess durch innovative Technologien und maßgeschneiderte Web-Lösungen. Von der ersten Leadgenerierung bis zum Vertragsabschluss - wir digitalisieren Ihren B2B-Vertrieb.
 
-### 🌟 Was wir erschaffen
+### 🌟 Unsere B2B-Lösungen
 
-- **Spektakuläre Websites** - Designs, die begeistern und konvertieren
-- **Responsive Meisterwerke** - Perfekt auf jedem Gerät
-- **Performance-Optimierte Lösungen** - Blitzschnelle Ladezeiten
-- **Suchmaschinen-Champions** - SEO von Anfang an mitgedacht
+- **Digitale Vertriebsplattformen** - Maßgeschneiderte B2B-Portale und E-Commerce-Lösungen
+- **Sales Enablement Tools** - Digitale Werkzeuge für Ihren Vertriebserfolg
+- **Conversion-optimierte Websites** - B2B-fokussierte Designs mit klarem ROI
+- **Vertriebsautomatisierung** - CRM-Integration und Marketing-Automation
 
 ## 🔧 Tech-Stack
 
 ```
-🎨 Design: Figma + kreative Köpfe
+🎨 Design: Figma + UX-Expertise für B2B
 🖥️ Frontend: HTML5, CSS3, JavaScript, React
-🔄 Backend: Node.js, Python
-🚀 Deployment: Cloudflare Pages
+🔄 Backend: Node.js, Python, CRM-Integrationen
+🚀 Deployment: Cloudflare Pages, Enterprise-ready
 ```
 
 ## 📂 Projektstruktur
@@ -127,6 +127,6 @@ Zugriff erfolgt über `/admin/index.html`.
 - Admin-Interface für Kontaktformular-Einträge
 - Statistik-Dashboard für Website-Performance
 
-⭐ **Mit 💙 erstellt von Johannes und Team** ⭐
+⭐ **Mit 💙 erstellt von Johannes, Dominic und Team** ⭐
 
-© 2023-2024 FutureLaunch.de - Die Zukunft beginnt hier!
+© 2025 FutureLaunch.de - Die Zukunft beginnt hier!
