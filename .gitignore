@@ -1,0 +1,25 @@
+# SMTP Configuration
+script/config.php
+
+# Logs
+script/mail_error.log
+script/newsletter_error.log
+
+# Dependencies
+vendor/
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# CSV data files
+csv/
+*.csv

@@ -174,20 +174,23 @@ try {
         try {
             $mail = new PHPMailer\PHPMailer\PHPMailer(true);
             
+            // Load configuration
+            $config = require __DIR__ . '/config.php';
+            
             // Server settings
             $mail->SMTPDebug = 0;  // Set to 2 for debugging
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
+            $mail->Host = $config['smtp']['host'];
             $mail->SMTPAuth = true;
-            $mail->Username = 'johannesbohn03@gmail.com';
-            $mail->Password = 'tsqs axin ztun bggs';  // App password, not regular password
+            $mail->Username = $config['smtp']['username'];
+            $mail->Password = $config['smtp']['password'];
             $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
+            $mail->Port = $config['smtp']['port'];
             $mail->CharSet = 'UTF-8';
 
             // Recipients
-            $mail->setFrom('johannesbohn03@gmail.com', 'FutureLaunch Website');
-            $mail->addAddress('johannesbohn03@gmail.com', 'Johannes Bohn');
+            $mail->setFrom($config['smtp']['username'], 'FutureLaunch Website');
+            $mail->addAddress($config['smtp']['username'], 'Johannes Bohn');
             $mail->addReplyTo($email, $name);
 
             // Content
