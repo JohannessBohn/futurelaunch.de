@@ -68,23 +68,74 @@
             font-weight: 500;
             opacity: 0;
             animation: fade-in 1s forwards 0.5s;
-        }
-        
-        .loading-spinner {
+        }        .loader {
             margin-top: 25px;
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s linear infinite;
+            perspective: 800px;
             align-self: center;
+        }
+
+        .inner {
+            position: absolute;
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;  
+        }
+
+        .inner.one {
+            left: 0%;
+            top: 0%;
+            animation: rotate-one 1s linear infinite;
+            border-bottom: 3px solid #EFEFFA;
+        }
+
+        .inner.two {
+            right: 0%;
+            top: 0%;
+            animation: rotate-two 1s linear infinite;
+            border-right: 3px solid #EFEFFA;
+        }
+
+        .inner.three {
+            right: 0%;
+            bottom: 0%;
+            animation: rotate-three 1s linear infinite;
+            border-top: 3px solid #EFEFFA;
         }
         
         @keyframes pulse-scale {
             0% { transform: scale(0.95); opacity: 0.7; }
             50% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(0.95); opacity: 0.7; }
+        }        @keyframes rotate-one {
+            0% {
+                transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate-two {
+            0% {
+                transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate-three {
+            0% {
+                transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+            }
         }
         
         @keyframes fade-in {
@@ -325,29 +376,29 @@
     <div class="loading-screen">
         <div class="content-wrapper">
             <img src="/assets/FutureLaunch.png" alt="FutureLaunch Logo" class="loading-logo">
-            <div class="welcome-text">Willkommen bei FutureLaunch</div>
-            <div class="loading-spinner"></div>
+            <div class="welcome-text">Willkommen bei FutureLaunch</div>            <div class="loader">
+                <div class="inner one"></div>
+                <div class="inner two"></div>
+                <div class="inner three"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Loading screen handler
-        window.addEventListener('load', function() {
+        // Loading screen handler        window.addEventListener('load', function() {
             setTimeout(function() {
                 document.querySelector('.loading-screen').classList.add('fade-out');
                 document.body.classList.add('loaded');
                 setTimeout(function() {
                     document.querySelector('.loading-screen').style.display = 'none';
-                }, 800); // Increased for smoother transition
-            }, 1800); // Slight increase to show the animation
-        });
-
-        // Prevent scrolling during loading
+                }, 400); // Reduced for faster transition
+            }, 600); // Reduced loading time
+        });        // Prevent scrolling during loading
         document.body.style.overflow = 'hidden';
         window.addEventListener('load', function() {
             setTimeout(function() {
                 document.body.style.overflow = '';
-            }, 2000);
+            }, 800); // Reduced scroll lock time
         });
 
         // Preload images
