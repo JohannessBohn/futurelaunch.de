@@ -21,10 +21,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
     <!-- Confetti animation -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-    <!-- Form handler script -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>    <!-- Form handler script -->
     <script src="/script/form-handler.js" defer></script>
+    
+    <!-- Website scanner script -->
+    <script src="/script/website-scanner.js" defer></script>
 
     <style>
         /* Tool-specific styles */
@@ -639,9 +640,8 @@
     <section class="tool-section">
         <div class="container">
             <div class="tool-container" data-aos="fade-up">
-                <!-- URL Input Form -->
-                <div class="input-container">
-                    <form id="analyzeForm" onsubmit="scanWebsite(event)">
+                <!-- URL Input Form -->                <div class="input-container">
+                    <form id="analyzeForm" onsubmit="return false;">
                         <div class="url-input">
                             <div class="input-wrapper">
                                 <i class="fas fa-globe"></i>
@@ -773,9 +773,7 @@
                                 <i class="fas fa-hands-helping"></i>
                                 <h3>Professionelle Unterstützung gewünscht?</h3>
                                 <p>Lassen Sie uns gemeinsam Ihre Website optimieren. Unser Expertenteam steht Ihnen zur Verfügung.</p>
-                            </div>
-                            
-                            <form id="contactForm" onsubmit="return submitContactForm(event)">
+                            </div>                            <form id="contactForm" method="post" action="javascript:void(0);">
                                 <div class="form-group">
                                     <label for="name">
                                         <i class="fas fa-user"></i>
@@ -807,9 +805,7 @@
                                     </span>
                                 </button>
                                 <div class="form-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px;"></div>
-                            </form>
-                            
-                            <div class="form-messages">
+                            </form>                            <div class="form-messages">
                                 <div id="contactSuccess" class="success-message"></div>
                                 <div id="contactError" class="error-message"></div>
                             </div>
@@ -855,12 +851,10 @@
                     <li><a href="#">Kontakt</a></li>
                     <li><a href="#">FAQ</a></li>
                 </ul>
-            </div>
-            <div class="footer-subscribe">
-                <h4 class="footer-heading">Newsletter</h4>
+            </div>            <div class="footer-subscribe">                <h4 class="footer-heading">Newsletter</h4>
                 <p>Abonnieren Sie unseren Newsletter für aktuelle Neuigkeiten und Trends.</p>
-                <form>
-                    <input type="email" placeholder="Ihre E-Mail-Adresse">
+                <form id="newsletterForm" onsubmit="return submitNewsletterForm(event)">
+                    <input type="email" name="email" placeholder="Ihre E-Mail-Adresse" required>
                     <button type="submit">&#10148;</button>
                 </form>
                 <p>Wir respektieren Ihre Privatsphäre und geben Ihre Daten nicht weiter.</p>
@@ -877,11 +871,24 @@
     AOS.init({
         duration: 800,
         once: true
-    });
-
-    // Handle mobile menu toggle
+    });    // Handle mobile menu toggle
     document.querySelector('.menu-toggle').addEventListener('click', function() {
         document.querySelector('.nav-links').classList.toggle('active');
+    });    // Initialize contact form event listener
+    document.addEventListener('DOMContentLoaded', function() {
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(event) {
+                submitContactForm(event);
+            });
+        }
+        
+        const newsletterForm = document.getElementById('newsletterForm');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(event) {
+                submitNewsletterForm(event);
+            });
+        }
     });
 </script>
 

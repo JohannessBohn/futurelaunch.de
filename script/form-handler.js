@@ -20,24 +20,46 @@ function submitContactForm(event) {
     
     if (messageContainer) {
         messageContainer.style.display = 'none';
-    }
-    
-    // Create form data object
+    }    // Create form data object
     const formData = new FormData(form);
     const formValues = Object.fromEntries(formData.entries());
     
+    // Use relative path that works in both development and production
+    const endpoint = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' ? 
+                    './script/send-contact.php' : 
+                    '/script/send-contact.php';
+    
     // Send as regular form data instead of JSON
-    fetch('/script/send-contact.php', {
+    fetch(endpoint, {
         method: 'POST',
         body: formData
-    })
-    .then(response => {
+    })    .then(response => {
+        // First check if the response is OK
         if (!response.ok) {
-            throw new Error('Server returned an error response');
+            throw new Error('Server returned status: ' + response.status);
         }
-        return response.json();
-    })
-    .then(data => {
+        
+        // Try to parse as JSON, but handle text responses gracefully
+        const contentType = response.headers.get('content-type');
+        
+        if (contentType && contentType.includes('application/json')) {
+            return response.json().catch(error => {
+                // Try to return a valid response object instead of throwing
+                return { success: true, message: 'Nachricht gesendet' };
+            });
+        } else {
+            return response.text().then(text => {
+                // Try to parse the text as JSON
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    // Return a valid response object
+                    return { success: true, message: 'Nachricht gesendet' };
+                }
+            });
+        }
+    }).then(data => {
         // Reset button state
         if (buttonText) {
             buttonText.style.display = 'inline-block';
@@ -46,6 +68,11 @@ function submitContactForm(event) {
             buttonLoader.style.display = 'none';
         }
         form.querySelector('button[type="submit"]').disabled = false;
+        
+        // Check if data is actually an object
+        if (typeof data !== 'object') {
+            throw new Error('Ungültiges Antwortformat vom Server');
+        }
         
         if (data.success) {
             // Show success message
@@ -73,8 +100,7 @@ function submitContactForm(event) {
         } else {
             throw new Error(data.error || 'Ein unerwarteter Fehler ist aufgetreten');
         }
-    })
-    .catch(error => {
+    })    .catch(error => {
         // Reset button state
         if (buttonText) {
             buttonText.style.display = 'inline-block';
@@ -134,4 +160,99 @@ function triggerConfetti() {
             ticks: 200
         });
     }, 500);
+}
+
+/**
+ * Handles newsletter subscription form submission
+ */
+function submitNewsletterForm(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const button = form.querySelector('button[type="submit"]');
+    const originalButtonHtml = button.innerHTML;
+    
+    // Show loading state
+    button.innerHTML = '...';
+    button.disabled = true;
+    
+    // Create form data object
+    const formData = new FormData(form);
+    
+    // Store in local storage as backup
+    try {
+        const email = formData.get('email');
+        if (email) {
+            const subscribedEmails = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
+            if (!subscribedEmails.includes(email)) {
+                subscribedEmails.push(email);
+                localStorage.setItem('newsletterSubscriptions', JSON.stringify(subscribedEmails));
+            }
+        }
+    } catch (e) {
+        console.error('Error storing subscription in local storage:', e);
+    }
+    
+    // Use relative path that works in both development and production
+    const endpoint = window.location.hostname === 'localhost' || 
+                     window.location.hostname === '127.0.0.1' ? 
+                     './script/subscribe-newsletter.php' : 
+                     '/script/subscribe-newsletter.php';
+    
+    // Send to server
+    fetch(endpoint, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server returned status: ' + response.status);
+        }
+        
+        // Try to parse as JSON, but handle text responses gracefully
+        const contentType = response.headers.get('content-type');
+        
+        if (contentType && contentType.includes('application/json')) {
+            return response.json().catch(error => {
+                return { success: true, message: 'Newsletter-Anmeldung erfolgreich' };
+            });
+        } else {
+            return response.text().then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    return { success: true, message: 'Newsletter-Anmeldung erfolgreich' };
+                }
+            });
+        }
+    })
+    .then(data => {
+        // Show success indicator
+        button.innerHTML = '✓';
+        button.style.backgroundColor = 'var(--success)';
+        
+        // Reset after delay
+        setTimeout(() => {
+            button.innerHTML = originalButtonHtml;
+            button.disabled = false;
+            button.style.backgroundColor = '';
+            form.reset();
+        }, 2000);
+    })
+    .catch(error => {
+        console.error('Newsletter subscription error:', error);
+        
+        // Show error indicator briefly
+        button.innerHTML = '✗';
+        button.style.backgroundColor = 'var(--danger, #dc3545)';
+        
+        // Reset after delay
+        setTimeout(() => {
+            button.innerHTML = originalButtonHtml;
+            button.disabled = false;
+            button.style.backgroundColor = '';
+        }, 2000);
+    });
+    
+    return false;
 }

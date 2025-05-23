@@ -808,12 +808,11 @@
                         <li><a href="#">Kontakt</a></li>
                         <li><a href="#">FAQ</a></li>
                     </ul>
-                </div>
-                <div class="footer-subscribe">
+                </div>                <div class="footer-subscribe">
                     <h4 class="footer-heading">Newsletter</h4>
                     <p>Abonnieren Sie unseren Newsletter für aktuelle Neuigkeiten und Trends.</p>
-                    <form>
-                        <input type="email" placeholder="Ihre E-Mail-Adresse">
+                    <form id="newsletterForm" onsubmit="return submitNewsletterForm(event)">
+                        <input type="email" name="email" placeholder="Ihre E-Mail-Adresse" required>
                         <button type="submit">&#10148;</button>
                     </form>
                     <p>Wir respektieren Ihre Privatsphäre und geben Ihre Daten nicht weiter.</p>

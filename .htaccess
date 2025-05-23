@@ -49,4 +49,13 @@ RewriteRule ^([^\.]+)$ $1.html [NC,L]
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Allow necessary HTTP methods
+<FilesMatch "\.php$">
+    <LimitExcept GET POST OPTIONS>
+        Order Allow,Deny
+        Deny from all
+    </LimitExcept>
+</FilesMatch>
 </IfModule> 

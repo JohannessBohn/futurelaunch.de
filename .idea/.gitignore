@@ -1,8 +1,35 @@
-# Default ignored files
+# IDE and Editor specific files
+.DS_Store
+*.iml
+.misc.xml
+.modules.xml
+.vcs.xml
+.vscode/
+.idea/
 /shelf/
 /workspace.xml
-# Editor-based HTTP Client requests
+
+# HTTP Client and DataSource files
 /httpRequests/
-# Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# Log files
+/mail_error.log
+
+# CSV files (ignore all in CSV folder or specific files)
+CSV/contact_messages.csv
+CSV/contact_submissions.csv
+CSV/newsletter_subscriptions.csv
+
+# Admin specific files
+admin/index.html
+
+# System and OS files
+Thumbs.db
+ehthumbs.db
+*.log
+*.sublime-*
+
+# Local development environment paths (XAMPP example, adjust as needed)
+/xampp/

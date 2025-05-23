@@ -257,3 +257,42 @@ Decoded data: Array
 
 Contact form data saved to CSV
 Email sent successfully
+=== REQUEST INFO ===REQUEST_METHOD: POSTREQUEST_URI: /script/send-contact.phpHTTP_ORIGIN: http://localhost:8000=== Starting contact form submission ===
+Form data received via POST
+Contact form data saved to CSV: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+Autoloader found at: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/vendor/autoload.php
+PHPMailer error: SMTP Error: Could not authenticate.
+Simple mail sending failed: Unknown error
+Mail not sent, but CSV saved. Response marked as success.
+=== REQUEST INFO ===REQUEST_METHOD: POSTREQUEST_URI: /script/send-contact.phpHTTP_ORIGIN: http://localhost:8000=== Starting contact form submission ===
+Form data received via POST
+Contact form data saved to CSV: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+Autoloader found at: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/vendor/autoload.php
+PHPMailer error: SMTP Error: Could not authenticate.
+Simple mail sending failed: Unknown error
+Mail not sent, but CSV saved. Response marked as success.
+=== REQUEST INFO ===REQUEST_METHOD: POSTREQUEST_URI: /script/send-contact.phpHTTP_ORIGIN: http://localhost:8000=== Starting contact form submission ===
+Form data received via POST
+Contact form data saved to CSV: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+Autoloader found at: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/vendor/autoload.php
+PHPMailer error: SMTP Error: Could not authenticate.
+Simple mail sending failed: Unknown error
+Mail not sent, but CSV saved. Response marked as success.
+=== Starting contact form submission ===
+Contact form data saved to CSV: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+Autoloader found at: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/vendor/autoload.php
+PHPMailer error: SMTP Error: Could not authenticate.
+Simple mail sending failed: Unknown error
+Mail not sent, but CSV saved. Response marked as success.
+=== Starting contact form submission ===
+Contact form data saved to CSV: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+Autoloader found at: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/vendor/autoload.php
+PHPMailer error: SMTP Error: Could not authenticate.
+Simple mail sending failed: Unknown error
+Mail not sent, but CSV saved. Response marked as success.
+=== Starting contact form submission ===
+Contact form data saved to CSV: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/../csv/contact_messages.csv
+Autoloader found at: C:\xampp\htdocs\LeqendAIO\futurelaunch.de\script/vendor/autoload.php
+PHPMailer error: SMTP Error: Could not authenticate.
+Simple mail sending failed: Unknown error
+Mail not sent, but CSV saved. Response marked as success.
