@@ -577,12 +577,11 @@
         }
         .text-danger {
             color: var(--danger);
-        }
-
-        /* Mobile Optimization Styles */
+        }        /* Mobile Optimization Styles */
         @media (max-width: 992px) {
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
             }
             
             .url-input {
@@ -592,49 +591,131 @@
             
             .url-input .scan-button {
                 width: 100%;
+                min-height: 50px;
             }
             
             .score-cards {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
         }
         
         @media (max-width: 768px) {
             .hero-section {
-                padding: 80px 0;
+                padding: 60px 0;
             }
             
             .hero-content h1 {
                 font-size: 32px;
+                line-height: 1.2;
+            }
+            
+            .hero-content p {
+                font-size: 18px;
+                margin-bottom: 30px;
             }
             
             .features-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .feature {
+                padding: 15px;
+                text-align: center;
             }
             
             .score-cards {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .score-card {
+                padding: 20px;
+            }
+            
+            .score-circle {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 15px;
+            }
+            
+            .score-value {
+                font-size: 28px;
             }
             
             .recommendations-grid {
                 grid-template-columns: 1fr;
             }
             
+            .recommendation-card {
+                padding: 20px;
+            }
+            
             .nav-links {
-                display: none;
+                position: fixed;
+                top: 80px;
+                left: -100%;
                 width: 100%;
+                height: calc(100vh - 80px);
+                background-color: white;
                 flex-direction: column;
-                padding: 0;
-                margin-top: 20px;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 30px 0;
+                transition: left 0.3s ease;
+                z-index: 1000;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
             
             .nav-links.active {
-                display: flex;
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 15px 0;
+                width: 90%;
+                text-align: center;
+            }
+            
+            .nav-links a {
+                display: block;
+                padding: 15px 20px;
+                font-size: 18px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
             }
             
             .menu-toggle {
                 display: block;
                 cursor: pointer;
+                font-size: 24px;
+                color: var(--dark);
+                background: none;
+                border: none;
+                padding: 8px;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+                z-index: 1001;
+            }
+            
+            .container {
+                padding: 0 20px;
+            }
+            
+            .tool-container {
+                margin: 0 10px;
+                border-radius: 15px;
+            }
+            
+            .input-wrapper input {
+                font-size: 16px;
+                padding: 12px 12px 12px 40px;
             }
         }
         
@@ -643,12 +724,17 @@
                 font-size: 26px;
             }
             
+            .hero-content p {
+                font-size: 16px;
+            }
+            
             .tool-section {
                 padding: 40px 0;
             }
             
             .tool-container {
-                padding: 20px;
+                padding: 20px 15px;
+                margin: 0 5px;
             }
             
             .progress-steps {
@@ -1395,25 +1481,61 @@
                 ticks: 200
             });
         }, 500);
-    }
-
-    // Handle mobile menu toggle
+    }    // Handle mobile menu toggle
     document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.querySelector('.menu-toggle');
         const navLinks = document.querySelector('.nav-links');
+        const body = document.body;
         
         if (menuToggle && navLinks) {
             menuToggle.addEventListener('click', function() {
                 navLinks.classList.toggle('active');
+                body.classList.toggle('menu-open');
+                
+                // Change hamburger icon
+                if (navLinks.classList.contains('active')) {
+                    menuToggle.innerHTML = '&#10005;'; // X symbol
+                } else {
+                    menuToggle.innerHTML = '&#9776;'; // Hamburger symbol
+                }
             });
             
             // Close menu when clicking a nav link
             navLinks.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', function() {
                     navLinks.classList.remove('active');
+                    body.classList.remove('menu-open');
+                    menuToggle.innerHTML = '&#9776;';
                 });
             });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!navLinks.contains(event.target) && !menuToggle.contains(event.target)) {
+                    navLinks.classList.remove('active');
+                    body.classList.remove('menu-open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+            });
         }
+        
+        // Prevent body scroll when menu is open
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    if (body.classList.contains('menu-open')) {
+                        body.style.overflow = 'hidden';
+                    } else {
+                        body.style.overflow = '';
+                    }
+                }
+            });
+        });
+        
+        observer.observe(body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
     });
 </script>
 

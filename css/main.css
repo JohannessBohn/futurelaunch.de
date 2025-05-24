@@ -249,6 +249,10 @@ footer {
     display: none;
     font-size: 1.5rem;
     cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text);
+    transition: all 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -258,8 +262,8 @@ footer {
 
     .nav-links {
         display: none;
-        position: absolute;
-        top: 100%;
+        position: fixed;
+        top: 80px;
         left: 0;
         right: 0;
         background: var(--white);
@@ -267,10 +271,35 @@ footer {
         flex-direction: column;
         text-align: center;
         box-shadow: var(--shadow);
+        z-index: 1000;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
     }
 
     .nav-links.active {
         display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 15px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 18px;
+    }
+
+    .nav-links a:hover {
+        background-color: rgba(74, 109, 229, 0.1);
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+        overflow: hidden;
     }
 
     .footer-content {

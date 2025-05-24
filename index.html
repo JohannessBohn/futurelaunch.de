@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#4A6DE5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="stylesheet" href="/css/main.css">
     <title>FutureLaunch | Innovative B2B Code-Dienstleistungen</title>
 
@@ -191,8 +193,8 @@
         .featured-badge {
             position: absolute;
             top: 15px;
-            right: 50%;
-            transform: translateX(50%);
+            left: 50%;
+            transform: translateX(-50%);
             background: #0066cc;
             color: white;
             padding: 8px 20px;
@@ -201,20 +203,23 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             z-index: 10;
         }
-        
-        .price {
+          .price {
             margin: 20px 0;
             position: relative;
+            text-align: center;
         }
         
         .original-price {
             display: inline-block;
             color: #dc3545;
-            font-size: 1.2rem;
+            font-size: 1em;
             position: relative;
             margin-right: 5px;
+            text-decoration: line-through;
         }
         
+        /* Remove the after pseudo-element since we're using  tag */
+        /*
         .original-price::after {
             content: '';
             position: absolute;
@@ -225,11 +230,13 @@
             left: 0;
             transform: rotate(-5deg);
         }
-        
-        .current-price {
-            font-size: 2.2rem;
+        */
+          .current-price {
+            font-size: 1.8rem;
             font-weight: bold;
             color: #0066cc;
+            text-align: center;
+            display: block;
         }
         
         .period {
@@ -237,6 +244,7 @@
             font-size: 0.9rem;
             color: #6c757d;
             margin-top: 5px;
+            text-align: center;
         }
         
         .pricing-features {
@@ -366,6 +374,26 @@
             margin-right: 15px;
             font-size: 1.2rem;
         }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
@@ -435,10 +463,9 @@
                 dismissOnScroll: false
             });
         });
-    </script>
-
-    <script src="/script/cookies.js" defer></script>
+    </script>    <script src="/script/cookies.js" defer></script>
     <script src="/script/form-handler.js" defer></script>
+    <script src="/script/main.js" defer></script>
 
     <!-- Header Section -->
     <header>
@@ -703,11 +730,29 @@
                 <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; margin-top: 20px; border-left: 4px solid #0066cc; text-align: left;">
                     <strong>Eröffnungsangebot:</strong> Alle Preise sind bereits um 30% reduziert! Angebot gültig bis zum 30.06.2025.
                 </div>
-            </div>
-            <div class="pricing-grid">
+            </div>            <div class="pricing-grid">
                 <div class="pricing-card">
                     <div class="pricing-header">
-                        <h3>Basis</h3>
+                        <h3>Starter</h3>
+                        <div class="price">
+                            <span class="original-price">899€</span>
+                            <span class="current-price">629€</span>
+                            <span class="period">/ Projekt</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Landing Page</li>
+                        <li>Responsive Design</li>
+                        <li>Basis SEO</li>
+                        <li>1 Monat Support</li>
+                        <li>SSL-Zertifikat</li>
+                    </ul>
+                    <a href="#contact" class="button button-primary">Anfrage senden</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Professional</h3>
                         <div class="price">
                             <span class="original-price">1.999€</span>
                             <span class="current-price">1.399€</span>
@@ -715,11 +760,11 @@
                         </div>
                     </div>
                     <ul class="pricing-features">
-                        <li>Individuelle Beratung</li>
-                        <li>Responsive Website</li>
+                        <li>Bis zu 5 Seiten</li>
                         <li>CMS-Integration</li>
-                        <li>SEO-Grundoptimierung</li>
+                        <li>SEO-Optimierung</li>
                         <li>3 Monate Support</li>
+                        <li>Google Analytics</li>
                     </ul>
                     <a href="#contact" class="button button-primary">Anfrage senden</a>
                 </div>
@@ -735,11 +780,11 @@
                         </div>
                     </div>
                     <ul class="pricing-features">
-                        <li>Alles aus Basis</li>
-                        <li>Individuelle Funktionen</li>
-                        <li>API-Integration</li>
-                        <li>Umfassende SEO</li>
-                        <li>12 Monate Support</li>
+                        <li>Unbegrenzte Seiten</li>
+                        <li>E-Commerce Integration</li>
+                        <li>API-Anbindungen</li>
+                        <li>6 Monate Support</li>
+                        <li>Marketing Tools</li>
                     </ul>
                     <a href="#contact" class="button button-primary">Anfrage senden</a>
                 </div>
@@ -754,11 +799,11 @@
                         </div>
                     </div>
                     <ul class="pricing-features">
-                        <li>Alles aus Business</li>
                         <li>Individuelle Software</li>
                         <li>KI-Integration</li>
-                        <li>Automatisierte Prozesse</li>
-                        <li>Unbegrenzter Support</li>
+                        <li>Automatisierung</li>
+                        <li>12 Monate Support</li>
+                        <li>Dedicated Team</li>
                     </ul>
                     <a href="#contact" class="button button-primary">Anfrage senden</a>
                 </div>
@@ -854,6 +899,7 @@
                         <li><a href="#">Blog</a></li>
                         <li><a href="#">Kontakt</a></li>
                         <li><a href="#">FAQ</a></li>
+                        <li><a href="/Datenschutz.html">Datenschutzerklärung</a></li>
                     </ul>
                 </div>                <div class="footer-subscribe">
                     <h4 class="footer-heading">Newsletter</h4>

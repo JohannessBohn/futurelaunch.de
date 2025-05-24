@@ -6,19 +6,42 @@
 
 .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .pricing-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        max-width: 1000px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .pricing-grid {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1200px;
+        gap: 20px;
+    }
 }
 
 .pricing-card {
     background-color: white;
     border-radius: 10px;
-    padding: 40px;
+    padding: 30px 20px;
     text-align: center;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    min-width: 220px;
+    max-width: 280px;
+    margin: 0 auto;
 }
 
 .pricing-card:hover {
@@ -52,6 +75,7 @@
     font-weight: 700;
     color: var(--dark);
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .plan-price {
@@ -59,6 +83,7 @@
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .plan-price span {
@@ -190,4 +215,133 @@ textarea.form-control {
 
 .submit-button:hover {
     background-color: var(--secondary);
+}
+
+/* Pricing-specific mobile optimizations */
+@media (max-width: 768px) {
+    .pricing-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+        max-width: 100%;
+        padding: 0 8px;
+        margin: 0 auto;
+        justify-items: center;
+    }
+    
+    .pricing-card {
+        padding: 15px 10px;
+        min-width: 140px;
+        max-width: 170px;
+        margin: 0 auto;
+    }
+    
+    .plan-name {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    .current-price,
+    .plan-price {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+    
+    .pricing-features,
+    .plan-features {
+        padding: 8px 0;
+    }
+    
+    .pricing-features li,
+    .plan-features li {
+        font-size: 12px;
+        padding: 4px 0;
+    }
+    
+    .plan-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .pricing-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 6px;
+        max-width: 100%;
+        padding: 0 6px;
+        margin: 0 auto;
+    }
+    
+    .pricing-card {
+        padding: 12px 8px;
+        min-width: 120px;
+        max-width: 140px;
+        margin: 0 auto;
+    }
+    
+    .plan-name {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+    
+    .current-price,
+    .plan-price {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+    
+    .pricing-features li,
+    .plan-features li {
+        font-size: 11px;
+        padding: 3px 0;
+    }
+    
+    .plan-button {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 375px) {
+    .pricing-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 4px;
+        max-width: 100%;
+        padding: 0 4px;
+        margin: 0 auto;
+    }
+    
+    .pricing-card {
+        padding: 10px 6px;
+        min-width: 100px;
+        max-width: 120px;
+        margin: 0 auto;
+    }
+    
+    .plan-name {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+    
+    .current-price,
+    .plan-price {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+    
+    .pricing-features li,
+    .plan-features li {
+        font-size: 10px;
+        padding: 2px 0;
+    }
+    
+    .plan-button {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    .featured-tag {
+        font-size: 8px;
+        padding: 2px 20px;
+    }
 }
