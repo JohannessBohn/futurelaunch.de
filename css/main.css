@@ -552,3 +552,16 @@ footer {
 .case-study-content .learn-more:hover {
     transform: translateX(5px);
 }
+
+.hero-buttons .button-primary:hover {
+    background-color: #0056b3; /* Darker shade of blue */
+    box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3); /* Subtle blue shadow */
+    transform: translateY(-2px); /* Keep the slight upward movement */
+}
+
+.hero-buttons .button-secondary:hover {
+    background-color: #e9ecef; /* Light background fill */
+    color: #0066cc; /* Change text color to blue */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle grey shadow */
+    transform: translateY(-2px); /* Keep the slight upward movement */
+}
