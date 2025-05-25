@@ -1,0 +1,51 @@
+/* Splash Cursor Effect Styles */
+#splash-cursor-canvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    pointer-events: none !important;
+    z-index: 1000 !important;
+    opacity: 0.6;
+    mix-blend-mode: multiply;
+    transition: opacity 0.3s ease;
+}
+
+/* Better integration with website colors */
+.splash-cursor-canvas {
+    filter: hue-rotate(220deg) saturate(1.2);
+}
+
+/* Hide on mobile devices to save performance */
+@media (max-width: 768px) {
+    #splash-cursor-canvas {
+        display: none !important;
+    }
+}
+
+/* Optional: Reduce opacity on smaller screens */
+@media (max-width: 1024px) {
+    #splash-cursor-canvas {
+        opacity: 0.4;
+    }
+}
+
+/* Disable on reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    #splash-cursor-canvas {
+        display: none !important;
+    }
+}
+
+/* Performance optimization for low-end devices */
+@media (max-resolution: 150dpi) {
+    #splash-cursor-canvas {
+        opacity: 0.3;
+    }
+}
+
+/* Hide during loading to prevent flickering */
+body.loading #splash-cursor-canvas {
+    opacity: 0;
+}

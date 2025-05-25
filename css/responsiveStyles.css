@@ -335,16 +335,37 @@ footer {
 
     .footer-content {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .process-steps {
+    }    .process-steps {
+        display: flex !important;
         flex-wrap: wrap;
         justify-content: center;
         gap: 40px;
+        align-items: flex-start !important;
     }
 
     .process-steps::before {
         display: none;
+    }
+
+    .step {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 180px !important;
+        flex: none !important;
+        min-height: auto !important;
+    }
+
+    .step-number {
+        width: 60px !important;
+        height: 60px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 auto 20px auto !important;
+        flex-shrink: 0 !important;
     }
 
     .hero-buttons {
@@ -365,14 +386,18 @@ footer {
 }
 
 @media (max-width: 768px) {
-    /* Center everything and make responsive */
-    * {
-        text-align: center !important;
-    }
-    
+    /* Remove global centering - only apply to specific sections */
     .container {
         padding: 0 15px;
         max-width: 100%;
+    }
+    
+    /* Center only pricing section */
+    #pricing * {
+        text-align: center !important;
+    }
+    
+    #pricing .container {
         text-align: center;
     }
     
@@ -419,9 +444,7 @@ footer {
     }    .nav-links li a:hover {
         background-color: rgba(74, 109, 229, 0.1);
         color: var(--primary);
-    }
-
-    /* Hero section - smaller and centered */
+    }    /* Hero section - responsive but naturally centered */
     .hero-content {
         text-align: center;
         padding: 20px 10px;
@@ -452,8 +475,15 @@ footer {
         text-align: center;
         font-size: 14px;
         padding: 12px 20px;
-    }    /* Grid layouts - pricing cards side by side */
-    .services-grid,
+    }    /* Grid layouts - keep services side by side, not centered */
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        max-width: 100%;
+        margin: 0;
+        text-align: left;
+    }
+    
     .case-studies-grid {
         grid-template-columns: 1fr;
         gap: 15px;
@@ -472,13 +502,15 @@ footer {
     .contact-container {
         flex-direction: column;
         max-width: 350px;
-        margin: 0 auto;    }
-
-    /* Section headers - smaller and centered */
+        margin: 0 auto;    }    /* Section headers - responsive but not forced center */
     .section-header {
-        text-align: center;
         max-width: 350px;
         margin: 0 auto 30px auto;
+    }
+    
+    /* Pricing section headers should be centered */
+    #pricing .section-header {
+        text-align: center;
     }
 
     .section-header h2 {
@@ -494,12 +526,19 @@ footer {
     /* Container adjustments */
     .container {
         padding: 0 15px;
-        text-align: center;
     }
-
-    /* All sections centered with max width */
+    
+    /* Pricing container should be centered */
+    #pricing .container {
+        text-align: center;
+    }    /* All sections normal padding */
     section {
         padding: 40px 0;
+    }
+    
+    /* Pricing section specific styling */
+    #pricing {
+        text-align: center;
     }
 
     /* Prevent body scroll when menu is open */
@@ -532,9 +571,10 @@ footer {
         width: 100%;
         font-size: 16px; /* Prevents zoom on iOS */
     }
-    
-    .contact-form {
+      .contact-form {
         padding: 0 20px;
+        max-width: 500px !important;
+        margin: 0 auto !important;
     }
     
     /* Newsletter form mobile */
@@ -679,14 +719,15 @@ footer {
 }
 
 @media (max-width: 576px) {
-    /* Even smaller screens - everything ultra compact and centered */
-    * {
-        text-align: center !important;
-    }
-    
+    /* Even smaller screens - keep normal layout except pricing */
     .container {
         padding: 0 10px;
         max-width: 100%;
+    }
+    
+    /* Center only pricing section */
+    #pricing * {
+        text-align: center !important;
     }
     
     /* Sections more compact */
@@ -843,23 +884,29 @@ footer {
     /* Service icons even smaller */
     .service-icon i {
         font-size: 1.5rem;
+    }      /* Grids ultra compact - services side by side */
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 8px;
+        max-width: 100%;
+        margin: 0;
+        text-align: left;
     }
-      /* Grids ultra compact */
-    .services-grid,
+    
     .case-studies-grid {
         gap: 8px;
         max-width: 250px;
-    }    .pricing-grid {
+    }.pricing-grid {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 8px;
         max-width: 100%;
         justify-items: center;
     }
-    
-    /* Forms ultra minimal */
+      /* Forms ultra minimal */
     .contact-form {
         padding: 12px 8px;
-        max-width: 250px;
+        max-width: 400px !important;
+        margin: 0 auto !important;
     }
     
     .contact-form input,
@@ -889,24 +936,46 @@ footer {
         padding: 8px;
         font-size: 12px;
     }
-    
-    /* Process steps ultra compact */
+      /* Process steps ultra compact */
     .step {
         max-width: 200px;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .step-number {
+        margin: 0 auto 15px auto !important;
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 20px !important;
     }
     
     .step h3 {
         font-size: 14px;
+        text-align: center !important;
+        width: 100% !important;
     }
     
     .step p {
         font-size: 11px;
+        text-align: center !important;
+        width: 100% !important;
+    }
+      /* Stats ultra compact */
+    .stats {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        max-width: 220px;
+        gap: 12px !important;
+        margin: 0 auto !important;
     }
     
-    /* Stats ultra compact */
-    .stats {
-        max-width: 220px;
-        gap: 12px;
+    .stat-item {
+        text-align: center !important;
+        flex: 1 !important;
     }
     
     .stat-number {
@@ -1191,8 +1260,7 @@ footer {
             color: #fff;
         }
     }
-    
-    /* Reduced motion support */
+      /* Reduced motion support */
     @media (prefers-reduced-motion: reduce) {
         *,
         ::before,
@@ -1202,7 +1270,6 @@ footer {
             transition-duration: 0.01ms !important;
         }
     }
-}
 
 /* Cards - smaller and perfectly centered */
 .service-card,
@@ -1260,10 +1327,23 @@ footer {
 .step {
     max-width: 250px;
     text-align: center;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.step-number {
+    margin: 0 auto 15px auto !important;
+    width: 55px !important;
+    height: 55px !important;
+    font-size: 22px !important;
 }
 
 .step h3 {
     font-size: 16px;
+    text-align: center !important;
+    width: 100% !important;
+}
 }
 
 .step p {
@@ -1285,15 +1365,17 @@ footer {
 
 /* Stats centered */
 .stats {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     flex-direction: column;
-    align-items: center;
     gap: 15px;
     max-width: 280px;
     margin: 0 auto;
 }
 
 .stat-item {
-    text-align: center;
+    text-align: center !important;
 }
 
 .stat-number {
@@ -1304,35 +1386,36 @@ footer {
     font-size: 12px;
 }
 
-/* Contact forms centered and responsive */
+/* Contact forms centered and wider */
 .contact-form {
-        padding: 20px 15px;
-        max-width: 350px;
-        margin: 0 auto;
-        text-align: center;
-    }
-    
-    .contact-form input,
-    .contact-form textarea {
-        font-size: 16px;
-        padding: 12px;
-        border-radius: 8px;
-        width: 100%;
-        box-sizing: border-box;
-        margin-bottom: 15px;
-    }
-    
-    .contact-form textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
-    
-    .contact-form button {
-        width: 100%;
-        padding: 14px;
-        font-size: 16px;
-        margin-top: 10px;
-    }
+    padding: 30px 25px;
+    max-width: 500px; /* Increased from 350px */
+    margin: 0 auto;
+    text-align: left; /* Form content should be left-aligned */
+}
+
+.contact-form input,
+.contact-form textarea {
+    font-size: 16px;
+    padding: 15px;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px; /* Increased spacing */
+}
+
+.contact-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.contact-form button {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    margin-top: 15px;
+    text-align: center;
+}
     
     /* Footer centered and compact */
     .footer-content {
@@ -1412,3 +1495,77 @@ footer {
         font-size: 14px;
         border-radius: 8px;
     }
+
+/* Fix layout alignment issues - more specific targeting */
+/* Reset global alignment but keep natural centering for specific elements */
+.section-header {
+    text-align: center !important;
+}
+
+.hero-content {
+    text-align: center !important;
+}
+
+.hero-content * {
+    text-align: center !important;
+}
+
+/* Keep pricing section centered */
+#pricing,
+#pricing * {
+    text-align: center !important;
+}
+
+/* Keep testimonials centered */
+#testimonials .testimonial-content,
+#testimonials .author-info {
+    text-align: center !important;
+}
+
+/* Button centering where appropriate */
+.button,
+.btn,
+.hero-buttons {
+    text-align: center !important;
+}
+
+/* Fix process steps alignment */
+.process-steps {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 30px !important;
+}
+
+.step {
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+    width: 180px !important;
+    flex: none !important;
+}
+
+.step-number {
+    margin: 0 auto 20px auto !important;
+    width: 60px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+/* Fix stats alignment */
+.stats {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 30px !important;
+}
+
+.stat-item {
+    text-align: center !important;
+    flex: 0 0 auto !important;
+}

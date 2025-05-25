@@ -9,6 +9,15 @@
     margin-bottom: 60px;
 }
 
+/* Override for non-pricing sections on mobile */
+#services .section-header {
+    text-align: center; /* Keep section headers centered */
+}
+
+#services .service-card {
+    text-align: left; /* Cards content left-aligned */
+}
+
 .section-header h2 {
     font-size: 36px;
     color: var(--dark);
@@ -34,6 +43,20 @@
     text-align: center;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .service-card {
+        text-align: left;
+        padding: 20px;
+    }
+    
+    .service-icon {
+        text-align: center;
+        display: block;
+        margin-bottom: 15px;
+    }
 }
 
 .service-card:hover {

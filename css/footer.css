@@ -127,3 +127,34 @@ footer {
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    footer {
+        padding: 40px 0 20px;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: left;
+        margin-bottom: 30px;
+    }
+    
+    .footer-links h4,
+    .newsletter h4 {
+        text-align: left;
+    }
+    
+    .footer-links ul {
+        text-align: left;
+    }
+    
+    .newsletter-form {
+        text-align: left;
+    }
+    
+    .social-links {
+        justify-content: flex-start;
+    }
+}
