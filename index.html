@@ -972,6 +972,7 @@
         </div>
     </section>
 
+
     <!-- Pricing Section -->
     <section id="pricing">
         <div class="container">
@@ -1146,6 +1147,102 @@
             </div>
         </div>
     </section>
+
+
+
+    <!-- FAQ Section -->
+<section id="faq" class="faq-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Häufig gestellte Fragen</h2>
+      <p>Alles, was Sie über unsere Dienstleistungen wissen müssen.</p>
+    </div>
+    <div class="faq-accordion">
+      <div class="faq-item">
+        <button class="faq-question">
+          <i class="fas fa-question-circle"></i>
+          Wie läuft ein Projekt mit FutureLaunch ab?
+          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div class="faq-answer">
+          <p>Nach einem kostenlosen Erstgespräch analysieren wir Ihre Ziele und erstellen ein maßgeschneidertes Konzept. Danach starten wir mit dem Design und der Entwicklung, transparent und agil.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <i class="fas fa-code"></i>
+          Welche Technologien setzt ihr ein?
+          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div class="faq-answer">
+          <p>Unsere Lösungen basieren auf modernen Frameworks wie React, Vue, Flutter, Node.js und KI-Technologien – immer zukunftssicher und performant.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <i class="fas fa-clock"></i>
+          Wie lange dauert die Umsetzung eines Projekts?
+          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div class="faq-answer">
+          <p>Kleinere Websites benötigen etwa 2–3 Wochen. Komplexe Systeme oder Apps können 6–12 Wochen dauern – abhängig von Ihren Anforderungen.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <i class="fas fa-handshake"></i>
+          Bietet ihr langfristigen Support an?
+          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div class="faq-answer">
+          <p>Ja – von 1 Monat im Starterpaket bis zu 12 Monaten im Enterprise-Paket. Optional bieten wir auch individuelle Wartungsverträge an.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <i class="fas fa-layer-group"></i>
+          Kann ich später noch Funktionen erweitern lassen?
+          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div class="faq-answer">
+          <p>Natürlich. Unsere Systeme sind modular aufgebaut und lassen sich jederzeit durch neue Funktionen oder Schnittstellen erweitern.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <i class="fas fa-video"></i>
+          Ist ein persönliches Gespräch möglich?
+          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div class="faq-answer">
+          <p>Gerne! Vereinbaren Sie ein kostenloses Beratungsgespräch per Video-Call oder vor Ort – unkompliziert und unverbindlich.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+      const faqItem = button.parentElement;
+      const isActive = faqItem.classList.contains('active');
+
+      document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
+      if (!isActive) faqItem.classList.add('active');
+    });
+  });
+</script>
+
+
+
+
 
     <!-- Footer -->
     <footer>
