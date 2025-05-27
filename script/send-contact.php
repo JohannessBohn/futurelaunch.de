@@ -10,252 +10,135 @@ if (ob_get_length()) ob_clean();
 
 // Set appropriate headers
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: *'); // Allow requests from any origin
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Credentials: true'); // Allow credentials for cross-origin
+header('Access-Control-Max-Age: 86400'); // Cache preflight for 24 hours
+
+// Function to send JSON response
+function sendJsonResponse($success, $message, $data = null, $code = 200) {
+    http_response_code($code);
+    echo json_encode([
+        'success' => $success,
+        'message' => $message,
+        'data' => $data
+    ]);
+    exit;
+}
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
+    sendJsonResponse(true, 'OK', null, 200);
 }
 
-// Simple mail function as fallback if PHPMailer isn't available
-function send_simple_mail($to, $subject, $message, $from) {
-    $headers = "From: $from\r\n";
-    $headers .= "Reply-To: $from\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-    
-    return mail($to, $subject, $message, $headers);
+// Check if it's a POST request
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    sendJsonResponse(false, 'Method not allowed. Please use POST.', null, 405);
 }
-
-// Set error logging
-error_log("=== Starting contact form submission ===\n", 3, __DIR__ . "/mail_error.log");
 
 try {
-    // Get input data - check if it's form data or JSON
-    $name = $email = $message = '';
-    
-    if (!empty($_POST)) {
-        // Regular form POST data
-        $name = isset($_POST['name']) ? $_POST['name'] : '';
-        $email = isset($_POST['email']) ? $_POST['email'] : '';
-        $message = isset($_POST['message']) ? $_POST['message'] : '';
-    } else {
-        // Try to get JSON data
-        $raw_data = file_get_contents('php://input');
-        
-        if (!empty($raw_data)) {
-            $data = json_decode($raw_data, true);
-            if ($data) {
-                $name = isset($data['name']) ? $data['name'] : '';
-                $email = isset($data['email']) ? $data['email'] : '';
-                $message = isset($data['message']) ? $data['message'] : '';
-            }
+    // Get POST data
+    $raw_data = file_get_contents('php://input');
+    $data = json_decode($raw_data, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log('Invalid JSON received: ' . $raw_data);
+        sendJsonResponse(false, 'Invalid JSON data received.', null, 400);
+    }
+
+    // Validate required fields
+    $required_fields = ['name', 'email', 'message'];
+    foreach ($required_fields as $field) {
+        if (empty($data[$field])) {
+            sendJsonResponse(false, "Missing required field: $field", null, 400);
         }
     }
-    
-    // Validate required fields
-    if (empty($name) || empty($email) || empty($message)) {
-        throw new Exception("Fehler: Alle Felder müssen ausgefüllt werden");
-    }
-    
+
+    // Sanitize input
+    $name = filter_var($data['name'], FILTER_SANITIZE_STRING);
+    $email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+    $phone = filter_var($data['phone'] ?? '', FILTER_SANITIZE_STRING);
+    $subject = filter_var($data['subject'] ?? '', FILTER_SANITIZE_STRING);
+    $message = filter_var($data['message'], FILTER_SANITIZE_STRING);
+
     // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        throw new Exception('Ungültige E-Mail-Adresse');
+        sendJsonResponse(false, 'Invalid email format.', null, 400);
     }
-    
-    // Sanitize inputs
-    $name = htmlspecialchars($name);
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    $message = htmlspecialchars($message);
-      // Save to CSV file as backup
-    $csv_dir = __DIR__ . '/../csv';
-    if (!file_exists($csv_dir)) {
-        if (!mkdir($csv_dir, 0777, true)) {
-            error_log("Failed to create directory: $csv_dir\n", 3, __DIR__ . "/mail_error.log");
+
+    // Ensure data directory exists
+    $dataDir = __DIR__ . '/../data';
+    if (!file_exists($dataDir)) {
+        if (!mkdir($dataDir, 0775, true)) {
+             error_log('Failed to create data directory: ' . $dataDir);
+             // Continue execution, database storage will fail gracefully
         }
     }
-    
-    $csv_file = $csv_dir . '/contact_messages.csv';
-    $is_new_file = !file_exists($csv_file);
-    
+
+    // Database connection and storage
+    $dbPath = $dataDir . '/submissions.db';
     try {
-        $fp = fopen($csv_file, 'a');
-        if (!$fp) {
-            throw new Exception("Could not open CSV file for writing");
-        }
-        
-        // Add headers if new file
-        if ($is_new_file) {
-            fputcsv($fp, ['Timestamp', 'Name', 'Email', 'Message']);
-        }
-        
-        // Add data
-        fputcsv($fp, [date('Y-m-d H:i:s'), $name, $email, $message]);
-        fclose($fp);
-        
-        error_log("Contact form data saved to CSV: $csv_file\n", 3, __DIR__ . "/mail_error.log");
-    } catch (Exception $csv_error) {
-        error_log("CSV Error: " . $csv_error->getMessage() . "\n", 3, __DIR__ . "/mail_error.log");
-        // Continue execution - we'll try to send email anyway
-    }
-    
-    // Prepare email content
-    $email_html = "
-    <html>
-    <head>
-        <title>Neue Kontaktanfrage</title>
-        <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            h2 { color: #4A6DE5; }
-            .message { background: #f9f9f9; padding: 15px; border-radius: 5px; }
-            hr { border: none; border-top: 1px solid #eee; margin: 20px 0; }
-            .footer { font-size: 12px; color: #666; }
-        </style>
-    </head>
-    <body>
-        <h2>Neue Kontaktanfrage von der Website</h2>
-        <p><strong>Name:</strong> {$name}</p>
-        <p><strong>E-Mail:</strong> {$email}</p>
-        <p><strong>Nachricht:</strong></p>
-        <div class='message'>" . nl2br($message) . "</div>
-        <hr>
-        <p class='footer'>Diese Nachricht wurde über das Kontaktformular gesendet.</p>
-    </body>
-    </html>";
-    
-    $email_plain = "Neue Kontaktanfrage\n\nName: {$name}\nE-Mail: {$email}\n\nNachricht:\n{$message}";
-      // Try to use PHPMailer if available
-    $mail_sent = false;
-    $mail_error = '';
-    
-    // Check for PHPMailer in several possible locations
-    $autoload_paths = [
-        __DIR__ . '/vendor/autoload.php',
-        __DIR__ . '/../vendor/autoload.php',
-        __DIR__ . '/../../vendor/autoload.php'
-    ];
-    
-    $autoload_found = false;
-    foreach ($autoload_paths as $path) {
-        if (file_exists($path)) {
-            require $path;
-            $autoload_found = true;
-            error_log("Autoloader found at: $path\n", 3, __DIR__ . "/mail_error.log");
-            break;
-        }
-    }
-    
-    if (!$autoload_found) {
-        error_log("Autoloader not found in any of the checked paths\n", 3, __DIR__ . "/mail_error.log");
-        
-        // Try to load PHPMailer directly
-        $phpmailer_paths = [
-            __DIR__ . '/PHPMailer/PHPMailer.php',
-            __DIR__ . '/PHPMailer/src/PHPMailer.php',
-            __DIR__ . '/src/PHPMailer.php'
-        ];
-        
-        foreach ($phpmailer_paths as $path) {
-            if (file_exists($path)) {
-                require_once $path;
-                require_once dirname($path) . '/SMTP.php';
-                require_once dirname($path) . '/Exception.php';
-                $autoload_found = true;
-                error_log("PHPMailer found directly at: $path\n", 3, __DIR__ . "/mail_error.log");
-                break;
-            }
-        }
-    }
-    
-    if (class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
-        try {
-            $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-            
-            // Load configuration
-            $config = require __DIR__ . '/config.php';
-            
-            // Server settings
-            $mail->SMTPDebug = 0;  // Set to 2 for debugging
-            $mail->isSMTP();
-            $mail->Host = $config['smtp']['host'];
-            $mail->SMTPAuth = true;
-            $mail->Username = $config['smtp']['username'];
-            $mail->Password = $config['smtp']['password'];
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = $config['smtp']['port'];
-            $mail->CharSet = 'UTF-8';
+        $db = new SQLite3($dbPath);
 
-            // Recipients
-            $mail->setFrom($config['smtp']['username'], 'FutureLaunch Website');
-            $mail->addAddress($config['smtp']['username'], 'Johannes Bohn');
-            $mail->addReplyTo($email, $name);
+        // Create table if it doesn't exist
+        $db->exec('CREATE TABLE IF NOT EXISTS submissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT,
+            subject TEXT,
+            message TEXT NOT NULL,
+            date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            read_status INTEGER DEFAULT 0
+        )');
 
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = 'Neue Kontaktanfrage von ' . $name;
-            $mail->Body = $email_html;
-            $mail->AltBody = $email_plain;
+        // Insert submission
+        $stmt = $db->prepare('INSERT INTO submissions (name, email, phone, subject, message) VALUES (:name, :email, :phone, :subject, :message)');
+        $stmt->bindValue(':name', $name, SQLITE3_TEXT);
+        $stmt->bindValue(':email', $email, SQLITE3_TEXT);
+        $stmt->bindValue(':phone', $phone, SQLITE3_TEXT);
+        $stmt->bindValue(':subject', $subject, SQLITE3_TEXT);
+        $stmt->bindValue(':message', $message, SQLITE3_TEXT);
 
-            $mail->send();
-            $mail_sent = true;
-            error_log("Email sent successfully via PHPMailer\n", 3, __DIR__ . "/mail_error.log");
-        } catch (Exception $e) {
-            $mail_error = $e->getMessage();
-            error_log("PHPMailer error: " . $mail_error . "\n", 3, __DIR__ . "/mail_error.log");
-            // Will fall back to simple mail
+        if (!$stmt->execute()) {
+             error_log('SQLite insert failed: ' . $db->lastErrorMsg());
+             // Continue execution, email sending might still work
         }
-    } else {
-        error_log("PHPMailer class not found\n", 3, __DIR__ . "/mail_error.log");
+
+        $db->close();
+    } catch (Exception $db_e) {
+        error_log('Database error: ' . $db_e->getMessage());
+        // Continue execution, email sending might still work
     }
-      // Fallback to simple mail if PHPMailer failed or isn't available
-    if (!$mail_sent) {
-        $to = 'johannesbohn03@gmail.com';
-        $subject = 'Neue Kontaktanfrage von ' . $name;
-        $from = 'website@futurelaunch.de';
-        
-        $headers = "From: $from\r\n";
-        $headers .= "Reply-To: $email\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-        
-        $mail_result = mail($to, $subject, $email_html, $headers);
-        
-        if ($mail_result) {
-            $mail_sent = true;
-            error_log("Email sent successfully via simple mail\n", 3, __DIR__ . "/mail_error.log");
-        } else {
-            $error_message = error_get_last();
-            error_log("Simple mail sending failed: " . ($error_message ? json_encode($error_message) : "Unknown error") . "\n", 3, __DIR__ . "/mail_error.log");
-        }
+
+    // Prepare email content (optional, may require SMTP setup)
+    $to = 'johannesbohn03@gmail.com'; // Replace with your email
+    $email_subject = "New Contact Form Submission" . ($subject ? ": $subject" : "");
+    $email_body = "Name: $name\n";
+    $email_body .= "Email: $email\n";
+    if ($phone) $email_body .= "Phone: $phone\n";
+    if ($subject) $email_body .= "Subject: $subject\n";
+    $email_body .= "\nMessage:\n$message";
+
+    $headers = "From: website@futurelaunch.de\r\n"; // Replace with your website email
+    $headers .= "Reply-To: $email\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion();
+
+    // Send email (this requires a configured mail server)
+    $mail_sent = @mail($to, $email_subject, $email_body, $headers);
+
+    // Respond based on database save success primarily, email as secondary
+    if (isset($db) && !$db->lastErrorMsg()) { // Check if database connection was successful and insert had no error
+        sendJsonResponse(true, 'Nachricht erfolgreich gesendet und gespeichert.');
+    } elseif ($mail_sent) { // Fallback if database failed but email sent
+         sendJsonResponse(true, 'Nachricht erfolgreich gesendet (Datenbank konnte nicht gespeichert werden).');
+    } else { // Both failed
+         sendJsonResponse(false, 'Nachricht konnte weder gesendet noch gespeichert werden. Bitte versuchen Sie es später erneut.', null, 500);
     }
-    
-    // Report status - consider CSV success as a partial success
-    if ($mail_sent) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Ihre Nachricht wurde erfolgreich gesendet!'
-        ]);
-    } else {
-        // We'll still return success if at least the CSV was saved
-        echo json_encode([
-            'success' => true,
-            'message' => 'Ihre Nachricht wurde gespeichert! Wir werden uns bald mit Ihnen in Verbindung setzen.'
-        ]);
-        
-        // Log the issue for debugging
-        error_log("Mail not sent, but CSV saved. Response marked as success.\n", 3, __DIR__ . "/mail_error.log");
-    }
-    
+
 } catch (Exception $e) {
-    if (ob_get_length()) ob_clean();
-    error_log("Contact form error: " . $e->getMessage() . "\n", 3, __DIR__ . "/mail_error.log");
-    http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage()
-    ]);
+    error_log("General form submission error: " . $e->getMessage());
+    sendJsonResponse(false, 'Ein unerwarteter Fehler ist aufgetreten.', null, 500);
 }
 ?>

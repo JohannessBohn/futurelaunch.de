@@ -23,3 +23,20 @@ node_modules/
 # CSV data files
 csv/
 *.csv
+
+# Ignore the SQLite database file
+data/*.db
+*.sqlite
+*.sqlite3
+
+# Ignore log files
+*.log
+
+# Ignore Composer dependencies (if you use Composer)
+vendor/
+
+# Ignore any sensitive configuration files (adjust as needed)
+config.php
+
+# Ignore node_modules (if you use Node.js/npm)
+node_modules/

@@ -4,120 +4,69 @@
 function submitContactForm(event) {
     event.preventDefault();
     
-    const form = event.target;
-    const buttonText = form.querySelector('button[type="submit"] .button-text') || form.querySelector('button[type="submit"]');
-    const buttonLoader = form.querySelector('button[type="submit"] .button-loader');
-    const messageContainer = form.querySelector('.form-message');
+    const form = document.getElementById('contactForm');
+    const submitButton = document.getElementById('submitButton');
+    const formResponse = document.getElementById('formResponse');
     
-    // Show loading state
-    if (buttonText) {
-        buttonText.style.display = 'none';
-    }
-    if (buttonLoader) {
-        buttonLoader.style.display = 'inline-block';
-    }
-    form.querySelector('button[type="submit"]').disabled = true;
+    // Disable submit button and show loading state
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Senden...';
     
-    if (messageContainer) {
-        messageContainer.style.display = 'none';
-    }    // Create form data object
+    // Get form data
     const formData = new FormData(form);
-    const formValues = Object.fromEntries(formData.entries());
+    const data = Object.fromEntries(formData.entries());
     
-    // Use relative path that works in both development and production
-    const endpoint = window.location.hostname === 'localhost' || 
-                      window.location.hostname === '127.0.0.1' ? 
-                    './script/send-contact.php' : 
-                    '/script/send-contact.php';
-    
-    // Send as regular form data instead of JSON
-    fetch(endpoint, {
+    // Send data to server
+    fetch('/script/send-contact.php', {
         method: 'POST',
-        body: formData
-    })    .then(response => {
-        // First check if the response is OK
-        if (!response.ok) {
-            throw new Error('Server returned status: ' + response.status);
-        }
-        
-        // Try to parse as JSON, but handle text responses gracefully
-        const contentType = response.headers.get('content-type');
-        
-        if (contentType && contentType.includes('application/json')) {
-            return response.json().catch(error => {
-                // Try to return a valid response object instead of throwing
-                return { success: true, message: 'Nachricht gesendet' };
-            });
-        } else {
-            return response.text().then(text => {
-                // Try to parse the text as JSON
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    // Return a valid response object
-                    return { success: true, message: 'Nachricht gesendet' };
-                }
-            });
-        }
-    }).then(data => {
-        // Reset button state
-        if (buttonText) {
-            buttonText.style.display = 'inline-block';
-        }
-        if (buttonLoader) {
-            buttonLoader.style.display = 'none';
-        }
-        form.querySelector('button[type="submit"]').disabled = false;
-        
-        // Check if data is actually an object
-        if (typeof data !== 'object') {
-            throw new Error('Ungültiges Antwortformat vom Server');
-        }
-        
-        if (data.success) {
-            // Show success message
-            if (messageContainer) {
-                messageContainer.textContent = data.message || 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.';
-                messageContainer.style.display = 'block';
-                messageContainer.style.backgroundColor = '#d4edda';
-                messageContainer.style.color = '#155724';
-                messageContainer.style.border = '1px solid #c3e6cb';
-            }
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            // Show success message with animation
+            formResponse.className = 'form-response success';
+            formResponse.textContent = result.message || 'Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.';
+            formResponse.style.display = 'block';
             
-            // Trigger confetti animation if available
-            if (typeof confetti === 'function') {
-                triggerConfetti();
-            }
+            // Trigger confetti effect
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
             
             // Reset form
             form.reset();
             
-            // If email field exists and should be preserved
-            const emailField = form.querySelector('input[name="email"][readonly]');
-            if (emailField) {
-                emailField.value = 'johannesbohn03@gmail.com';
-            }
+            // Add success animation to form
+            form.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                form.style.transform = 'scale(1)';
+            }, 200);
         } else {
-            throw new Error(data.error || 'Ein unerwarteter Fehler ist aufgetreten');
+            throw new Error(result.message || result.error || 'Ein Fehler ist aufgetreten');
         }
-    })    .catch(error => {
-        // Reset button state
-        if (buttonText) {
-            buttonText.style.display = 'inline-block';
-        }
-        if (buttonLoader) {
-            buttonLoader.style.display = 'none';
-        }
-        form.querySelector('button[type="submit"]').disabled = false;
-        
+    })
+    .catch(error => {
+        console.error('Form submission error:', error);
         // Show error message
-        if (messageContainer) {
-            messageContainer.textContent = error.message || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
-            messageContainer.style.display = 'block';
-            messageContainer.style.backgroundColor = '#f8d7da';
-            messageContainer.style.color = '#721c24';
-            messageContainer.style.border = '1px solid #f5c6cb';
-        }
+        formResponse.className = 'form-response error';
+        formResponse.textContent = error.message || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
+        formResponse.style.display = 'block';
+    })
+    .finally(() => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Senden';
+        
+        // Clear message after 5 seconds
+        setTimeout(() => {
+            formResponse.style.display = 'none';
+        }, 5000);
     });
     
     return false;
@@ -179,80 +128,34 @@ function submitNewsletterForm(event) {
     // Create form data object
     const formData = new FormData(form);
     
-    // Store in local storage as backup
-    try {
-        const email = formData.get('email');
-        if (email) {
-            const subscribedEmails = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
-            if (!subscribedEmails.includes(email)) {
-                subscribedEmails.push(email);
-                localStorage.setItem('newsletterSubscriptions', JSON.stringify(subscribedEmails));
-            }
-        }
-    } catch (e) {
-        console.error('Error storing subscription in local storage:', e);
-    }
+    // Show success indicator
+    button.innerHTML = '✓';
+    button.style.backgroundColor = '#4CAF50';
     
-    // Use relative path that works in both development and production
-    const endpoint = window.location.hostname === 'localhost' || 
-                     window.location.hostname === '127.0.0.1' ? 
-                     './script/subscribe-newsletter.php' : 
-                     '/script/subscribe-newsletter.php';
-    
-    // Send to server
-    fetch(endpoint, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Server returned status: ' + response.status);
-        }
-        
-        // Try to parse as JSON, but handle text responses gracefully
-        const contentType = response.headers.get('content-type');
-        
-        if (contentType && contentType.includes('application/json')) {
-            return response.json().catch(error => {
-                return { success: true, message: 'Newsletter-Anmeldung erfolgreich' };
-            });
-        } else {
-            return response.text().then(text => {
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    return { success: true, message: 'Newsletter-Anmeldung erfolgreich' };
-                }
-            });
-        }
-    })
-    .then(data => {
-        // Show success indicator
-        button.innerHTML = '✓';
-        button.style.backgroundColor = 'var(--success)';
-        
-        // Reset after delay
-        setTimeout(() => {
-            button.innerHTML = originalButtonHtml;
-            button.disabled = false;
-            button.style.backgroundColor = '';
-            form.reset();
-        }, 2000);
-    })
-    .catch(error => {
-        console.error('Newsletter subscription error:', error);
-        
-        // Show error indicator briefly
-        button.innerHTML = '✗';
-        button.style.backgroundColor = 'var(--danger, #dc3545)';
-        
-        // Reset after delay
-        setTimeout(() => {
-            button.innerHTML = originalButtonHtml;
-            button.disabled = false;
-            button.style.backgroundColor = '';
-        }, 2000);
-    });
+    // Reset after delay
+    setTimeout(() => {
+        button.innerHTML = originalButtonHtml;
+        button.disabled = false;
+        button.style.backgroundColor = '';
+        form.reset();
+    }, 2000);
     
     return false;
 }
+
+// Add privacy policy checkbox
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contactForm');
+    const privacyDiv = document.querySelector('.privacy-consent');
+    
+    if (privacyDiv && !privacyDiv.querySelector('input[type="checkbox"]')) {
+        privacyDiv.innerHTML = `
+            <div class="checkbox-group">
+                <input type="checkbox" id="privacy" name="privacy" required>
+                <label for="privacy">
+                    Ich habe die <a href="/Datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu.
+                </label>
+            </div>
+        `;
+    }
+});

@@ -643,6 +643,229 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Form Response Styling */
+        .form-response {
+            display: none;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-response.success {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #45a049;
+        }
+
+        .form-response.error {
+            background-color: #f44336;
+            color: white;
+            border: 1px solid #da190b;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Form Submit Button Styling */
+        .form-submit button {
+            background-color: #0066cc;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .form-submit button:hover {
+            background-color: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        .form-submit button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .form-submit button i {
+            margin-right: 8px;
+        }
+
+        /* Process Section Mobile Improvements - Two Columns with Arrows */
+        @media (max-width: 768px) {
+            .process-steps {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); /* Two columns */
+                gap: 20px; /* Adjust gap between steps */
+                padding: 0 10px; /* Add some horizontal padding */
+            }
+
+            .step {
+                width: 100%; /* Steps take full grid column width */
+                text-align: center;
+                padding: 25px 15px; /* Adjust padding */
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                transition: transform 0.3s ease;
+                position: relative; /* Needed for pseudo-elements */
+            }
+
+            .step:hover {
+                transform: translateY(-5px);
+            }
+
+            .step-number {
+                width: 45px; /* Slightly smaller number */
+                height: 45px;
+                background: #0066cc;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.3rem; /* Slightly smaller font */
+                font-weight: bold;
+                margin: 0 auto 15px; /* Center and space number */
+            }
+
+            .step h3 {
+                color: #0066cc;
+                margin-bottom: 10px;
+                font-size: 1.2rem; /* Slightly smaller font */
+            }
+
+            .step p {
+                color: #666;
+                line-height: 1.5;
+                margin: 0;
+                font-size: 0.9rem; /* Slightly smaller font */
+            }
+
+            /* Remove vertical connecting lines */
+            .step::after {
+                content: none !important;
+            }
+
+            /* Add arrow between steps (horizontal and diagonal) */
+            .step:nth-child(odd):not(:last-child)::before { /* Arrow for odd steps (right) */
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: -15px; /* Position between columns */
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-left: 15px solid #0066cc; /* Arrow color */
+                opacity: 0.5;
+            }
+
+            .step:nth-child(even):not(:last-child)::before { /* Arrow for even steps (diagonal down-right) */
+                content: '';
+                position: absolute;
+                bottom: -40px; /* Position below the step */
+                left: 50%;
+                transform: translateX(-50%) rotate(45deg); /* Rotate for diagonal */
+                width: 30px; /* Length of the diagonal line */
+                height: 2px;
+                background: #0066cc; /* Arrow color */
+                opacity: 0.5;
+                transform-origin: left top; /* Pivot for rotation */
+            }
+
+             /* Adjust arrow for the 4th step (last in its row) */
+             .process-steps .step:nth-child(4)::before {
+                 content: none !important;
+             }
+
+             /* Add specific arrow for step 4 pointing to step 5 below */
+             .process-steps .step:nth-child(4)::after {
+                 content: '';
+                 position: absolute;
+                 bottom: -40px; /* Position below step 4 */
+                 left: 50%;
+                 transform: translateX(-50%); /* Vertical line */
+                 width: 2px;
+                 height: 30px;
+                 background: #0066cc;
+                 opacity: 0.5;
+             }
+
+        }
+
+        /* Services Section Mobile Improvements */
+        @media (max-width: 768px) {
+            .services-grid {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 25px; /* Adjust gap as needed */
+                padding: 0 10px; /* Add some horizontal padding */
+            }
+
+            .service-card {
+                width: 100%;
+                max-width: 300px; /* Limit card width on smaller screens */
+                text-align: center;
+                padding: 30px 20px; /* Adjust padding */
+            }
+
+            .service-icon {
+                margin: 0 auto 15px; /* Center icon */
+            }
+
+            .service-card h3 {
+                margin-bottom: 10px;
+            }
+
+            .learn-more {
+                justify-content: center; /* Center learn more link */
+            }
+        }
+
+        /* Add animation styles for scroll */
+        .process-steps .step {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .process-steps .step.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Add delay to animation */
+        .process-steps .step:nth-child(1) { transition-delay: 0.1s; }
+        .process-steps .step:nth-child(2) { transition-delay: 0.2s; }
+        .process-steps .step:nth-child(3) { transition-delay: 0.3s; }
+        .process-steps .step:nth-child(4) { transition-delay: 0.4s; }
+        .process-steps .step:nth-child(5) { transition-delay: 0.5s; }
     </style>
 </head>
 <body>
@@ -941,7 +1164,7 @@
                         </div>
                         <div class="testimonial-author">
                             <div class="author-avatar">
-                                <img src="/assets/4.jpg" alt="Dominik Kroll">
+                                <img src="/assets/bild1.png" alt="Dominik Kroll">
                             </div>
                             <div class="author-name">Dominik Kroll</div>
                             <div class="author-position">CEO, Kroll & Kroll GbR</div>
@@ -953,7 +1176,7 @@
                         </div>
                         <div class="testimonial-author">
                             <div class="author-avatar">
-                                <img src="/assets/4.jpg" alt="Johannes Bohn">
+                                <img src="/assets/bild2.png" alt="Johannes Bohn">
                             </div>
                             <div class="author-name">Johannes Bohn</div>
                             <div class="author-position">Gründer, FutureLaunch</div>
@@ -971,7 +1194,6 @@
             </div>
         </div>
     </section>
-
 
     <!-- Pricing Section -->
     <section id="pricing">
@@ -1128,121 +1350,23 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="message">Nachricht</label>
-                            <textarea id="message" name="message" placeholder="Ihre Nachricht" required></textarea>
+                            <label for="message">Nachricht *</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
-                        <div class="form-group checkbox-group">
-                            <input type="checkbox" id="privacy" name="privacy" required>
-                            <label for="privacy">Ich stimme der Verarbeitung meiner Daten gemäß der <a href="/datenschutz.html">Datenschutzerklärung</a> zu.</label>
+
+                        <div class="form-submit">
+                            <button type="submit" id="submitButton">Senden</button>
                         </div>
-                        <button type="submit" class="button button-primary">
-                            <span class="button-text">Nachricht senden</span>
-                            <span class="button-loader" style="display: none;">
-                                <i class="fas fa-circle-notch fa-spin"></i> Wird gesendet...
-                            </span>
-                        </button>
-                        <div class="form-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px;"></div>
+
+                        <div id="formResponse" class="form-response"></div>
                     </form>
                 </div>
             </div>
         </div>
+        <div>
+            
+        </div>
     </section>
-
-
-
-    <!-- FAQ Section -->
-<section id="faq" class="faq-section">
-  <div class="container">
-    <div class="section-header">
-      <h2>Häufig gestellte Fragen</h2>
-      <p>Alles, was Sie über unsere Dienstleistungen wissen müssen.</p>
-    </div>
-    <div class="faq-accordion">
-      <div class="faq-item">
-        <button class="faq-question">
-          <i class="fas fa-question-circle"></i>
-          Wie läuft ein Projekt mit FutureLaunch ab?
-          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
-        </button>
-        <div class="faq-answer">
-          <p>Nach einem kostenlosen Erstgespräch analysieren wir Ihre Ziele und erstellen ein maßgeschneidertes Konzept. Danach starten wir mit dem Design und der Entwicklung, transparent und agil.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <i class="fas fa-code"></i>
-          Welche Technologien setzt ihr ein?
-          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
-        </button>
-        <div class="faq-answer">
-          <p>Unsere Lösungen basieren auf modernen Frameworks wie React, Vue, Flutter, Node.js und KI-Technologien – immer zukunftssicher und performant.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <i class="fas fa-clock"></i>
-          Wie lange dauert die Umsetzung eines Projekts?
-          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
-        </button>
-        <div class="faq-answer">
-          <p>Kleinere Websites benötigen etwa 2–3 Wochen. Komplexe Systeme oder Apps können 6–12 Wochen dauern – abhängig von Ihren Anforderungen.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <i class="fas fa-handshake"></i>
-          Bietet ihr langfristigen Support an?
-          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
-        </button>
-        <div class="faq-answer">
-          <p>Ja – von 1 Monat im Starterpaket bis zu 12 Monaten im Enterprise-Paket. Optional bieten wir auch individuelle Wartungsverträge an.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <i class="fas fa-layer-group"></i>
-          Kann ich später noch Funktionen erweitern lassen?
-          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
-        </button>
-        <div class="faq-answer">
-          <p>Natürlich. Unsere Systeme sind modular aufgebaut und lassen sich jederzeit durch neue Funktionen oder Schnittstellen erweitern.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question">
-          <i class="fas fa-video"></i>
-          Ist ein persönliches Gespräch möglich?
-          <span class="faq-toggle"><i class="fas fa-chevron-down"></i></span>
-        </button>
-        <div class="faq-answer">
-          <p>Gerne! Vereinbaren Sie ein kostenloses Beratungsgespräch per Video-Call oder vor Ort – unkompliziert und unverbindlich.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<script>
-  document.querySelectorAll('.faq-question').forEach(button => {
-    button.addEventListener('click', () => {
-      const faqItem = button.parentElement;
-      const isActive = faqItem.classList.contains('active');
-
-      document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
-      if (!isActive) faqItem.classList.add('active');
-    });
-  });
-</script>
-
-
-
-
 
     <!-- Footer -->
     <footer>
@@ -1337,16 +1461,6 @@
             const buttonLoader = submitButton.querySelector('.button-loader');
             const formMessage = form.querySelector('.form-message');
             
-            // Check if privacy policy is accepted
-            const privacyCheckbox = document.getElementById('privacy');
-            if (!privacyCheckbox.checked) {
-                formMessage.style.display = 'block';
-                formMessage.style.backgroundColor = '#ffebee';
-                formMessage.style.color = '#c62828';
-                formMessage.textContent = 'Bitte akzeptieren Sie die Datenschutzerklärung.';
-                return false;
-            }
-
             // Show loading state
             buttonText.style.display = 'none';
             buttonLoader.style.display = 'inline-block';
@@ -1381,12 +1495,26 @@
             return false;
         }
 
-        // Add event listener for privacy checkbox
-        document.getElementById('privacy').addEventListener('change', function() {
-            const formMessage = document.querySelector('.form-message');
-            if (this.checked) {
-                formMessage.style.display = 'none';
-            }
+        // Scroll animation for process steps
+        const processSteps = document.querySelectorAll('#process .step');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        processSteps.forEach(step => {
+            observer.observe(step);
         });
     </script>
 </body>
