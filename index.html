@@ -714,32 +714,36 @@
             margin-right: 8px;
         }
 
-        /* Process Section Mobile Improvements - Two Columns with Arrows */
+        /* Process Section Mobile Improvements - Clean Grid */
         @media (max-width: 768px) {
             .process-steps {
                 display: grid;
-                grid-template-columns: repeat(2, 1fr); /* Two columns */
-                gap: 20px; /* Adjust gap between steps */
-                padding: 0 10px; /* Add some horizontal padding */
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 20px;
+                padding: 0 15px;
+                max-width: 500px;
+                margin: 0 auto;
             }
 
             .step {
-                width: 100%; /* Steps take full grid column width */
+                width: 100%;
                 text-align: center;
-                padding: 25px 15px; /* Adjust padding */
+                padding: 25px 20px;
                 background: white;
                 border-radius: 15px;
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-                transition: transform 0.3s ease;
-                position: relative; /* Needed for pseudo-elements */
+                transition: all 0.3s ease;
+                margin: 0 auto;
+                position: relative;
             }
 
             .step:hover {
                 transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             }
 
             .step-number {
-                width: 45px; /* Slightly smaller number */
+                width: 45px;
                 height: 45px;
                 background: #0066cc;
                 color: white;
@@ -747,75 +751,31 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.3rem; /* Slightly smaller font */
+                font-size: 1.3rem;
                 font-weight: bold;
-                margin: 0 auto 15px; /* Center and space number */
+                margin: 0 auto 15px;
+                position: relative;
+                z-index: 1;
             }
 
             .step h3 {
                 color: #0066cc;
                 margin-bottom: 10px;
-                font-size: 1.2rem; /* Slightly smaller font */
+                font-size: 1.3rem;
             }
 
             .step p {
                 color: #666;
-                line-height: 1.5;
+                line-height: 1.6;
                 margin: 0;
-                font-size: 0.9rem; /* Slightly smaller font */
+                font-size: 1rem;
             }
 
-            /* Remove vertical connecting lines */
+            /* Remove all arrows and connecting lines */
+            .step::before,
             .step::after {
-                content: none !important;
+                display: none !important;
             }
-
-            /* Add arrow between steps (horizontal and diagonal) */
-            .step:nth-child(odd):not(:last-child)::before { /* Arrow for odd steps (right) */
-                content: '';
-                position: absolute;
-                top: 50%;
-                right: -15px; /* Position between columns */
-                transform: translateY(-50%);
-                width: 0;
-                height: 0;
-                border-top: 10px solid transparent;
-                border-bottom: 10px solid transparent;
-                border-left: 15px solid #0066cc; /* Arrow color */
-                opacity: 0.5;
-            }
-
-            .step:nth-child(even):not(:last-child)::before { /* Arrow for even steps (diagonal down-right) */
-                content: '';
-                position: absolute;
-                bottom: -40px; /* Position below the step */
-                left: 50%;
-                transform: translateX(-50%) rotate(45deg); /* Rotate for diagonal */
-                width: 30px; /* Length of the diagonal line */
-                height: 2px;
-                background: #0066cc; /* Arrow color */
-                opacity: 0.5;
-                transform-origin: left top; /* Pivot for rotation */
-            }
-
-             /* Adjust arrow for the 4th step (last in its row) */
-             .process-steps .step:nth-child(4)::before {
-                 content: none !important;
-             }
-
-             /* Add specific arrow for step 4 pointing to step 5 below */
-             .process-steps .step:nth-child(4)::after {
-                 content: '';
-                 position: absolute;
-                 bottom: -40px; /* Position below step 4 */
-                 left: 50%;
-                 transform: translateX(-50%); /* Vertical line */
-                 width: 2px;
-                 height: 30px;
-                 background: #0066cc;
-                 opacity: 0.5;
-             }
-
         }
 
         /* Services Section Mobile Improvements */
@@ -1457,40 +1417,56 @@
             
             const form = document.getElementById('contactForm');
             const submitButton = form.querySelector('button[type="submit"]');
-            const buttonText = submitButton.querySelector('.button-text');
-            const buttonLoader = submitButton.querySelector('.button-loader');
-            const formMessage = form.querySelector('.form-message');
+            const formMessage = document.getElementById('formResponse');
             
             // Show loading state
-            buttonText.style.display = 'none';
-            buttonLoader.style.display = 'inline-block';
             submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet...';
+            
+            // Clear previous messages
+            formMessage.className = 'form-response';
+            formMessage.style.display = 'none';
 
             // Get form data
             const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            // Simulate form submission (replace with actual API call)
-            setTimeout(() => {
-                // Reset form
-                form.reset();
-                
+            
+            // Send data to server
+            fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
                 // Show success message
+                formMessage.textContent = data.message;
+                formMessage.className = 'form-response success';
                 formMessage.style.display = 'block';
-                formMessage.style.backgroundColor = '#e8f5e9';
-                formMessage.style.color = '#2e7d32';
-                formMessage.textContent = 'Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.';
-
+                
+                // Reset form on success
+                if (data.success) {
+                    form.reset();
+                    
+                    // Scroll to show the success message
+                    formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            })
+            .catch(error => {
+                // Show error message
+                formMessage.textContent = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt per E-Mail.';
+                formMessage.className = 'form-response error';
+                formMessage.style.display = 'block';
+                console.error('Error:', error);
+            })
+            .finally(() => {
                 // Reset button state
-                buttonText.style.display = 'inline-block';
-                buttonLoader.style.display = 'none';
                 submitButton.disabled = false;
-
-                // Clear message after 5 seconds
+                submitButton.innerHTML = 'Nachricht senden';
+                
+                // Hide message after 10 seconds
                 setTimeout(() => {
                     formMessage.style.display = 'none';
-                }, 5000);
-            }, 1500);
+                }, 10000);
+            });
 
             return false;
         }
