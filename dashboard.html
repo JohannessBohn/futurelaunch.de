@@ -111,7 +111,33 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3>Abonnenten</h3>
                 <div>
+                    <button id="add-subscriber-btn" class="btn btn-primary me-2">Abonnent hinzufügen</button>
                     <button id="export-csv" class="btn btn-success">Als CSV exportieren</button>
+                </div>
+            </div>
+            
+            <!-- Add Subscriber Modal -->
+            <div class="modal fade" id="addSubscriberModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Neuen Abonnenten hinzufügen</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="add-subscriber-form">
+                                <div class="mb-3">
+                                    <label for="new-subscriber-email" class="form-label">E-Mail-Adresse</label>
+                                    <input type="email" class="form-control" id="new-subscriber-email" required>
+                                </div>
+                                <div id="add-subscriber-response" class="alert d-none" role="alert"></div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                            <button type="button" class="btn btn-primary" id="save-subscriber-btn">Speichern</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive">
@@ -196,6 +222,63 @@
             });
 
             exportCsvBtn.addEventListener('click', exportSubscribersToCSV);
+            
+            // Add subscriber functionality
+            const addSubscriberBtn = document.getElementById('add-subscriber-btn');
+            const saveSubscriberBtn = document.getElementById('save-subscriber-btn');
+            const addSubscriberForm = document.getElementById('add-subscriber-form');
+            const addSubscriberResponse = document.getElementById('add-subscriber-response');
+            const addSubscriberModal = new bootstrap.Modal(document.getElementById('addSubscriberModal'));
+            
+            addSubscriberBtn.addEventListener('click', function() {
+                // Reset form and response
+                addSubscriberForm.reset();
+                addSubscriberResponse.classList.add('d-none');
+                addSubscriberModal.show();
+            });
+            
+            saveSubscriberBtn.addEventListener('click', function() {
+                const email = document.getElementById('new-subscriber-email').value.trim();
+                
+                // Validate email
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showAddSubscriberResponse('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'danger');
+                    return;
+                }
+                
+                // Check if email already exists
+                const subscribers = getSubscribers();
+                if (subscribers.some(sub => sub.email === email)) {
+                    showAddSubscriberResponse('Diese E-Mail ist bereits angemeldet.', 'warning');
+                    return;
+                }
+                
+                // Add new subscriber
+                subscribers.push({
+                    email: email,
+                    date: new Date().toISOString()
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('futurelaunch_subscribers', JSON.stringify(subscribers));
+                
+                // Show success message
+                showAddSubscriberResponse('Abonnent erfolgreich hinzugefügt!', 'success');
+                
+                // Reload subscribers table
+                loadSubscribers();
+                
+                // Close modal after a short delay
+                setTimeout(() => {
+                    addSubscriberModal.hide();
+                }, 1500);
+            });
+            
+            function showAddSubscriberResponse(message, type) {
+                addSubscriberResponse.textContent = message;
+                addSubscriberResponse.className = `alert alert-${type}`;
+                addSubscriberResponse.classList.remove('d-none');
+            }
 
             // UI functions
             function showLogin() {
@@ -253,25 +336,58 @@
             }
 
             function getSubscribers() {
+                // Also check newsletter subscribers and merge them
+                let newsletterSubscribers = [];
+                try {
+                    const newsSubsData = localStorage.getItem('newsletterSubscribers');
+                    if (newsSubsData) {
+                        const emails = JSON.parse(newsSubsData);
+                        // Convert simple email array to subscriber objects
+                        newsletterSubscribers = emails.map(email => ({
+                            email: email,
+                            date: new Date().toISOString() // Use current date as we don't have the original date
+                        }));
+                    }
+                } catch (e) {
+                    console.error('Error parsing newsletter subscribers:', e);
+                }
+                
                 const storedData = localStorage.getItem('futurelaunch_subscribers');
                 
                 if (storedData) {
                     try {
-                        return JSON.parse(storedData);
+                        const dashboardSubscribers = JSON.parse(storedData);
+                        
+                        // Merge subscribers from both sources
+                        const allEmails = new Set(dashboardSubscribers.map(s => s.email));
+                        
+                        // Only add newsletter subscribers that aren't already in dashboard list
+                        const uniqueNewsletterSubs = newsletterSubscribers.filter(s => !allEmails.has(s.email));
+                        
+                        // Combine both lists
+                        const mergedSubscribers = [...dashboardSubscribers, ...uniqueNewsletterSubs];
+                        
+                        // Save the merged list back to localStorage
+                        localStorage.setItem('futurelaunch_subscribers', JSON.stringify(mergedSubscribers));
+                        
+                        return mergedSubscribers;
                     } catch (e) {
                         console.error('Error parsing subscribers data:', e);
                     }
                 }
                 
-                // Sample data
+                // Sample data if nothing exists
                 const defaultSubscribers = [
                     { email: 'sample@example.com', date: '2025-05-25T12:00:00Z' },
                     { email: 'test@futurelaunch.de', date: '2025-05-26T15:30:00Z' },
                     { email: 'info@example.org', date: '2025-05-28T09:15:00Z' }
                 ];
                 
-                localStorage.setItem('futurelaunch_subscribers', JSON.stringify(defaultSubscribers));
-                return defaultSubscribers;
+                // Merge with any newsletter subscribers
+                const mergedDefaults = [...defaultSubscribers, ...newsletterSubscribers];
+                
+                localStorage.setItem('futurelaunch_subscribers', JSON.stringify(mergedDefaults));
+                return mergedDefaults;
             }
 
             function updateDashboardStats(subscribers) {
