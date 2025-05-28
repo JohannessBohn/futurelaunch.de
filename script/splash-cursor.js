@@ -4,6 +4,22 @@
  */
 
 class SplashCursor {
+  // Define PointerPrototype as a class
+  static PointerPrototype = class {
+    constructor() {
+      this.id = -1;
+      this.texcoordX = 0;
+      this.texcoordY = 0;
+      this.prevTexcoordX = 0;
+      this.prevTexcoordY = 0;
+      this.deltaX = 0;
+      this.deltaY = 0;
+      this.down = false;
+      this.moved = false;
+      this.color = [0, 0, 0];
+    }
+  }
+
   constructor(options = {}) {
     // Configuration with defaults
     this.config = {
@@ -27,7 +43,7 @@ class SplashCursor {
     this.canvas = null;
     this.gl = null;
     this.ext = null;
-    this.pointers = [new this.PointerPrototype()];
+    this.pointers = [new SplashCursor.PointerPrototype()];
     this.programs = {};
     this.framebuffers = {};
     this.lastUpdateTime = Date.now();

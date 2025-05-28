@@ -8,12 +8,19 @@ ini_set('error_log', __DIR__ . '/mail_error.log');
 // Clear any previous output
 if (ob_get_length()) ob_clean();
 
+// Handle CORS headers
+$http_origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+$allowed_domains = ['https://futurelaunch.de', 'http://localhost', 'http://127.0.0.1'];
+
+if (in_array($http_origin, $allowed_domains)) {
+    header("Access-Control-Allow-Origin: $http_origin");
+}
+
 // Set appropriate headers
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // Allow requests from any origin
+header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Credentials: true'); // Allow credentials for cross-origin
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400'); // Cache preflight for 24 hours
 
 // Function to send JSON response
@@ -141,4 +148,181 @@ try {
     error_log("General form submission error: " . $e->getMessage());
     sendJsonResponse(false, 'Ein unerwarteter Fehler ist aufgetreten.', null, 500);
 }
-?>
+<?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Set headers for CORS
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+
+// Function to send JSON response
+function sendJsonResponse($success, $message = '', $data = null, $statusCode = 200) {
+    http_response_code($statusCode);
+    echo json_encode([
+        'success' => $success,
+        'message' => $message,
+        'data' => $data
+    ]);
+    exit;
+}
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    sendJsonResponse(true, 'OK');
+}
+
+// Check if it's a POST request
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    sendJsonResponse(false, 'Method not allowed. Please use POST.', null, 405);
+}
+
+try {
+    // Get JSON input
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    // If JSON decode failed, try to get form data
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $input = $_POST;
+    }
+    
+    // If still no data
+    if (empty($input)) {
+        sendJsonResponse(false, 'No data received', null, 400);
+    }
+
+    // Validate required fields
+    $required = ['name', 'email', 'message'];
+    $missing = [];
+    
+    foreach ($required as $field) {
+        if (empty($input[$field])) {
+            $missing[] = $field;
+        }
+    }
+    
+    if (!empty($missing)) {
+        sendJsonResponse(false, 'Missing required fields: ' . implode(', ', $missing), null, 400);
+    }
+
+    // Sanitize input
+    $name = filter_var($input['name'], FILTER_SANITIZE_STRING);
+    $email = filter_var($input['email'], FILTER_SANITIZE_EMAIL);
+    $message = filter_var($input['message'], FILTER_SANITIZE_STRING);
+    $subject = !empty($input['subject']) ? filter_var($input['subject'], FILTER_SANITIZE_STRING) : 'Kontaktanfrage von Website';
+
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        sendJsonResponse(false, 'Ungültige E-Mail-Adresse', null, 400);
+    }
+
+    // Log the submission (for testing)
+    $logMessage = date('Y-m-d H:i:s') . " - New contact form submission:\n" .
+                 "Name: $name\n" .
+                 "Email: $email\n" .
+                 "Subject: $subject\n" .
+                 "Message: $message\n\n";
+    
+    $logFile = __DIR__ . '/contact_log.txt';
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+
+    // Return success response
+    sendJsonResponse(true, 'Ihre Nachricht wurde erfolgreich gesendet!');
+
+} catch (Exception $e) {
+    error_log('Contact form error: ' . $e->getMessage());
+    sendJsonResponse(false, 'Ein Fehler ist aufgetreten: ' . $e->getMessage(), null, 500);
+}
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Set headers for CORS
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+
+// Function to send JSON response
+function sendJsonResponse($success, $message = '', $data = null, $statusCode = 200) {
+    http_response_code($statusCode);
+    echo json_encode([
+        'success' => $success,
+        'message' => $message,
+        'data' => $data
+    ]);
+    exit;
+}
+
+// Handle preflight requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    sendJsonResponse(true, 'OK');
+}
+
+// Check if it's a POST request
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    sendJsonResponse(false, 'Method not allowed. Please use POST.', null, 405);
+}
+
+try {
+    // Get JSON input
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    // If JSON decode failed
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        // Try to get form data if not JSON
+        $input = $_POST;
+        
+        // If still no data
+        if (empty($input)) {
+            sendJsonResponse(false, 'Invalid request data', null, 400);
+        }
+    }
+
+    // Validate required fields
+    $required = ['name', 'email', 'message'];
+    $missing = [];
+    
+    foreach ($required as $field) {
+        if (empty($input[$field])) {
+            $missing[] = $field;
+        }
+    }
+    
+    if (!empty($missing)) {
+        sendJsonResponse(false, 'Missing required fields: ' . implode(', ', $missing), null, 400);
+    }
+
+    // Sanitize input
+    $name = filter_var($input['name'], FILTER_SANITIZE_STRING);
+    $email = filter_var($input['email'], FILTER_SANITIZE_EMAIL);
+    $message = filter_var($input['message'], FILTER_SANITIZE_STRING);
+    $subject = !empty($input['subject']) ? filter_var($input['subject'], FILTER_SANITIZE_STRING) : 'Kontaktanfrage von Website';
+
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        sendJsonResponse(false, 'Ungültige E-Mail-Adresse', null, 400);
+    }
+
+    // Process the form (e.g., send email, save to database)
+    // TODO: Add your email sending or database logic here
+    
+    // For testing, you can log the submission
+    $logMessage = date('Y-m-d H:i:s') . " - New contact form submission:\n" .
+                 "Name: $name\n" .
+                 "Email: $email\n" .
+                 "Subject: $subject\n" .
+                 "Message: $message\n\n";
+    
+    file_put_contents(__DIR__ . '/contact_log.txt', $logMessage, FILE_APPEND);
+
+    // Return success response
+    sendJsonResponse(true, 'Ihre Nachricht wurde erfolgreich gesendet!');
+
+} catch (Exception $e) {
+    error_log('Contact form error: ' . $e->getMessage());
+    sendJsonResponse(false, 'Ein Fehler ist aufgetreten: ' . $e->getMessage(), null, 500);
+}

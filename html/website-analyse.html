@@ -1078,8 +1078,77 @@
             status.style.color = 'var(--primary)';
             status.textContent = 'Starte Analyse...';
             
-            // Simulate analysis with realistic scores
-            const mockData = {
+            // Check if the URL is futurelaunch.de
+            const isFutureLaunch = url.includes('futurelaunch.de');
+            
+            // Simulate analysis with different scores based on domain
+            const mockData = isFutureLaunch ? {
+                // High scores for futurelaunch.de
+                success: true,
+                scores: {
+                    performance: 98,
+                    seo: 96,
+                    mobile: 100,
+                    security: 100
+                },
+                details: {
+                    performance: {
+                        total_time: 0.5,
+                        size: 750000, // 750KB
+                        speed: 2500 // 2.5 MB/s
+                    },
+                    seo: {
+                        title: {
+                            length: 58,
+                            optimal: true
+                        },
+                        meta_description: {
+                            length: 156,
+                            optimal: true
+                        },
+                        h1: {
+                            count: 1,
+                            optimal: true
+                        },
+                        images: {
+                            with_alt: 100, // 100% of images have alt text
+                            optimal: true
+                        }
+                    },
+                    mobile: {
+                        viewport: true,
+                        responsive: true,
+                        tap_targets: true
+                    },
+                    security: {
+                        secure: true,
+                        cert_valid: true,
+                        hsts: true,
+                        xss_protection: true
+                    }
+                },
+                recommendations: [
+                    {
+                        priority: "niedrig",
+                        title: "Weiterhin gute Arbeit leisten",
+                        actions: [
+                            "Regelmäßige Backups durchführen",
+                            "Software aktuell halten",
+                            "Performance regelmäßig überprüfen"
+                        ]
+                    },
+                    {
+                        priority: "niedrig",
+                        title: "Content-Strategie erweitern",
+                        actions: [
+                            "Regelmäßig neuen Content veröffentlichen",
+                            "Blogbeiträge optimieren",
+                            "Social Media Präsenz ausbauen"
+                        ]
+                    }
+                ]
+            } : {
+                // Standard scores for other domains
                 success: true,
                 scores: {
                     performance: 65,
@@ -1143,8 +1212,15 @@
                 ]
             };
 
-            // Simulate progress updates
-            const steps = [
+            // Simulate progress updates with different messages for futurelaunch.de
+            const steps = isFutureLaunch ? [
+                { progress: 20, status: 'Prüfe Website-Erreichbarkeit...' },
+                { progress: 40, status: 'Analysiere Performance...' },
+                { progress: 60, status: 'Prüfe SEO & Mobile...' },
+                { progress: 80, status: 'Prüfe Sicherheit...' },
+                { progress: 90, status: 'Erstelle Empfehlungen...' },
+                { progress: 100, status: 'Ausgezeichnete Ergebnisse gefunden!' }
+            ] : [
                 { progress: 25, status: 'Prüfe Website-Erreichbarkeit...' },
                 { progress: 50, status: 'Analysiere Performance...' },
                 { progress: 75, status: 'Prüfe SEO & Mobile...' },
@@ -1394,8 +1470,27 @@
         errorDiv.style.display = 'none';
         successDiv.style.display = 'none';
         
+        // Validate required fields
+        const requiredFields = ['name', 'email', 'message'];
+        const missingFields = requiredFields.filter(field => !form[field].value.trim());
+        
+        if (missingFields.length > 0) {
+            errorDiv.textContent = `Bitte füllen Sie alle Pflichtfelder aus: ${missingFields.join(', ')}`;
+            errorDiv.style.display = 'block';
+            return;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.email.value)) {
+            errorDiv.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
+            errorDiv.style.display = 'block';
+            return;
+        }
+        
         // Disable submit button and show loading state
         submitButton.disabled = true;
+        const originalButtonText = submitButton.innerHTML;
         submitButton.innerHTML = `
             <div class="loading-spinner">
                 <i class="fas fa-circle-notch fa-spin"></i>
@@ -1405,45 +1500,53 @@
         
         try {
             const formData = {
-                name: form.name.value,
-                email: form.email.value,
-                message: form.message.value
+                name: form.name.value.trim(),
+                email: form.email.value.trim(),
+                message: form.message.value.trim(),
+                subject: 'Kontaktanfrage von Website-Analyse-Tool'
             };
             
-            const response = await fetch('../script/send-contact.php', {
+            const response = await fetch('/script/send-contact.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials: 'same-origin'
             });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
             
             const data = await response.json();
             
             if (data.success) {
                 // Show success message with animation
-                successDiv.textContent = data.message;
+                successDiv.textContent = data.message || 'Ihre Nachricht wurde erfolgreich gesendet!';
                 successDiv.style.display = 'block';
                 
                 // Trigger confetti animation
                 triggerConfetti();
                 
-                // Reset form
+                // Reset form but keep email
+                const emailValue = form.email.value;
                 form.reset();
-                
-                // Keep the email field set
-                form.email.value = 'johannesbohn03@gmail.com';
+                form.email.value = emailValue;
             } else {
-                throw new Error(data.error || 'Ein unerwarteter Fehler ist aufgetreten');
+                throw new Error(data.message || 'Ein unerwarteter Fehler ist aufgetreten');
             }
         } catch (error) {
             // Show error message
-            errorDiv.textContent = error.message;
+            console.error('Form submission error:', error);
+            errorDiv.textContent = error.message || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
             errorDiv.style.display = 'block';
         } finally {
             // Reset submit button state
             submitButton.disabled = false;
-            submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Nachricht senden';
+            submitButton.innerHTML = originalButtonText;
         }
     }
 
