@@ -1,22 +1,33 @@
-# Basic .htaccess file
+# Enhanced .htaccess file for static + PHP hosting
 Options -Indexes
 RewriteEngine On
 
-# PHP Handling - Ensure PHP files are processed correctly
-AddType application/x-httpd-php .php
-<FilesMatch \.php$>
-    SetHandler application/x-httpd-php
-</FilesMatch>
+# Redirect from PHP dashboard to HTML dashboard
+RewriteRule ^dashboard\.php$ dashboard.html [R=301,L]
+RewriteRule ^admin-dashboard\.php$ dashboard.html [R=301,L]
+RewriteRule ^admin\.php$ dashboard.html [R=301,L]
 
-# Force PHP to be processed
+# Serve HTML files directly (works without PHP)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# If PHP is available, also support PHP
 <IfModule mod_php7.c>
     php_flag display_errors on
     php_value error_reporting E_ALL
+    
+    # Handle PHP subscription API fallback if JS localStorage isn't enough
+    RewriteRule ^api/subscribe$ api/subscribe.php [L]
+    
+    # Redirect old PHP URLs to new API endpoint
+    RewriteRule ^subscribe\.php$ api/subscribe.php [L]
 </IfModule>
 
 # Enable compression
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
 </IfModule>
 
 # Set browser caching
@@ -36,5 +47,5 @@ AddType application/x-httpd-php .php
     Header set X-XSS-Protection "1; mode=block"
 </IfModule>
 
-# Ensure index.php is included in directory index
-DirectoryIndex index.php index.html
+# Set default index files
+DirectoryIndex index.html index.php

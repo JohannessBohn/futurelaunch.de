@@ -7,4 +7,3 @@
 // Redirect to HTML dashboard
 header('Location: dashboard.html');
 exit;
-?>

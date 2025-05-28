@@ -1,36 +1,13 @@
 <?php
 /**
- * Admin Dashboard
- * Secure dashboard for FutureLaunch administration
+ * Dashboard Redirect
+ * Redirects to the new HTML-based dashboard that doesn't require XAMPP
  */
 
-// Load authentication helper
-require_once __DIR__ . '/includes/auth_helper.php';
+// Redirect to HTML dashboard
+header('Location: dashboard.html');
+exit;
 
-// Initialize session
-initSession();
-
-// Process login
-$loginError = '';
-$lockedOut = false;
-
-if (isset($_POST['login'])) {
-    if (isLockedOut()) {
-        $lockedOut = true;
-        $loginError = 'Zu viele Anmeldeversuche. Bitte warten Sie ' . getRemainingLockoutTime() . ' Minuten.';
-    } else {
-        if (!verifyLogin($_POST['username'], $_POST['password'])) {
-            $loginError = 'Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.';
-        }
-    }
-}
-
-// Process logout
-if (isset($_GET['logout'])) {
-    logout();
-    header('Location: dashboard.php');
-    exit;
-}
 
 // Get subscribers from JSON file
 function getSubscribersFromJSON() {
