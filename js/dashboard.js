@@ -7,9 +7,9 @@
 const STORAGE_KEY_AUTH = 'futurelaunch_auth';
 const STORAGE_KEY_SUBSCRIBERS = 'futurelaunch_subscribers';
 const DEFAULT_CREDENTIALS = {
-    username: 'admin',
+    username: 'gibmirdeinGeld',
     // This is just a frontend check, not secure - use a backend if true security is needed
-    passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918' // SHA-256 hash of 'admin' 
+    password: '!Dome_Jojo2025' // Using direct password for compatibility with old system
 };
 
 // DOM Elements
@@ -83,10 +83,10 @@ function handleLogin(e) {
 }
 
 function validateCredentials(username, password) {
-    // Simple validation using hash comparison
-    // In a real app, this would be done server-side
+    // Simple direct credential validation
+    // In a real app, this would be done server-side with proper security
     return username === DEFAULT_CREDENTIALS.username && 
-           sha256(password) === DEFAULT_CREDENTIALS.passwordHash;
+           password === DEFAULT_CREDENTIALS.password;
 }
 
 function handleLogout() {
