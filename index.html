@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#4A6DE5">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
@@ -886,12 +887,11 @@
 
         // Preload images
         const imagesToPreload = [
-            '/assets/1.jpg',
-            '/assets/FutureLaunch.png',
-            '/assets/3.png',
-            '/assets/4.jpg',
-            '/assets/kroll-preview.jpg',
-            '/assets/bildungsplan-preview.jpg'
+            'assets/FutureLaunch.png',
+            'assets/3.png',
+            'assets/1.jpg', 
+            'assets/kroll-preview.jpg',
+            'assets/bildungsplan-preview.jpg'
         ];
         
         imagesToPreload.forEach(src => {
@@ -1491,89 +1491,7 @@
                                 </div>
                             </form>
                         </div>
-                                responseDiv.classList.add(type === 'error' ? 'text-danger' : 
-                                                        type === 'success' ? 'text-success' : 'text-info');
-                                responseDiv.style.display = 'block';
-                                responseDiv.style.opacity = '1';
-                                responseDiv.style.transition = 'opacity 0.5s ease';
-                                
-                                // Hide message after 5 seconds
-                                setTimeout(() => {
-                                    responseDiv.style.opacity = '0';
-                                    setTimeout(() => {
-                                        responseDiv.style.display = 'none';
-                                    }, 500);
-                                }, 5000);
-                            }
-                            
-                            function saveSubscription(email) {
-                                try {
-                                    let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
-                                    if (!subscribers.includes(email)) {
-                                        subscribers.push(email);
-                                        localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
-                                        return true;
-                                    }
-                                    return false;
-                                } catch (e) {
-                                    console.error('Error saving subscription:', e);
-                                    return false;
-                                }
-                            }
-                            
-                            window.handleNewsletterSubmit = function(event) {
-                                event.preventDefault();
-                                
-                                const emailInput = document.getElementById('newsletterEmail');
-                                const email = emailInput.value.trim();
-                                const submitButton = event.target.querySelector('button[type="submit"]');
-                                
-                                // Validate email
-                                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                                    showResponse('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
-                                    return false;
-                                }
-                                
-                                // Show loading state
-                                submitButton.disabled = true;
-                                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                                
-                                // Process after a short delay for better UX
-                                setTimeout(() => {
-                                    try {
-                                        if (saveSubscription(email)) {
-                                            showResponse('Vielen Dank für Ihr Abonnement!', 'success');
-                                            event.target.reset();
-                                            
-                                            // Show confetti effect if available
-                                            if (typeof confetti === 'function') {
-                                                confetti({
-                                                    particleCount: 100,
-                                                    spread: 70,
-                                                    origin: { y: 0.6 }
-                                                });
-                                            }
-                                        } else {
-                                            showResponse('Diese E-Mail ist bereits angemeldet.', 'info');
-                                        }
-                                    } catch (e) {
-                                        console.error('Error:', e);
-                                        showResponse('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
-                                    } finally {
-                                        submitButton.disabled = false;
-                                        submitButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                                    }
-                                }, 300);
-                                
-                                return false;
-                            };
-                        });
-                        </script>
-                        <script>
-                        function subscribeNewsletter(event) {
-                            event.preventDefault();
-                            
-                            const email = document.getElementById('newsletterEmail').value.trim();
+                    </div>
                             const responseDiv = document.getElementById('newsletterResponse');
                             const submitButton = event.target.querySelector('button[type="submit"]');
                             
@@ -1617,29 +1535,10 @@
                             return false;
                         }
                         
-                        function showResponse(message, type) {
-                            const responseDiv = document.getElementById('newsletterResponse');
-                            if (!responseDiv) return;
-                            
-                            responseDiv.textContent = message;
-                            responseDiv.className = 'mt-2';
-                            responseDiv.classList.add(type === 'error' ? 'text-danger' : 
-                                                    type === 'success' ? 'text-success' : 'text-info');
-                            responseDiv.style.display = 'block';
-                            responseDiv.style.opacity = '1';
-                            responseDiv.style.transition = 'opacity 0.5s ease';
-                            
-                            // Hide message after 5 seconds
-                            setTimeout(() => {
-                                responseDiv.style.opacity = '0';
-                                setTimeout(() => {
-                                    responseDiv.style.display = 'none';
-                                }, 500);
-                            }, 5000);
-                        }
-                    
                     <!-- External scripts moved to separate files -->
                     <script src="js/app.js"></script>
+                    <!-- Confetti effect for animations -->
+                    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
                 </div>
             </div>
 
