@@ -220,10 +220,7 @@ function saveToSubscribersDashboard(email) {
 
 window.handleNewsletterSubmit = function(event) {
     event.preventDefault();
-    
     const emailInput = document.getElementById('newsletterEmail');
-    if (!emailInput) return false;
-    
     const email = emailInput.value.trim();
     const submitButton = event.target.querySelector('button[type="submit"]');
     
@@ -234,10 +231,8 @@ window.handleNewsletterSubmit = function(event) {
     }
     
     // Show loading state
-    if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.innerHTML = '';
-    }
+    submitButton.disabled = true;
+    submitButton.innerHTML = '';
     
     // Process after a short delay for better UX
     setTimeout(() => {
@@ -261,10 +256,8 @@ window.handleNewsletterSubmit = function(event) {
             console.error('Error:', e);
             showResponse('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
         } finally {
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.innerHTML = '';
-            }
+            submitButton.disabled = false;
+            submitButton.innerHTML = '';
         }
     }, 300);
     
@@ -277,8 +270,7 @@ function showResponse(message, type) {
     
     responseDiv.textContent = message;
     responseDiv.className = 'mt-2';
-    responseDiv.classList.add(type === 'error' ? 'text-danger' : 
-                            type === 'success' ? 'text-success' : 'text-info');
+    responseDiv.classList.add(type === 'error' ? 'text-danger' : type === 'success' ? 'text-success' : 'text-info');
     responseDiv.style.display = 'block';
     responseDiv.style.opacity = '1';
     responseDiv.style.transition = 'opacity 0.5s ease';
