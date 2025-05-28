@@ -1,0 +1,5 @@
+module.exports = {
+  php: "C:\\xampp\\php\\php.exe",
+  root: ".",
+  open: false
+}

@@ -1,13 +1,14 @@
 <?php
-// Disable error reporting for production
-// error_reporting(0);
-// ini_set('display_errors', 0);
+/**
+ * FutureLaunch Installationsskript
+ * Einrichtung der erforderlichen Verzeichnisse und Konfigurationen
+ */
 
-// Enable for debugging
+// Fehlerberichte aktivieren während der Installation
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Check if already installed
+// Prüfen, ob bereits installiert
 if (file_exists('config/installed.flag')) {
     header('Location: index.html');
     exit();
@@ -17,20 +18,21 @@ $step = isset($_GET['step']) ? (int)$_GET['step'] : 1;
 $error = '';
 $success = '';
 $config = [
+    'use_db' => false,            // Standardmäßig keine DB verwenden
     'db_host' => 'localhost',
-    'db_name' => '',
-    'db_user' => '',
+    'db_name' => 'futurelaunch',
+    'db_user' => 'root',
     'db_pass' => '',
     'admin_user' => 'admin',
     'admin_pass' => ''
 ];
 
-// Handle form submission
+// Formular-Verarbeitung
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($step === 1) {
-        // Verify requirements
+        // Systemanforderungen prüfen
         $requirements = [
-            'PHP 7.4 or higher' => version_compare(PHP_VERSION, '7.4.0', '>='),
+            'PHP 7.4 oder höher' => version_compare(PHP_VERSION, '7.4.0', '>='),
             'MySQLi Extension' => extension_loaded('mysqli'),
             'PDO Extension' => extension_loaded('pdo_mysql'),
             'config Directory Writable' => is_writable(__DIR__ . '/config'),
