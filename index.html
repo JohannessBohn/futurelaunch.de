@@ -1484,61 +1484,17 @@
                         <h4>Newsletter</h4>
                         <p>Bleiben Sie auf dem Laufenden mit unseren neuesten Updates.</p>
                         <div id="newsletterContainer">
-                            <form id="subscription-form">
-                                <div class="input-group">
-                                    <input type="email" id="email" placeholder="Ihre E-Mail-Adresse" required>
-                                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                            <form id="newsletterForm" class="newsletter-form">
+                                <div class="input-group mb-2">
+                                    <input type="email" class="form-control" id="newsletterEmail" placeholder="Ihre E-Mail-Adresse" required>
                                 </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
                             </form>
+                            <div id="newsletterResponse" class="mt-2" style="display: none;"></div>
                         </div>
                     </div>
-                            const responseDiv = document.getElementById('newsletterResponse');
-                            const submitButton = event.target.querySelector('button[type="submit"]');
-                            
-                            // Validate email
-                            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                                showResponse('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
-                                return false;
-                            }
-                            
-                            // Show loading state
-                            submitButton.disabled = true;
-                            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                            
-                            // Simulate successful submission
-                            setTimeout(() => {
-                                // Save to localStorage
-                                let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
-                                if (!subscribers.includes(email)) {
-                                    subscribers.push(email);
-                                    localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
-                                    
-                                    showResponse('Vielen Dank für Ihr Abonnement!', 'success');
-                                    event.target.reset();
-                                    
-                                    // Show confetti effect if available
-                                    if (typeof confetti === 'function') {
-                                        confetti({
-                                            particleCount: 100,
-                                            spread: 70,
-                                            origin: { y: 0.6 }
-                                        });
-                                    }
-                                } else {
-                                    showResponse('Diese E-Mail ist bereits angemeldet.', 'info');
-                                }
-                                
-                                submitButton.disabled = false;
-                                submitButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                            }, 1000);
-                            
-                            return false;
-                        }
-                        
-                    <!-- External scripts moved to separate files -->
-                    <script src="js/app.js"></script>
-                    <!-- Confetti effect for animations -->
-                    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
                 </div>
             </div>
 
@@ -1784,6 +1740,10 @@
         }
     </script>
     
+    <!-- Load our application scripts -->
+    <script src="js/app.js"></script>
+    <!-- Confetti effect for animations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <!-- Load our subscription scripts -->
     <script src="js/subscribe.js"></script>
     <script src="js/newsletter.js"></script>
