@@ -1561,13 +1561,14 @@
                             const formData = new FormData();
                             formData.append('email', email);
                             
-                            fetch('subscribe.php', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
+                            // Use the client-side only solution instead of server request
+                            setTimeout(() => {
+                                // Save to localStorage
+                                let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+                                if (!subscribers.includes(email)) {
+                                    subscribers.push(email);
+                                    localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+                                    
                                     showResponse('Vielen Dank für Ihr Abonnement!', 'success');
                                     event.target.reset();
                                     
@@ -1580,17 +1581,12 @@
                                         });
                                     }
                                 } else {
-                                    throw new Error(data.message || 'Ein Fehler ist aufgetreten');
+                                    showResponse('Diese E-Mail ist bereits angemeldet.', 'info');
                                 }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                showResponse(error.message || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
-                            })
-                            .finally(() => {
+                                
                                 submitButton.disabled = false;
                                 submitButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                            });
+                            }, 500);
                             
                             return false;
                         }
