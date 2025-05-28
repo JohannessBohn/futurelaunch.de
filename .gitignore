@@ -40,3 +40,5 @@ config.php
 
 # Ignore node_modules (if you use Node.js/npm)
 node_modules/
+
+admin-config.php

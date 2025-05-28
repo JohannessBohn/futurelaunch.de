@@ -1,7 +1,7 @@
 <?php
 // Admin credentials
-$admin_username = 'admin';
-$admin_password = '!Admin1234'; // Change this to a strong password
+$admin_username = 'gibmirdeinGeld';
+$admin_password = '!Dome_Jojo2025'; // Change this to a strong password
 
 // Session configuration
 session_start();
