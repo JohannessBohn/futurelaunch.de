@@ -31,10 +31,18 @@ FutureLaunch.de/
 ├── .idea/          # IDE-Konfiguration
 ├── admin/          # Admin-Interface und Verwaltungstools
 ├── assets/         # Bilder, Icons, Medien
+│   └── img/        # Bilder und Logo-Dateien
+├── config/         # Konfigurationsdateien
+│   ├── auth_config.php    # Authentifizierungseinstellungen
+│   └── db_config.php      # Datenbankverbindung
 ├── css/            # Stylesheets
-├── csv/            # Datenablage (Kontakte, Newsletter etc.)
-├── html/           # HTML-Templates
+├── data/           # Datenablage (JSON, Konfiguration)
+├── includes/       # Wiederverwendbare PHP-Komponenten
+│   ├── auth_helper.php    # Authentifizierungsfunktionen
+│   └── loadingscreen.php  # Zentraler Ladebildschirm
+├── logs/           # Log-Dateien
 ├── script/         # JavaScript-Dateien und PHP-Handler
+├── uploads/        # Nutzer-Uploads (mit .gitkeep)
 └── README.md       # Du bist hier! 👋
 ```
 

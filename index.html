@@ -7,11 +7,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico">
-    <link rel="apple-touch-icon" href="/assets/favicon.ico">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/splash-cursor.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/splash-cursor.css">
     <title>FutureLaunch | Innovative B2B Code-Dienstleistungen</title>
 
     <!-- Cookies -->
@@ -59,6 +59,19 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+        }
+        
+        .loading-logo {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .loading-logo img {
+            max-width: 140px;
+            height: auto;
+            margin-top: -20px;
         }
         
         .loading-screen.fade-out {
@@ -841,7 +854,7 @@
     <!-- Loading Screen -->
     <div class="loading-screen">
         <div class="content-wrapper">
-            <img src="/assets/FutureLaunch.png" alt="FutureLaunch Logo" class="loading-logo">
+            <div class="loading-logo"><img src="assets/FutureLaunch.png" alt="FutureLaunch Logo"></div>
             <div class="welcome-text">Willkommen bei FutureLaunch</div>            <div class="loader">
                 <div class="inner one"></div>
                 <div class="inner two"></div>
@@ -904,16 +917,16 @@
                 dismissOnScroll: false
             });
         });
-    </script>    <script src="/script/cookies.js" defer></script>
-    <script src="/script/form-handler.js" defer></script>
-    <script src="/script/main.js" defer></script>
-    <script src="/script/splash-cursor.js" defer></script>
+    </script>    <script src="script/cookies.js" defer></script>
+    <script src="script/form-handler.js" defer></script>
+    <script src="script/main.js" defer></script>
+    <script src="script/splash-cursor.js" defer></script>
 
     <!-- Header Section -->
     <header>
         <div class="container header-container">
             <a href="/" class="logo">
-                <img src="/assets/FutureLaunch.png" alt="FutureLaunch Logo" class="logo-image"/>
+                <img src="assets/FutureLaunch.png" alt="FutureLaunch Logo" class="logo-image"/>
                 Future<span>Launch</span>
             </a>
             <div class="menu-toggle">&#9776;</div>
@@ -1019,7 +1032,7 @@
     <section id="about">
         <div class="container about-container">
             <div class="about-image">
-                <img src="/assets/1.jpg" alt="Über FutureLaunch">
+                <img src="assets/1.jpg" alt="Über FutureLaunch">
             </div>
             <div class="about-content">
                 <h2>Über FutureLaunch</h2>
@@ -1055,7 +1068,7 @@
                 <!-- Kroll Bauelemente Project -->
                 <div class="case-study-card">
                     <div class="case-study-image">
-                        <img src="/assets/kroll-preview.jpg" alt="Kroll & Kroll GbR Website" onerror="this.src='/assets/3.png'; this.onerror=null;">
+                        <img src="assets/kroll-preview.jpg" alt="Kroll & Kroll GbR Website" onerror="this.src='assets/3.png'; this.onerror=null;">
                         <div class="case-study-overlay">
                             <a href="https://kroll-bauelemente.de" target="_blank" rel="noopener" class="view-site-btn">Website besuchen</a>
                         </div>
@@ -1077,8 +1090,8 @@
                 <!-- SoftSpot Project -->
                 <div class="case-study-card">
                     <div class="case-study-image">
-                        <img src="/assets/SoftSpot.jpg" alt="SoftSpot Website" 
-                             onerror="this.src='/assets/3.png'; this.onerror=null;">
+                        <img src="assets/SoftSpot.jpg" alt="SoftSpot Website" 
+                             onerror="this.src='assets/3.png'; this.onerror=null;">
                         <div class="case-study-overlay">
                             <a href="https://softspot.site/" target="_blank" rel="noopener" class="view-site-btn">Website besuchen</a>
                         </div>
@@ -1133,7 +1146,7 @@
                         </div>
                         <div class="testimonial-author">
                             <div class="author-avatar">
-                                <img src="/assets/bild1.png" alt="Dominik Kroll">
+                                <img src="assets/bild1.png" alt="Dominik Kroll">
                             </div>
                             <div class="author-name">Dominik Kroll</div>
                             <div class="author-position">CEO, Kroll & Kroll GbR</div>
@@ -1145,7 +1158,7 @@
                         </div>
                         <div class="testimonial-author">
                             <div class="author-avatar">
-                                <img src="/assets/bild2.png" alt="Johannes Bohn">
+                                <img src="assets/bild2.png" alt="Johannes Bohn">
                             </div>
                             <div class="author-name">Johannes Bohn</div>
                             <div class="author-position">Gründer, FutureLaunch</div>
@@ -1650,14 +1663,14 @@
                             const formData = new FormData();
                             formData.append('email', email);
                             
-                            // Use the client-side only solution instead of server request
-                            setTimeout(() => {
-                                // Save to localStorage
-                                let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
-                                if (!subscribers.includes(email)) {
-                                    subscribers.push(email);
-                                    localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
-                                    
+                            // Send the email to our PHP script
+                            fetch('subscribe.php', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
                                     showResponse('Vielen Dank für Ihr Abonnement!', 'success');
                                     event.target.reset();
                                     
@@ -1670,12 +1683,17 @@
                                         });
                                     }
                                 } else {
-                                    showResponse('Diese E-Mail ist bereits angemeldet.', 'info');
+                                    showResponse(data.message || 'Ein Fehler ist aufgetreten.', 'info');
                                 }
-                                
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                showResponse('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
+                            })
+                            .finally(() => {
                                 submitButton.disabled = false;
                                 submitButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                            }, 500);
+                            });
                             
                             return false;
                         }

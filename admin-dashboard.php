@@ -2,13 +2,16 @@
 // Simple session-based authentication
 session_start();
 
-// Hardcoded admin credentials (in production, use a database)
-$admin_user = 'admin';
-$admin_pass = '!Admin1234';
+// Admin credentials
+$admin_username = 'gibmirdeinGeld';
+$admin_password = '!Dome_Jojo2025';
+
+// In a production environment, these would be stored in a secure config file
+// that is excluded from version control
 
 // Handle login
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    if ($_POST['username'] === $admin_user && $_POST['password'] === $admin_pass) {
+    if ($_POST['username'] === $admin_username && $_POST['password'] === $admin_password) {
         $_SESSION['admin_logged_in'] = true;
     } else {
         $login_error = 'Ungültige Anmeldedaten';
@@ -69,6 +72,7 @@ if (!$is_logged_in) {
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" name="login" class="btn btn-primary w-100">Anmelden</button>
+                <a href="index.html" class="btn btn-primary">Zurück zur Homepage</a>
             </form>
         </div>
     </body>

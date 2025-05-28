@@ -1,44 +1,97 @@
-# SMTP Configuration
-script/config.php
-
-# Logs
-script/mail_error.log
-script/newsletter_error.log
-
-# Dependencies
+# Dependency directories
 vendor/
 node_modules/
+jspm_packages/
+bower_components/
 
 # Environment files
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+.env.test
 
 # Editor directories and files
 .idea/
 .vscode/
 *.swp
 *.swo
+*.sublime-workspace
+*.sublime-project
+.project
+.settings/
 
-# CSV data files
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Data files
 csv/
 *.csv
-
-# Ignore the SQLite database file
 data/*.db
 *.sqlite
 *.sqlite3
+data/subscribers.json
 
-# Ignore log files
-*.log
+# Sensitive configuration files
+config/secrets.php
+config/local_config.php
+includes/config/secrets.php
+config/db_credentials.php
 
-# Ignore Composer dependencies (if you use Composer)
-vendor/
+# Temporary files
+tmp/
+temp/
 
-# Ignore any sensitive configuration files (adjust as needed)
-config.php
+# Uploads (except .gitkeep)
+uploads/*
+!uploads/.gitkeep
 
-# Ignore node_modules (if you use Node.js/npm)
-node_modules/
+# Cache files
+cache/
+.sass-cache/
 
-admin-config.php
+# Session files
+sessions/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# PHP specific
+phpMyAdmin/
+phpMyAdmin-*/
+phpinfo.php
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Deployment specific
+.windsurfrules
+.deployment/
+
+# Build output
+dist/
+build/
+
+# Testing
+coverage/
+.phpunit.result.cache
+
