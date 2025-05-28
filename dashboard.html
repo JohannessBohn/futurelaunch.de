@@ -54,11 +54,11 @@
         <form id="login-form">
             <div class="mb-3">
                 <label for="username" class="form-label">Benutzername</label>
-                <input type="text" class="form-control" id="username" required>
+                <input type="text" class="form-control" id="username" autocomplete="username" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Passwort</label>
-                <input type="password" class="form-control" id="password" required>
+                <input type="password" class="form-control" id="password" autocomplete="current-password" required>
             </div>
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">Anmelden</button>
@@ -132,6 +132,208 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/dashboard.js"></script>
+    
+    <!-- Inline JavaScript to avoid file permissions issues -->
+    <script>
+        // Simple dashboard script with hard-coded authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const loginForm = document.getElementById('login-form');
+            const loginContainer = document.getElementById('login-container');
+            const dashboardContainer = document.getElementById('dashboard-container');
+            const loginAlert = document.getElementById('login-alert');
+            const logoutBtn = document.getElementById('logout-btn');
+            const subscribersTable = document.getElementById('subscribers-table');
+            const totalSubscribersEl = document.getElementById('total-subscribers');
+            const thisMonthEl = document.getElementById('this-month');
+            const thisWeekEl = document.getElementById('this-week');
+            const exportCsvBtn = document.getElementById('export-csv');
+
+            // Hard-coded credentials for simplified access
+            const USERNAME = 'gibmirdeinGeld';
+            const PASSWORD = '!Dome_Jojo2025';
+
+            // Check if already logged in
+            const authData = localStorage.getItem('futurelaunch_auth');
+            if (authData) {
+                try {
+                    const { isLoggedIn, expiresAt } = JSON.parse(authData);
+                    if (isLoggedIn && expiresAt > Date.now()) {
+                        showDashboard();
+                        loadSubscribers();
+                    }
+                } catch (e) {
+                    console.error('Error parsing auth data:', e);
+                }
+            }
+
+            // Setup event listeners
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                
+                // Simple credential check
+                if (username === USERNAME && password === PASSWORD) {
+                    // Set authentication in localStorage
+                    const authData = {
+                        isLoggedIn: true,
+                        expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+                    };
+                    
+                    localStorage.setItem('futurelaunch_auth', JSON.stringify(authData));
+                    showDashboard();
+                    loadSubscribers();
+                } else {
+                    showLoginError('Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.');
+                }
+            });
+
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('futurelaunch_auth');
+                showLogin();
+            });
+
+            exportCsvBtn.addEventListener('click', exportSubscribersToCSV);
+
+            // UI functions
+            function showLogin() {
+                loginContainer.style.display = 'block';
+                dashboardContainer.style.display = 'none';
+            }
+
+            function showDashboard() {
+                loginContainer.style.display = 'none';
+                dashboardContainer.style.display = 'block';
+            }
+
+            function showLoginError(message) {
+                loginAlert.textContent = message;
+                loginAlert.classList.remove('d-none');
+                
+                setTimeout(() => {
+                    loginAlert.classList.add('d-none');
+                }, 3000);
+            }
+
+            // Subscriber management
+            function loadSubscribers() {
+                let subscribers = getSubscribers();
+                
+                // Update statistics
+                updateDashboardStats(subscribers);
+                
+                // Clear table
+                subscribersTable.innerHTML = '';
+                
+                // Add subscribers to table
+                subscribers.forEach(sub => {
+                    const row = document.createElement('tr');
+                    
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = sub.email;
+                    
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = new Date(sub.date).toLocaleDateString('de-DE');
+                    
+                    const actionsCell = document.createElement('td');
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn btn-sm btn-danger';
+                    deleteBtn.innerHTML = '<i class="bi bi-trash"></i>';
+                    deleteBtn.onclick = () => deleteSubscriber(sub.email);
+                    actionsCell.appendChild(deleteBtn);
+                    
+                    row.appendChild(emailCell);
+                    row.appendChild(dateCell);
+                    row.appendChild(actionsCell);
+                    
+                    subscribersTable.appendChild(row);
+                });
+            }
+
+            function getSubscribers() {
+                const storedData = localStorage.getItem('futurelaunch_subscribers');
+                
+                if (storedData) {
+                    try {
+                        return JSON.parse(storedData);
+                    } catch (e) {
+                        console.error('Error parsing subscribers data:', e);
+                    }
+                }
+                
+                // Sample data
+                const defaultSubscribers = [
+                    { email: 'sample@example.com', date: '2025-05-25T12:00:00Z' },
+                    { email: 'test@futurelaunch.de', date: '2025-05-26T15:30:00Z' },
+                    { email: 'info@example.org', date: '2025-05-28T09:15:00Z' }
+                ];
+                
+                localStorage.setItem('futurelaunch_subscribers', JSON.stringify(defaultSubscribers));
+                return defaultSubscribers;
+            }
+
+            function updateDashboardStats(subscribers) {
+                // Total subscribers
+                totalSubscribersEl.textContent = subscribers.length;
+                
+                // Get current date
+                const now = new Date();
+                const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                
+                // Get start of current week (Monday)
+                const dayOfWeek = now.getDay() || 7; // Convert Sunday (0) to 7
+                const startOfWeek = new Date(now);
+                startOfWeek.setDate(now.getDate() - dayOfWeek + 1);
+                startOfWeek.setHours(0, 0, 0, 0);
+                
+                // Count subscribers this month and this week
+                const subscribersThisMonth = subscribers.filter(sub => new Date(sub.date) >= thisMonth);
+                const subscribersThisWeek = subscribers.filter(sub => new Date(sub.date) >= startOfWeek);
+                
+                thisMonthEl.textContent = subscribersThisMonth.length;
+                thisWeekEl.textContent = subscribersThisWeek.length;
+            }
+
+            function deleteSubscriber(email) {
+                if (confirm(`Möchten Sie den Abonnenten ${email} wirklich löschen?`)) {
+                    let subscribers = getSubscribers();
+                    subscribers = subscribers.filter(sub => sub.email !== email);
+                    
+                    localStorage.setItem('futurelaunch_subscribers', JSON.stringify(subscribers));
+                    loadSubscribers();
+                }
+            }
+
+            function exportSubscribersToCSV() {
+                const subscribers = getSubscribers();
+                
+                if (subscribers.length === 0) {
+                    alert('Keine Abonnenten zum Exportieren verfügbar.');
+                    return;
+                }
+                
+                // Create CSV content
+                let csvContent = 'data:text/csv;charset=utf-8,Email,Datum\n';
+                
+                subscribers.forEach(sub => {
+                    const date = new Date(sub.date).toLocaleDateString('de-DE');
+                    csvContent += `${sub.email},${date}\n`;
+                });
+                
+                // Create download link
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', `futurelaunch-subscribers-${new Date().toISOString().slice(0, 10)}.csv`);
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+    </script>
 </body>
 </html>
