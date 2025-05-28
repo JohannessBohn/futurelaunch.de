@@ -26,6 +26,61 @@
 }
 
 /* Reset & Base Styles */
+/* Button Reset for Chrome and other browsers - Base reset only */
+button:not(.cta-button):not(.button-primary):not(.button-secondary):not(.consultation),
+input[type="button"]:not(.cta-button):not(.button-primary):not(.button-secondary):not(.consultation),
+input[type="submit"]:not(.cta-button):not(.button-primary):not(.button-secondary):not(.consultation),
+input[type="reset"]:not(.cta-button):not(.button-primary):not(.button-secondary):not(.consultation) {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font: inherit !important;
+    color: inherit !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    line-height: normal !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
+/* Ensure our styled buttons are not affected by the reset */
+.cta-button,
+.button-primary,
+.button-secondary,
+.consultation {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    line-height: normal !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove focus outline for non-keyboard users */
+button:focus:not(:focus-visible) {
+    outline: none !important;
+}
+
+/* Basic Reset */
 * {
     margin: 0;
     padding: 0;
