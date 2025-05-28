@@ -1618,34 +1618,17 @@
                         }
                         
                         function showResponse(message, type) {
-                            const responseDiv = document.getElementById('newsletterResponse');
-                            if (!responseDiv) return;
                         </div>
                     </div>
-                        
-                        function showResponse(message, type) {
-                            const responseDiv = document.getElementById('newsletterResponse');
-                            if (!responseDiv) return;
-                            
-                            responseDiv.textContent = message;
-                            responseDiv.className = 'mt-2';
-                            responseDiv.classList.add(type === 'error' ? 'text-danger' : 'text-success');
-                            responseDiv.style.display = 'block';
-                            responseDiv.style.opacity = '1';
-                            responseDiv.style.transition = 'opacity 0.5s ease';
-                            
-                            // Hide message after 5 seconds
-                            setTimeout(() => {
-                                responseDiv.style.opacity = '0';
-                                setTimeout(() => {
-                                    responseDiv.style.display = 'none';
-                                }, 500);
-                            }, 5000);
-                        }
-                        </script>
-                        <script>
-                            // Form submission handler
-                            document.getElementById('newsletterForm').addEventListener('submit', async function(e) {
+                    
+                    <!-- Newsletter and contact scripts now moved to external files -->
+                    <script>
+                        // Initialize any remaining functionality
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Any initialization code can go here
+                            console.log('Site initialized successfully');
+                        });
+                    </script>
                                 e.preventDefault();
                                 
                                 const form = e.target;
@@ -1870,98 +1853,69 @@
 
         // Newsletter Subscription
         function subscribeNewsletter(event) {
-            event.preventDefault();
-            
-            const form = event.target;
-            const email = form.email.value.trim();
-            const responseDiv = document.getElementById('newsletterResponse');
-            const submitButton = form.querySelector('button[type="submit"]');
-            
-            // Validate email
-            if (!email) {
-                showNewsletterResponse('Bitte geben Sie eine E-Mail-Adresse ein.', 'error');
+            return handleNewsletterSubmit(event);
+        }
+        
+        function saveSubscription(email) {
+            try {
+                let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+                if (!subscribers.includes(email)) {
+                    subscribers.push(email);
+                    localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                console.error('Error saving subscription:', e);
                 return false;
             }
+        }
+        
+        window.handleNewsletterSubmit = function(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('newsletterEmail');
+            const email = emailInput.value.trim();
+            const submitButton = event.target.querySelector('button[type="submit"]');
             
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            // Validate email
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 showNewsletterResponse('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
                 return false;
             }
             
             // Show loading state
             submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            submitButton.innerHTML = '';
             
-            // Create form data
-            const formData = new FormData();
-            formData.append('email', email);
-            
-            // Test JSON endpoint
-            fetch('script/test-json.php', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-                return response.text().then(text => {
-                    console.log('Response text:', text);
-                    try {
-                        return JSON.parse(text);
-                    } catch (e) {
-                        console.error('Failed to parse JSON:', e);
-                        throw new Error('Invalid JSON response: ' + text.substring(0, 100));
+            // Process after a short delay for better UX
+            setTimeout(() => {
+                try {
+                    if (saveSubscription(email)) {
+                        showNewsletterResponse('Vielen Dank für Ihr Abonnement!', 'success');
+                        event.target.reset();
+                        
+                        // Show confetti effect if available
+                        if (typeof confetti === 'function') {
+                            confetti({
+                                particleCount: 100,
+                                spread: 70,
+                                origin: { y: 0.6 }
+                            });
+                        }
+                    } else {
+                        showNewsletterResponse('Diese E-Mail ist bereits angemeldet.', 'info');
                     }
-                });
-            })
-            
-            .then(data => {
-                if (data && data.success) {
-                    showNewsletterResponse('Vielen Dank für Ihr Abonnement! Bitte überprüfen Sie Ihren Posteingang zur Bestätigung.', 'success');
-                    form.reset();
-                    
-                    // Show confetti effect on success
-                    confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 0.6 }
-                    });
-                } else {
-                    const errorMsg = data && data.message 
-                        ? data.message 
-                        : 'Ein unerwarteter Fehler ist aufgetreten.';
-                    showNewsletterResponse(errorMsg, 'error');
+                } catch (e) {
+                    console.error('Error:', e);
+                    showNewsletterResponse('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '';
                 }
-            })
-            .catch(error => {
-                console.error('Fetch Error:', error);
-                if (error.message.includes('JSON')) {
-                    showNewsletterResponse('Server-Antwort konnte nicht verarbeitet werden. Bitte kontaktieren Sie uns direkt.', 'error');
-                } else {
-                    showNewsletterResponse('Ein Verbindungsfehler ist aufgetreten. Bitte überprüfen Sie Ihre Internetverbindung.', 'error');
-                }
-            })
-            .finally(() => {
-                submitButton.disabled = false;
-                submitButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                
-                // Hide message after 10 seconds
-                setTimeout(() => {
-                    const responseDiv = document.getElementById('newsletterResponse');
-                    if (responseDiv) {
-                        responseDiv.style.opacity = '0';
-                        setTimeout(() => {
-                            responseDiv.style.display = 'none';
-                        }, 500);
-                    }
-                }, 10000);
-            });
+            }, 300);
             
             return false;
-        }
+        };
         
         function showNewsletterResponse(message, type) {
             const responseDiv = document.getElementById('newsletterResponse');
@@ -1969,16 +1923,26 @@
             
             responseDiv.textContent = message;
             responseDiv.className = 'mt-2';
-            responseDiv.classList.add(type === 'error' ? 'text-danger' : 'text-success');
+            responseDiv.classList.add(type === 'error' ? 'text-danger' : 
+                                 type === 'success' ? 'text-success' : 'text-info');
             responseDiv.style.display = 'block';
             responseDiv.style.opacity = '1';
             responseDiv.style.transition = 'opacity 0.5s ease';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                responseDiv.style.opacity = '0';
+                setTimeout(() => {
+                    responseDiv.style.display = 'none';
+                }, 500);
+            }, 5000);
         }
     </script>
     
     <!-- Load our subscription scripts -->
     <script src="js/subscribe.js"></script>
     <script src="js/newsletter.js"></script>
+    <script src="js/newsletter-form.js"></script>
     
     <!-- Dashboard Access Button -->
     <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
