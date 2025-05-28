@@ -1465,13 +1465,87 @@
                     <div class="footer-newsletter">
                         <h4>Newsletter</h4>
                         <p>Bleiben Sie auf dem Laufenden mit unseren neuesten Updates.</p>
-                        <form id="newsletterForm" onsubmit="return subscribeNewsletter(event)">
+                        <form id="newsletterForm" onsubmit="event.preventDefault(); subscribeNewsletter(event);">
                             <div class="input-group">
                                 <input type="email" id="newsletterEmail" placeholder="Ihre E-Mail-Adresse" required>
                                 <button type="submit"><i class="fas fa-paper-plane"></i></button>
                             </div>
                             <div id="newsletterResponse" class="mt-2" style="display: none;"></div>
                         </form>
+                        <script>
+                        // Make sure these functions are available globally
+                        window.subscribeNewsletter = function(event) {
+                            event.preventDefault();
+                            
+                            const email = document.getElementById('newsletterEmail').value.trim();
+                            const responseDiv = document.getElementById('newsletterResponse');
+                            const submitButton = event.target.querySelector('button[type="submit"]');
+                            
+                            // Validate email
+                            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                                showResponse('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
+                                return false;
+                            }
+                            
+                            // Show loading state
+                            submitButton.disabled = true;
+                            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                            
+                            // Save to localStorage
+                            setTimeout(() => {
+                                try {
+                                    let subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
+                                    if (!subscribers.includes(email)) {
+                                        subscribers.push(email);
+                                        localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
+                                        
+                                        showResponse('Vielen Dank für Ihr Abonnement!', 'success');
+                                        event.target.reset();
+                                        
+                                        // Show confetti effect if available
+                                        if (typeof confetti === 'function') {
+                                            confetti({
+                                                particleCount: 100,
+                                                spread: 70,
+                                                origin: { y: 0.6 }
+                                            });
+                                        }
+                                    } else {
+                                        showResponse('Diese E-Mail ist bereits angemeldet.', 'info');
+                                    }
+                                } catch (e) {
+                                    console.error('Error saving subscription:', e);
+                                    showResponse('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
+                                } finally {
+                                    submitButton.disabled = false;
+                                    submitButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                                }
+                            }, 300);
+                            
+                            return false;
+                        };
+                        
+                        window.showResponse = function(message, type) {
+                            const responseDiv = document.getElementById('newsletterResponse');
+                            if (!responseDiv) return;
+                            
+                            responseDiv.textContent = message;
+                            responseDiv.className = 'mt-2';
+                            responseDiv.classList.add(type === 'error' ? 'text-danger' : 
+                                                    type === 'success' ? 'text-success' : 'text-info');
+                            responseDiv.style.display = 'block';
+                            responseDiv.style.opacity = '1';
+                            responseDiv.style.transition = 'opacity 0.5s ease';
+                            
+                            // Hide message after 5 seconds
+                            setTimeout(() => {
+                                responseDiv.style.opacity = '0';
+                                setTimeout(() => {
+                                    responseDiv.style.display = 'none';
+                                }, 500);
+                            }, 5000);
+                        };
+                        </script>
                         <script>
                         function subscribeNewsletter(event) {
                             event.preventDefault();
