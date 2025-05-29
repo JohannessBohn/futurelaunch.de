@@ -1562,8 +1562,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
+                
                 <!-- Services Column -->
                 <div class="col-lg-2 col-md-6">
                     <h5 class="footer-heading">Services</h5>
@@ -1572,7 +1571,7 @@
                     <a href="#" class="footer-link">Lokale Projekte</a>
                     <a href="#" class="footer-link">Support</a>
                 </div>
-
+                
                 <!-- Legal Links Column -->
                 <div class="col-lg-2 col-md-6">
                     <h5 class="footer-heading">Rechtliches</h5>
@@ -1581,7 +1580,7 @@
                     <a href="/AGB.html" class="footer-link">AGB</a>
                     <a href="/Widerrufsrecht.html" class="footer-link">Widerrufsrecht</a>
                 </div>
-
+                
                 <!-- Contact Column -->
                 <div class="col-lg-4 col-md-6 contact-info">
                     <h5 class="footer-heading">Kontakt</h5>
@@ -1757,21 +1756,23 @@
             // Process after a short delay for better UX
             setTimeout(() => {
                 try {
-                    if (saveSubscription(email)) {
-                        showNewsletterResponse('Vielen Dank für Ihr Abonnement!', 'success');
-                        event.target.reset();
-                        
-                        // Show confetti effect if available
-                        if (typeof confetti === 'function') {
-                            confetti({
-                                particleCount: 100,
-                                spread: 70,
-                                origin: { y: 0.6 }
-                            });
-                        }
-                    } else {
-                        showNewsletterResponse('Diese E-Mail ist bereits angemeldet.', 'info');
-                    }
+                    const isNewSubscription = saveSubscription(email);
+            
+            // Show confetti effect if available (for both new and existing subscriptions)
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+            
+            if (isNewSubscription) {
+                showNewsletterResponse('Vielen Dank für Ihr Abonnement!', 'success');
+                event.target.reset();
+            } else {
+                showNewsletterResponse('Diese E-Mail ist bereits angemeldet.', 'info');
+            }
                 } catch (e) {
                     console.error('Error:', e);
                     showNewsletterResponse('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'error');
