@@ -696,37 +696,197 @@
             border: 1px solid #da190b;
         }
 
-        /* Form Submit Button Styling */
-        .form-submit {
-            margin-top: 20px;
+        /* V2 Contact Form Styling */
+        .contact-form.v2 {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        
+        .form-header {
+            margin-bottom: 32px;
             text-align: center;
         }
-
-        .form-submit button {
-            background-color: #4A6DE5;
+        
+        .form-header h3 {
+            color: #1a1a2e;
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .form-header p {
+            color: #6c757d;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .form-group {
+            position: relative;
+            margin-bottom: 0;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-label {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            color: #6c757d;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            background: #f8f9fa;
+            padding: 0 4px;
+            margin-left: -4px;
+        }
+        
+        .form-input:focus, .form-textarea:focus {
+            border-color: #4A6DE5;
+            outline: none;
+            background: #ffffff;
+        }
+        
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label,
+        .form-textarea:focus + .form-label,
+        .form-textarea:not(:placeholder-shown) + .form-label {
+            top: -10px;
+            font-size: 12px;
+            color: #4A6DE5;
+            background: white;
+        }
+        
+        .form-footer {
+            text-align: center;
+        }
+        
+        .submit-button {
+            background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%);
             color: white !important;
             border: none;
-            padding: 12px 30px;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 18px 48px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 240px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(74, 109, 229, 0.3);
+            z-index: 1;
+        }
+        
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 200px;
+            height: 100%;
+            background: linear-gradient(135deg, #2E3192 0%, #4A6DE5 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
-
-        .form-submit button:hover {
-            background-color: #3a5bd9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        
+        .submit-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(74, 109, 229, 0.4);
         }
-
-        .form-submit button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        
+        .submit-button:hover::before {
+            opacity: 1;
+        }
+        
+        .submit-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(74, 109, 229, 0.4);
+        }
+        
+        .submit-button::after {
+            content: '→';
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+        
+        .submit-button:hover::after {
+            transform: translateX(5px);
+        }
+        
+        .button-loader {
+            display: none;
+            margin-left: 8px;
+        }
+        
+        .submit-button.loading .button-text {
+            visibility: hidden;
+        }
+        
+        .submit-button.loading .button-loader {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .privacy-note {
+            margin-top: 16px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .privacy-link {
+            color: #4A6DE5;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .privacy-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .contact-form.v2 {
+                padding: 24px;
+            }
         }
 
         /* Newsletter Form Styling */
@@ -1467,7 +1627,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="contact-form">
+                <div class="contact-form v2">
                     <form id="contactForm" method="POST" class="contact-form-container">
                         <input type="hidden" name="access_key" value="3c0f18f1-f5d3-4bd6-a72c-941aa42a991a">
                         <input type="hidden" name="subject" value="Neue Kontaktanfrage von FutureLaunch Website">
@@ -1477,38 +1637,46 @@
                         <input type="hidden" name="_template" value="table">
                         <input type="hidden" name="_next" value="https://futurelaunch.de/danke">
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" name="name" placeholder="Ihr Name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">E-Mail</label>
-                                <input type="email" id="email" name="email" placeholder="Ihre E-Mail" required>
-                            </div>
+                        <div class="form-header">
+                            <h3>Kontaktformular</h3>
+                            <p>Füllen Sie das Formular aus und wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
                         </div>
-                        <div class="form-row">
+                        
+                        <div class="form-grid">
                             <div class="form-group">
-                                <label for="phone">Telefon</label>
-                                <input type="tel" id="phone" name="phone" placeholder="Ihre Telefonnummer">
+                                <input type="text" id="name" name="name" class="form-input" placeholder=" " required>
+                                <label for="name" class="form-label">Name *</label>
                             </div>
+                            
                             <div class="form-group">
-                                <label for="subject">Betreff</label>
-                                <input type="text" id="subject" name="_subject" placeholder="Betreff Ihrer Nachricht">
+                                <input type="email" id="email" name="email" class="form-input" placeholder=" " required>
+                                <label for="email" class="form-label">E-Mail *</label>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Nachricht *</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
+                            
+                            <div class="form-group">
+                                <input type="tel" id="phone" name="phone" class="form-input" placeholder=" ">
+                                <label for="phone" class="form-label">Telefon (optional)</label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" id="subject" name="_subject" class="form-input" placeholder=" ">
+                                <label for="subject" class="form-label">Betreff (optional)</label>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <textarea id="message" name="message" class="form-textarea" rows="4" required></textarea>
+                                <label for="message" class="form-label">Ihre Nachricht *</label>
+                            </div>
                         </div>
 
-                        <div class="form-submit">
+                        <div class="form-footer">
                             <button type="submit" id="submitButton" class="submit-button">
                                 <span class="button-text">Nachricht senden</span>
-                                <span class="button-loader" style="display: none;">
+                                <span class="button-loader">
                                     <i class="fas fa-spinner fa-spin"></i>
                                 </span>
                             </button>
+                            <p class="privacy-note">Mit dem Absenden des Formulars erklären Sie sich mit unserer <a href="#" class="privacy-link">Datenschutzerklärung</a> einverstanden.</p>
                         </div>
 
                         <div id="formResponse" class="form-response"></div>
