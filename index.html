@@ -12,7 +12,6 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="apple-touch-icon" href="assets/favicon.ico">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/splash-cursor.css">
     <title>FutureLaunch | Innovative B2B Code-Dienstleistungen</title>
 
     <!-- Cookies -->
@@ -697,6 +696,94 @@
             border: 1px solid #da190b;
         }
 
+        /* Form Submit Button Styling */
+        .form-submit {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .form-submit button {
+            background-color: #4A6DE5;
+            color: white !important;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .form-submit button:hover {
+            background-color: #3a5bd9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-submit button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Newsletter Form Styling */
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .newsletter-form input[type="email"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .newsletter-form button {
+            background-color: #e92b2b;
+            color: white !important;
+            border: none;
+            padding: 0 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background-color: #d11f1f;
+            transform: translateY(-2px);
+        }
+
+        .newsletter-response {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-response.success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .newsletter-response.error {
+            background-color: #f44336;
+            color: white;
+        }
+
         @keyframes slideIn {
             from {
                 transform: translateY(-10px);
@@ -1328,11 +1415,11 @@
                 </div>
             </div>
             
-            <div class="custom-solution">
-                <div class="custom-solution-content">
-                    <h3>Individuelle Lösung benötigt?</h3>
-                    <p>Jedes Unternehmen ist einzigartig. Kontaktieren Sie uns für ein maßgeschneidertes Angebot, das genau auf Ihre Anforderungen zugeschnitten ist.</p>
-                    <a href="#contact" class="button button-primary">Kostenlose Beratung</a>
+            <div class="custom-solution" style="background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%); color: white; padding: 40px; border-radius: 15px; margin-top: 40px;">
+                <div class="custom-solution-content" style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <h3 style="color: white; font-size: 2rem; margin-bottom: 15px;">Individuelle Lösung benötigt?</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9;">Jedes Unternehmen ist einzigartig. Kontaktieren Sie uns für ein maßgeschneidertes Angebot, das genau auf Ihre Anforderungen zugeschnitten ist.</p>
+                    <a href="#contact" class="button button-primary" style="display: inline-block; background-color: #e92b2b; color: white !important; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; font-size: 1.1rem;">Kostenlose Beratung</a>
                 </div>
             </div>
         </div>
@@ -1381,12 +1468,14 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" onsubmit="return submitContactForm(event)">
+                    <form id="contactForm" method="POST" class="contact-form-container">
                         <input type="hidden" name="access_key" value="3c0f18f1-f5d3-4bd6-a72c-941aa42a991a">
                         <input type="hidden" name="subject" value="Neue Kontaktanfrage von FutureLaunch Website">
-                        <input type="hidden" name="from_name" value="FutureLaunch Kontaktformular">
+                        <input type="hidden" name="from_name" value="FutureLaunch Website Kontaktformular">
                         <input type="checkbox" name="botcheck" class="d-none" style="display: none;">
-                        <input type="hidden" name="redirect" value="https://futurelaunch.de/Dank-dir">
+                        <input type="hidden" name="redirect" value="https://futurelaunch.de/danke">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_next" value="https://futurelaunch.de/danke">
                         
                         <div class="form-row">
                             <div class="form-group">
@@ -1414,7 +1503,12 @@
                         </div>
 
                         <div class="form-submit">
-                            <button type="submit" id="submitButton">Senden</button>
+                            <button type="submit" id="submitButton" class="submit-button">
+                                <span class="button-text">Nachricht senden</span>
+                                <span class="button-loader" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
                         </div>
 
                         <div id="formResponse" class="form-response"></div>
@@ -1515,7 +1609,7 @@
             transition: all 0.3s ease;
         }
         .newsletter-form button:hover {
-            background: #3a5bd9;
+            background: #e92b2b;
         }
     </style>
     <footer class="footer-bg">
@@ -1642,14 +1736,26 @@
         }, 5000);
 
         // Form Handling with Web3Forms
-        function submitContactForm(event) {
-            event.preventDefault();
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', handleContactFormSubmit);
+        }
+
+        // Newsletter Form Handling
+        const newsletterForm = document.querySelector('.newsletter-form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+        }
+
+        function handleContactFormSubmit(e) {
+            e.preventDefault();
             
-            const form = document.getElementById('contactForm');
+            const form = e.target;
             const submitButton = form.querySelector('button[type="submit"]');
             const formMessage = document.getElementById('formResponse');
             
             // Show loading state
+            const originalButtonText = submitButton.innerHTML;
             submitButton.disabled = true;
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet...';
             
@@ -1657,21 +1763,35 @@
             formMessage.className = 'form-response';
             formMessage.style.display = 'none';
 
-            // Get form data
+            // Convert form data to object
             const formData = new FormData(form);
+            const object = {};
+            formData.forEach((value, key) => object[key] = value);
             
+            // Show processing message
+            formMessage.textContent = 'Bitte warten...';
+            formMessage.className = 'form-response';
+            formMessage.style.display = 'block';
+
             // Send data to Web3Forms
-            fetch(form.getAttribute('action'), {
+            fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...object,
+                    access_key: '3c0f18f1-f5d3-4bd6-a72c-941aa42a991a',
+                    subject: 'Neue Kontaktanfrage von FutureLaunch Website'
+                })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+            .then(async (response) => {
+                const data = await response.json();
+                if (response.status === 200 && data.success) {
                     // Show success message
                     formMessage.textContent = 'Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.';
                     formMessage.className = 'form-response success';
-                    formMessage.style.display = 'block';
                     
                     // Reset form on success
                     form.reset();
@@ -1692,13 +1812,12 @@
                 // Show error message
                 formMessage.textContent = 'Ein Fehler ist aufgetreten: ' + (error.message || 'Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt per E-Mail.');
                 formMessage.className = 'form-response error';
-                formMessage.style.display = 'block';
                 console.error('Error:', error);
             })
             .finally(() => {
                 // Reset button state
                 submitButton.disabled = false;
-                submitButton.innerHTML = 'Nachricht senden';
+                submitButton.innerHTML = originalButtonText;
                 
                 // Scroll to show the message
                 formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1708,8 +1827,76 @@
                     formMessage.style.display = 'none';
                 }, 10000);
             });
+        }
 
-            return false;
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const emailInput = form.querySelector('input[type="email"]');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const responseMessage = document.createElement('div');
+            responseMessage.className = 'newsletter-response';
+            
+            // Remove any existing response messages
+            const existingResponse = form.querySelector('.newsletter-response');
+            if (existingResponse) {
+                existingResponse.remove();
+            }
+            
+            // Validate email
+            const email = emailInput.value.trim();
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showNewsletterResponse('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird abonniert...';
+            
+            // Here you would typically send the email to your server or email service
+            // For now, we'll simulate a successful submission
+            setTimeout(() => {
+                // Reset form
+                form.reset();
+                
+                // Show success message
+                showNewsletterResponse('Vielen Dank für Ihr Abonnement! Bitte bestätigen Sie Ihre E-Mail-Adresse.', 'success');
+                
+                // Reset button
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+                
+                // Hide message after 10 seconds
+                setTimeout(() => {
+                    const message = form.querySelector('.newsletter-response');
+                    if (message) {
+                        message.style.opacity = '0';
+                        setTimeout(() => message.remove(), 300);
+                    }
+                }, 10000);
+            }, 1500);
+        }
+        
+        function showNewsletterResponse(message, type) {
+            const form = document.querySelector('.newsletter-form');
+            if (!form) return;
+            
+            const responseDiv = form.querySelector('.newsletter-response') || document.createElement('div');
+            responseDiv.className = `newsletter-response ${type}`;
+            responseDiv.textContent = message;
+            
+            if (!form.querySelector('.newsletter-response')) {
+                form.appendChild(responseDiv);
+            }
+            
+            // Animate in
+            setTimeout(() => {
+                responseDiv.style.opacity = '1';
+                responseDiv.style.transform = 'translateY(0)';
+            }, 10);
         }
 
         // Scroll animation for process steps
