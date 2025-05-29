@@ -1381,7 +1381,13 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="contactForm" onsubmit="return submitContactForm(event)">
+                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" onsubmit="return submitContactForm(event)">
+                        <input type="hidden" name="access_key" value="3c0f18f1-f5d3-4bd6-a72c-941aa42a991a">
+                        <input type="hidden" name="subject" value="Neue Kontaktanfrage von FutureLaunch Website">
+                        <input type="hidden" name="from_name" value="FutureLaunch Kontaktformular">
+                        <input type="checkbox" name="botcheck" class="d-none" style="display: none;">
+                        <input type="hidden" name="redirect" value="https://futurelaunch.de/Dank-dir">
+                        
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -1399,7 +1405,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="subject">Betreff</label>
-                                <input type="text" id="subject" name="subject" placeholder="Betreff Ihrer Nachricht">
+                                <input type="text" id="subject" name="_subject" placeholder="Betreff Ihrer Nachricht">
                             </div>
                         </div>
                         <div class="form-group">
@@ -1635,7 +1641,7 @@
             changeTestimonial(1);
         }, 5000);
 
-        // Form Handling
+        // Form Handling with Web3Forms
         function submitContactForm(event) {
             event.preventDefault();
             
@@ -1654,29 +1660,37 @@
             // Get form data
             const formData = new FormData(form);
             
-            // Send data to server
-            fetch('send_email.php', {
+            // Send data to Web3Forms
+            fetch(form.getAttribute('action'), {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                // Show success message
-                formMessage.textContent = data.message;
-                formMessage.className = 'form-response success';
-                formMessage.style.display = 'block';
-                
-                // Reset form on success
                 if (data.success) {
+                    // Show success message
+                    formMessage.textContent = 'Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.';
+                    formMessage.className = 'form-response success';
+                    formMessage.style.display = 'block';
+                    
+                    // Reset form on success
                     form.reset();
                     
-                    // Scroll to show the success message
-                    formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Trigger confetti effect
+                    if (typeof confetti === 'function') {
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    }
+                } else {
+                    throw new Error(data.message || 'Ein unbekannter Fehler ist aufgetreten.');
                 }
             })
             .catch(error => {
                 // Show error message
-                formMessage.textContent = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt per E-Mail.';
+                formMessage.textContent = 'Ein Fehler ist aufgetreten: ' + (error.message || 'Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt per E-Mail.');
                 formMessage.className = 'form-response error';
                 formMessage.style.display = 'block';
                 console.error('Error:', error);
@@ -1685,6 +1699,9 @@
                 // Reset button state
                 submitButton.disabled = false;
                 submitButton.innerHTML = 'Nachricht senden';
+                
+                // Scroll to show the message
+                formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
                 // Hide message after 10 seconds
                 setTimeout(() => {
