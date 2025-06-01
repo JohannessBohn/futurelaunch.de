@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Website Analyse Tool | FutureLaunch</title>
+
+    <!-- Cookies -->
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+
+    <!-- Social Media-logos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- AOS for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <!-- Confetti animation -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Tool-specific styles */
+        .analysis-tool {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding-top: 80px; /* Add padding to push content below header */
+        }
+
+        /* Header adjustments */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="rgba(255,255,255,0.05)" /></svg>');
+            background-size: 80px;
+            animation: backgroundMove 60s linear infinite;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .feature span {
+            display: block;
+            font-weight: 500;
+        }
+
+        /* Tool Section */
+        .tool-section {
+            padding: 60px 0;
+        }
+
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+
+        /* URL Input */
+        .input-container {
+            margin-bottom: 40px;
+        }
+
+        .url-input {
+            display: flex;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .url-input input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .url-input input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,109,229,0.1);
+        }
+
+        .scan-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,109,229,0.2);
+        }
+
+        /* Progress Section */
+        .progress-container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .progress-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .status-text {
+            text-align: center;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+        }
+
+        .step i {
+            font-size: 24px;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .step.active i {
+            opacity: 1;
+            color: var(--success);
+        }
+
+        /* Results Section */
+        .results-container {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .results-container.visible {
+            opacity: 1;
+        }
+
+        .scores-overview {
+            margin-bottom: 60px;
+        }
+
+        .scores-overview h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .score-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .score-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .score-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .score-circle {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .score-chart {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .score-chart path {
+            fill: none;
+            stroke-width: 2.8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease, stroke 1s ease;
+        }
+
+        .score-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #666;
+            display: block;
+        }
+
+        .score-details {
+            margin-top: 20px;
+        }
+
+        .score-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .score-details li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        .score-details li.error {
+            color: var(--danger);
+            text-align: center;
+            font-style: italic;
+        }
+
+        .score-details li:last-child {
+            border-bottom: none;
+        }
+
+        /* Recommendations Section */
+        .recommendations-section {
+            margin-top: 60px;
+        }
+
+        .recommendations-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .recommendation-item {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .priority-badge.hoch {
+            background-color: rgba(231,76,60,0.1);
+            color: var(--danger);
+        }
+
+        .priority-badge.mittel {
+            background-color: rgba(243,156,18,0.1);
+            color: var(--warning);
+        }
+
+        .priority-badge.niedrig {
+            background-color: rgba(46,204,113,0.1);
+            color: var(--success);
+        }
+
+        .recommendation-item h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .action-list {
+            margin-top: 20px;
+        }
+
+        .action-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .action-list i {
+            color: var(--success);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            margin-top: 80px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .contact-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .contact-header i {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .contact-header h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .contact-header p {
+            opacity: 0.9;
+        }
+
+        #contactForm {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,109,229,0.1);
+        }
+
+        .form-group input[readonly] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,109,229,0.2);
+        }
+
+        .form-messages {
+            padding: 0 40px 40px;
+        }
+
+        .success-message,
+        .error-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .success-message {
+            background-color: rgba(46,204,113,0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .error-message {
+            background-color: rgba(231,76,60,0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .loading-spinner i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Add these styles for the metrics */
+        .text-success {
+            color: var(--success);
+        }
+        .text-warning {
+            color: var(--warning);
+        }
+        .text-danger {
+            color: var(--danger);
+        }        /* Mobile Optimization Styles */
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .url-input {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .url-input .scan-button {
+                width: 100%;
+                min-height: 50px;
+            }
+            
+            .score-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .hero-content h1 {
+                font-size: 32px;
+                line-height: 1.2;
+            }
+            
+            .hero-content p {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .feature {
+                padding: 15px;
+                text-align: center;
+            }
+            
+            .score-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .score-card {
+                padding: 20px;
+            }
+            
+            .score-circle {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 15px;
+            }
+            
+            .score-value {
+                font-size: 28px;
+            }
+            
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recommendation-card {
+                padding: 20px;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 30px 0;
+                transition: left 0.3s ease;
+                z-index: 1000;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 15px 0;
+                width: 90%;
+                text-align: center;
+            }
+            
+            .nav-links a {
+                display: block;
+                padding: 15px 20px;
+                font-size: 18px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+            
+            .menu-toggle {
+                display: block;
+                cursor: pointer;
+                font-size: 24px;
+                color: var(--dark);
+                background: none;
+                border: none;
+                padding: 8px;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+                z-index: 1001;
+            }
+            
+            .container {
+                padding: 0 20px;
+            }
+            
+            .tool-container {
+                margin: 0 10px;
+                border-radius: 15px;
+            }
+            
+            .input-wrapper input {
+                font-size: 16px;
+                padding: 12px 12px 12px 40px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 26px;
+            }
+            
+            .hero-content p {
+                font-size: 16px;
+            }
+            
+            .tool-section {
+                padding: 40px 0;
+            }
+            
+            .tool-container {
+                padding: 20px 15px;
+                margin: 0 5px;
+            }
+            
+            .progress-steps {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .step {
+                width: 100%;
+                flex-direction: row;
+                justify-content: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<script src="/script/cookies.js" defer></script>
+<script src="/script/form-handler.js" defer></script>
+
+<!-- Header Section -->
+<header>
+    <div class="container header-container">
+        <a href="/" class="logo">
+            <img src="/assets/FutureLaunch.png" alt="FutureLaunch Logo" class="logo-image"/>
+            Future<span>Launch</span>
+        </a>
+        <div class="menu-toggle">&#9776;</div>
+        <ul class="nav-links">
+            <li><a href="/#services">Dienstleistungen</a></li>
+            <li><a href="/#process">Prozess</a></li>
+            <li><a href="/#case-studies">Referenzen</a></li>
+            <li><a href="/#pricing">Preise</a></li>
+            <li><a href="/#contact" class="cta-button">Kontakt</a></li>
+        </ul>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="analysis-tool">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-up">
+                <h1>Website Analyse Tool</h1>
+                <p>Erhalten Sie eine umfassende Analyse Ihrer Website in wenigen Minuten</p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Performance</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-search"></i>
+                        <span>SEO</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mobile</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Sicherheit</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Tool Section -->
+    <section class="tool-section">
+        <div class="container">
+            <div class="tool-container" data-aos="fade-up">
+                <!-- URL Input Form -->
+                <div class="input-container">
+                    <form id="analyzeForm" onsubmit="scanWebsite(event)">
+                        <div class="url-input">
+                            <div class="input-wrapper">
+                                <i class="fas fa-globe"></i>
+                                <input type="url" 
+                                       placeholder="https://ihre-website.de" 
+                                       required
+                                       pattern="https?://.+"
+                                       title="Bitte geben Sie eine gültige URL ein (beginnend mit http:// oder https://)"
+                                >
+                            </div>
+                            <button type="submit" class="scan-button">
+                                <i class="fas fa-search"></i>
+                                Website analysieren
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="progress-container" style="display: none;">
+                    <div class="progress-wrapper">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="scanProgress"></div>
+                        </div>
+                        <div class="status-text" id="scanStatus">Initialisiere Analyse...</div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step" data-step="1">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Erreichbarkeit</span>
+                        </div>
+                        <div class="step" data-step="2">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Performance</span>
+                        </div>
+                        <div class="step" data-step="3">
+                            <i class="fas fa-check-circle"></i>
+                            <span>SEO</span>
+                        </div>
+                        <div class="step" data-step="4">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Mobile</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-container" id="results" style="display: none;">
+                    <!-- Score Overview -->
+                    <div class="scores-overview">
+                        <h2>Analyse-Ergebnisse</h2>
+                        <div class="score-cards">
+                            <div class="score-card" id="performanceScore" data-aos="flip-left">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">Performance</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="performanceMetrics"></ul>
+                                </div>
+                            </div>
+
+                            <div class="score-card" id="seoScore" data-aos="flip-left" data-aos-delay="100">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">SEO</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="seoMetrics"></ul>
+                                </div>
+                            </div>
+
+                            <div class="score-card" id="mobileScore" data-aos="flip-left" data-aos-delay="200">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">Mobile</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="mobileMetrics"></ul>
+                                </div>
+                            </div>
+
+                            <div class="score-card" id="securityScore" data-aos="flip-left" data-aos-delay="300">
+                                <div class="score-circle">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-background" stroke="#e0e0e0"/>
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="score-fill" stroke="var(--success)" stroke-dasharray="0 100"/>
+                                    </svg>
+                                    <div class="score-info">
+                                        <span class="score-value">0</span>
+                                        <span class="score-label">Sicherheit</span>
+                                    </div>
+                                </div>
+                                <div class="score-details">
+                                    <ul id="securityMetrics"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations Section -->
+                    <div class="recommendations-section" id="recommendations">
+                        <h2>Optimierungsempfehlungen</h2>
+                        <div class="recommendations-grid"></div>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div class="contact-section" data-aos="fade-up">
+                        <div class="contact-card">
+                            <div class="contact-header">
+                                <i class="fas fa-hands-helping"></i>
+                                <h3>Professionelle Unterstützung gewünscht?</h3>
+                                <p>Lassen Sie uns gemeinsam Ihre Website optimieren. Unser Expertenteam steht Ihnen zur Verfügung.</p>
+                            </div>
+                            
+                            <form id="contactForm" onsubmit="return submitContactForm(event)">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <i class="fas fa-user"></i>
+                                        Name
+                                    </label>
+                                    <input type="text" id="name" name="name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email">
+                                        <i class="fas fa-envelope"></i>
+                                        E-Mail
+                                    </label>
+                                    <input type="email" id="email" name="email" value="johannesbohn03@gmail.com" required readonly>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="message">
+                                        <i class="fas fa-comment"></i>
+                                        Nachricht
+                                    </label>
+                                    <textarea id="message" name="message" rows="4" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="submit-button">
+                                    <span class="button-text"><i class="fas fa-paper-plane"></i> Nachricht senden</span>
+                                    <span class="button-loader" style="display: none;">
+                                        <i class="fas fa-circle-notch fa-spin"></i> Wird gesendet...
+                                    </span>
+                                </button>
+                                <div class="form-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px;"></div>
+                            </form>
+                            
+                            <div class="form-messages">
+                                <div id="contactSuccess" class="success-message"></div>
+                                <div id="contactError" class="error-message"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-about">
+                <a href="#" class="footer-logo">Future<span>Launch</span></a>
+                <p>Wir sind Ihr Partner für maßgeschneiderte Softwarelösungen im B2B-Bereich. Unser erfahrenes Team
+                    hilft Ihnen, Ihre Geschäftsprozesse zu digitalisieren und zu optimieren.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-link instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-links-col">
+                <h4 class="footer-heading">Dienstleistungen</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Webentwicklung</a></li>
+                    <li><a href="#">App-Entwicklung</a></li>
+                    <li><a href="#">Business Software</a></li>
+                    <li><a href="#">API Entwicklung</a></li>
+                    <li><a href="#">KI & Big Data</a></li>
+                </ul>
+            </div>
+            <div class="footer-links-col">
+                <h4 class="footer-heading">Unternehmen</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Über uns</a></li>
+                    <li><a href="#">Karriere</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>            <div class="footer-subscribe">
+                <h4 class="footer-heading">Newsletter</h4>
+                <p>Abonnieren Sie unseren Newsletter für aktuelle Neuigkeiten und Trends.</p>
+                <form id="newsletterForm" onsubmit="return submitNewsletterForm(event)">
+                    <input type="email" name="email" placeholder="Ihre E-Mail-Adresse" required>
+                    <button type="submit">&#10148;</button>
+                </form>
+                <p>Wir respektieren Ihre Privatsphäre und geben Ihre Daten nicht weiter.</p>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 FutureLaunch. Alle Rechte vorbehalten.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+
+    async function scanWebsite(event) {
+        event.preventDefault();
+        const form = event.target;
+        const url = form.querySelector('input[type="url"]').value;
+        const progressContainer = document.querySelector('.progress-container');
+        const status = document.getElementById('scanStatus');
+        const progress = document.getElementById('scanProgress');
+        const resultsContainer = document.getElementById('results');
+        const submitButton = form.querySelector('.scan-button');
+        
+        // Show progress container and hide results
+        progressContainer.style.display = 'block';
+        resultsContainer.style.display = 'none';
+        resultsContainer.classList.remove('visible');
+        
+        // Disable submit button and show loading animation
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <div class="loading-spinner">
+                <i class="fas fa-circle-notch fa-spin"></i>
+            </div>
+            Analysiere...
+        `;
+        
+        try {
+            // Reset progress
+            progress.style.width = '0%';
+            status.style.color = 'var(--primary)';
+            status.textContent = 'Starte Analyse...';
+            
+            // Check if the URL is futurelaunch.de
+            const isFutureLaunch = url.includes('futurelaunch.de');
+            
+            // Simulate analysis with different scores based on domain
+            const mockData = isFutureLaunch ? {
+                // High scores for futurelaunch.de
+                success: true,
+                scores: {
+                    performance: 98,
+                    seo: 96,
+                    mobile: 100,
+                    security: 100
+                },
+                details: {
+                    performance: {
+                        total_time: 0.5,
+                        size: 750000, // 750KB
+                        speed: 2500 // 2.5 MB/s
+                    },
+                    seo: {
+                        title: {
+                            length: 58,
+                            optimal: true
+                        },
+                        meta_description: {
+                            length: 156,
+                            optimal: true
+                        },
+                        h1: {
+                            count: 1,
+                            optimal: true
+                        },
+                        images: {
+                            with_alt: 100, // 100% of images have alt text
+                            optimal: true
+                        }
+                    },
+                    mobile: {
+                        viewport: true,
+                        responsive: true,
+                        tap_targets: true
+                    },
+                    security: {
+                        secure: true,
+                        cert_valid: true,
+                        hsts: true,
+                        xss_protection: true
+                    }
+                },
+                recommendations: [
+                    {
+                        priority: "niedrig",
+                        title: "Weiterhin gute Arbeit leisten",
+                        actions: [
+                            "Regelmäßige Backups durchführen",
+                            "Software aktuell halten",
+                            "Performance regelmäßig überprüfen"
+                        ]
+                    },
+                    {
+                        priority: "niedrig",
+                        title: "Content-Strategie erweitern",
+                        actions: [
+                            "Regelmäßig neuen Content veröffentlichen",
+                            "Blogbeiträge optimieren",
+                            "Social Media Präsenz ausbauen"
+                        ]
+                    }
+                ]
+            } : {
+                // Standard scores for other domains
+                success: true,
+                scores: {
+                    performance: 65,
+                    seo: 58,
+                    mobile: 72,
+                    security: 45
+                },
+                details: {
+                    performance: {
+                        total_time: 2.8,
+                        size: 2458000, // ~2.4MB
+                        speed: 875 // 875 KB/s
+                    },
+                    seo: {
+                        title: {
+                            length: 45,
+                            optimal: false
+                        },
+                        meta_description: {
+                            length: 90,
+                            optimal: false
+                        }
+                    },
+                    mobile: {
+                        viewport: true,
+                        responsive: true
+                    },
+                    security: {
+                        secure: false,
+                        cert_valid: false
+                    }
+                },
+                recommendations: [
+                    {
+                        priority: "hoch",
+                        title: "SSL-Zertifikat implementieren",
+                        actions: [
+                            "HTTPS-Verschlüsselung aktivieren",
+                            "Gültiges SSL-Zertifikat installieren",
+                            "HTTP auf HTTPS umleiten"
+                        ]
+                    },
+                    {
+                        priority: "hoch",
+                        title: "Performance optimieren",
+                        actions: [
+                            "Bilder komprimieren",
+                            "Browser-Caching aktivieren",
+                            "Code minimieren"
+                        ]
+                    },
+                    {
+                        priority: "mittel",
+                        title: "SEO verbessern",
+                        actions: [
+                            "Meta-Beschreibung optimieren",
+                            "Title-Tag anpassen",
+                            "Alt-Texte für Bilder hinzufügen"
+                        ]
+                    }
+                ]
+            };
+
+            // Simulate progress updates with different messages for futurelaunch.de
+            const steps = isFutureLaunch ? [
+                { progress: 20, status: 'Prüfe Website-Erreichbarkeit...' },
+                { progress: 40, status: 'Analysiere Performance...' },
+                { progress: 60, status: 'Prüfe SEO & Mobile...' },
+                { progress: 80, status: 'Prüfe Sicherheit...' },
+                { progress: 90, status: 'Erstelle Empfehlungen...' },
+                { progress: 100, status: 'Ausgezeichnete Ergebnisse gefunden!' }
+            ] : [
+                { progress: 25, status: 'Prüfe Website-Erreichbarkeit...' },
+                { progress: 50, status: 'Analysiere Performance...' },
+                { progress: 75, status: 'Prüfe SEO & Mobile...' },
+                { progress: 85, status: 'Prüfe Sicherheit...' },
+                { progress: 95, status: 'Erstelle Empfehlungen...' },
+                { progress: 100, status: 'Analyse abgeschlossen!' }
+            ];
+
+            for (const step of steps) {
+                await new Promise(resolve => setTimeout(resolve, 800));
+                progress.style.width = step.progress + '%';
+                status.textContent = step.status;
+            }
+
+            // Update results with animation
+            updateAnalysisResults(analysisData);
+            
+            // Show results section with animation
+            resultsContainer.style.display = 'block';
+            setTimeout(() => {
+                resultsContainer.classList.add('visible');
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+
+        } catch (error) {
+            progress.style.width = '0%';
+            status.textContent = error.name === 'AbortError' 
+                ? 'Zeitüberschreitung: Die Analyse hat zu lange gedauert.' 
+                : 'Fehler: ' + error.message;
+            status.style.color = 'var(--danger)';
+            resultsContainer.style.display = 'none';
+        } finally {
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="fas fa-search"></i> Website analysieren';
+        }
+    }
+
+    function updateScanStatus(progress) {
+        const status = document.getElementById('scanStatus');
+        if (progress < 25) {
+            status.textContent = 'Prüfe Website-Erreichbarkeit...';
+        } else if (progress < 50) {
+            status.textContent = 'Analysiere Performance...';
+        } else if (progress < 75) {
+            status.textContent = 'Prüfe SEO & Mobile...';
+        } else if (progress < 85) {
+            status.textContent = 'Prüfe Sicherheit...';
+        } else if (progress < 95) {
+            status.textContent = 'Erstelle Empfehlungen...';
+        } else {
+            status.textContent = 'Analyse abgeschlossen!';
+        }
+    }
+
+    function updateAnalysisResults(data) {
+        // Update score circles with animation
+        updateScoreCircle('performanceScore', data.scores.performance);
+        updateScoreCircle('seoScore', data.scores.seo);
+        updateScoreCircle('mobileScore', data.scores.mobile);
+        updateScoreCircle('securityScore', data.scores.security);
+
+        // Update metrics for each category
+        updateMetrics('performanceMetrics', data.details.performance);
+        updateMetrics('seoMetrics', data.details.seo);
+        updateMetrics('mobileMetrics', data.details.mobile);
+        updateMetrics('securityMetrics', data.details.security);
+
+        // Update recommendations
+        updateRecommendations(data.recommendations);
+    }
+
+    function updateScoreCircle(elementId, score) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const circle = element.querySelector('.score-circle');
+        const value = element.querySelector('.score-value');
+        const path = circle.querySelector('.score-fill');
+        
+        // Calculate the circumference
+        const radius = 15.9155; // From the SVG viewBox
+        const circumference = 2 * Math.PI * radius;
+        
+        // Animate the score
+        let currentScore = 0;
+        const duration = 1500;
+        const steps = 60;
+        const increment = score / steps;
+        
+        const animation = setInterval(() => {
+            currentScore += increment;
+            if (currentScore >= score) {
+                currentScore = score;
+                clearInterval(animation);
+            }
+            
+            value.textContent = Math.round(currentScore);
+            
+            // Calculate the dash values
+            const percent = currentScore / 100;
+            const dashArray = `${circumference * percent} ${circumference * (1 - percent)}`;
+            path.style.strokeDasharray = dashArray;
+            
+            // Update color based on score
+            path.style.stroke = getScoreColor(currentScore);
+        }, duration / steps);
+    }
+
+    function updateMetrics(elementId, data) {
+        const container = document.getElementById(elementId);
+        if (!container || !data) return;
+
+        container.innerHTML = '';
+        
+        if (data.error) {
+            container.innerHTML = `<li class="error">Fehler: ${data.error}</li>`;
+            return;
+        }
+
+        // Add specific metrics based on category
+        switch(elementId) {
+            case 'performanceMetrics':
+                if (data.total_time) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Antwortzeit</span>
+                            <span>${(data.total_time * 1000).toFixed(0)}ms</span>
+                        </li>`;
+                }
+                if (data.size) {
+                    const size = data.size;
+                    const unit = size > 1024 * 1024 ? 'MB' : 'KB';
+                    const value = size > 1024 * 1024 ? 
+                        (size / (1024 * 1024)).toFixed(2) : 
+                        (size / 1024).toFixed(2);
+                    container.innerHTML += `
+                        <li>
+                            <span>Gesamtgröße</span>
+                            <span>${value} ${unit}</span>
+                        </li>`;
+                }
+                if (data.speed) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Download-Geschwindigkeit</span>
+                            <span>${(data.speed / 1024).toFixed(2)} KB/s</span>
+                        </li>`;
+                }
+                break;
+
+            case 'seoMetrics':
+                if (data.title) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Title-Tag</span>
+                            <span class="${data.title.optimal ? 'text-success' : 'text-warning'}">
+                                ${data.title.length} Zeichen
+                                ${data.title.optimal ? '✓' : '⚠️'}
+                            </span>
+                        </li>`;
+                }
+                if (data.meta_description) {
+                    container.innerHTML += `
+                        <li>
+                            <span>Meta Description</span>
+                            <span class="${data.meta_description.optimal ? 'text-success' : 'text-warning'}">
+                                ${data.meta_description.length} Zeichen
+                                ${data.meta_description.optimal ? '✓' : '⚠️'}
+                            </span>
+                        </li>`;
+                }
+                break;
+
+            case 'mobileMetrics':
+                container.innerHTML += `
+                    <li>
+                        <span>Viewport Meta-Tag</span>
+                        <span>${data.viewport ? '✓' : '✗'}</span>
+                    </li>
+                    <li>
+                        <span>Responsive Design</span>
+                        <span>${data.responsive ? '✓' : '✗'}</span>
+                    </li>`;
+                break;
+
+            case 'securityMetrics':
+                container.innerHTML += `
+                    <li>
+                        <span>HTTPS</span>
+                        <span>${data.secure ? '✓ Aktiv' : '✗ Inaktiv'}</span>
+                    </li>
+                    <li>
+                        <span>SSL-Zertifikat</span>
+                        <span>${data.cert_valid ? '✓ Gültig' : '✗ Ungültig'}</span>
+                    </li>`;
+                break;
+        }
+    }
+
+    function updateRecommendations(recommendations) {
+        const container = document.querySelector('.recommendations-grid');
+        if (!container || !recommendations) return;
+
+        container.innerHTML = '';
+        
+        recommendations.forEach((rec, index) => {
+            const div = document.createElement('div');
+            div.className = 'recommendation-item';
+            div.setAttribute('data-aos', 'fade-up');
+            div.setAttribute('data-aos-delay', (index * 100).toString());
+            
+            div.innerHTML = `
+                <div class="priority-badge ${rec.priority}">${rec.priority}</div>
+                <h4>${rec.title}</h4>
+                <ul class="action-list">
+                    ${rec.actions.map(action => `
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            ${action}
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            
+            container.appendChild(div);
+        });
+        
+        // Refresh AOS for new elements
+        AOS.refresh();
+    }
+
+    function getScoreColor(score) {
+        if (score >= 80) return 'var(--success)';
+        if (score >= 60) return 'var(--warning)';
+        return 'var(--danger)';
+    }
+
+    async function submitContact(event) {
+        event.preventDefault();
+        const form = event.target;
+        const submitButton = form.querySelector('.submit-button');
+        const errorDiv = document.getElementById('contactError');
+        const successDiv = document.getElementById('contactSuccess');
+        
+        // Hide previous messages
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+        
+        // Validate required fields
+        const requiredFields = ['name', 'email', 'message'];
+        const missingFields = requiredFields.filter(field => !form[field].value.trim());
+        
+        if (missingFields.length > 0) {
+            errorDiv.textContent = `Bitte füllen Sie alle Pflichtfelder aus: ${missingFields.join(', ')}`;
+            errorDiv.style.display = 'block';
+            return;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.email.value)) {
+            errorDiv.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
+            errorDiv.style.display = 'block';
+            return;
+        }
+        
+        // Disable submit button and show loading state
+        submitButton.disabled = true;
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.innerHTML = `
+            <div class="loading-spinner">
+                <i class="fas fa-circle-notch fa-spin"></i>
+            </div>
+            Senden...
+        `;
+        
+        try {
+            const formData = {
+                name: form.name.value.trim(),
+                email: form.email.value.trim(),
+                message: form.message.value.trim(),
+                subject: 'Kontaktanfrage von Website-Analyse-Tool'
+            };
+            
+            const response = await fetch('/script/send-contact.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData),
+                credentials: 'same-origin'
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Show success message with animation
+                successDiv.textContent = data.message || 'Ihre Nachricht wurde erfolgreich gesendet!';
+                successDiv.style.display = 'block';
+                
+                // Trigger confetti animation
+                triggerConfetti();
+                
+                // Reset form but keep email
+                const emailValue = form.email.value;
+                form.reset();
+                form.email.value = emailValue;
+            } else {
+                throw new Error(data.message || 'Ein unerwarteter Fehler ist aufgetreten');
+            }
+        } catch (error) {
+            // Show error message
+            console.error('Form submission error:', error);
+            errorDiv.textContent = error.message || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
+            errorDiv.style.display = 'block';
+        } finally {
+            // Reset submit button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+    }
+
+    function triggerConfetti() {
+        // First burst
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+
+        // Multiple bursts with different colors
+        setTimeout(() => {
+            confetti({
+                particleCount: 50,
+                spread: 100,
+                origin: { x: 0.2, y: 0.6 },
+                colors: ['#4A6DE5', '#FF6B6B', '#4ECB71']
+            });
+            confetti({
+                particleCount: 50,
+                spread: 100,
+                origin: { x: 0.8, y: 0.6 },
+                colors: ['#4A6DE5', '#FF6B6B', '#4ECB71']
+            });
+        }, 250);
+
+        // Final burst
+        setTimeout(() => {
+            confetti({
+                particleCount: 75,
+                spread: 140,
+                origin: { y: 0.6 },
+                colors: ['#4A6DE5', '#FF6B6B', '#4ECB71', '#FFD93D'],
+                ticks: 200
+            });
+        }, 500);
+    }    // Handle mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const body = document.body;
+        
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                body.classList.toggle('menu-open');
+                
+                // Change hamburger icon
+                if (navLinks.classList.contains('active')) {
+                    menuToggle.innerHTML = '&#10005;'; // X symbol
+                } else {
+                    menuToggle.innerHTML = '&#9776;'; // Hamburger symbol
+                }
+            });
+            
+            // Close menu when clicking a nav link
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.classList.remove('active');
+                    body.classList.remove('menu-open');
+                    menuToggle.innerHTML = '&#9776;';
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!navLinks.contains(event.target) && !menuToggle.contains(event.target)) {
+                    navLinks.classList.remove('active');
+                    body.classList.remove('menu-open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+            });
+        }
+        
+        // Prevent body scroll when menu is open
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    if (body.classList.contains('menu-open')) {
+                        body.style.overflow = 'hidden';
+                    } else {
+                        body.style.overflow = '';
+                    }
+                }
+            });
+        });
+        
+        observer.observe(body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    });
+</script>
+
+</body>
+</html>

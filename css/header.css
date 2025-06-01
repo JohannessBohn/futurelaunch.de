@@ -179,9 +179,9 @@ input[type="reset"] {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('assets/1.jpg');
+    background-image: linear-gradient(135deg, rgba(74, 109, 229, 0.1) 0%, rgba(46, 49, 146, 0.1) 100%);
     background-size: cover;
-    opacity: 0.1;
+    opacity: 0.2;
     z-index: 0;
 }
 

@@ -11,7 +11,21 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="apple-touch-icon" href="assets/favicon.ico">
+    <!-- Main CSS -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/services.css">
+    <link rel="stylesheet" href="css/case-studies.css">
+    
+    <!-- Vendor CSS Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/glightbox@3.2.0/dist/css/glightbox.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/swiper@9.0.0/swiper-bundle.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <title>FutureLaunch | Innovative B2B Code-Dienstleistungen</title>
 
     <!-- Cookies -->
@@ -28,6 +42,544 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <style>
+        /* Header Styles */
+        .desktop-only {
+            display: block;
+        }
+        
+        @media (max-width: 992px) {
+            .desktop-only {
+                display: none;
+            }
+            .menu-toggle {
+                margin-left: auto;
+            }
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #2E3192;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo-image {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo span {
+            color: #4A6DE5;
+        }
+
+        .menu-toggle {
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2E3192;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #4A6DE5;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 109, 229, 0.4);
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: 0.3s;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+        }
+
+        /* About Section Styles */
+        .about-container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-top: 60px;
+        }
+
+        .about-image {
+            flex: 1;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-image-container {
+            background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%);
+            padding: 40px;
+            color: white;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="rgba(255,255,255,0.05)" /></svg>');
+            opacity: 0.5;
+            background-size: 80px;
+            animation: backgroundMove 60s linear infinite;
+        }
+
+        .about-image-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .about-image h3 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .about-features {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .feature i {
+            color: #4A6DE5;
+            background: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #2E3192;
+            font-weight: 700;
+        }
+
+        .about-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #4A6DE5;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .about-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .about-image, .about-content {
+                width: 100%;
+            }
+            
+            .about-image {
+                height: 400px;
+            }
+        }
+
+        /* Button Hover Effects */
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform: translateZ(0);
+        }
+        
+        .cta-button .button-hover-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%) skewX(-15deg);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: -1;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px) translateZ(0);
+            box-shadow: 0 6px 20px rgba(74, 109, 229, 0.6);
+        }
+        
+        .cta-button:hover .button-hover-effect {
+            transform: translateX(100%) skewX(-15deg);
+        }
+        
+        .cta-button:active {
+            transform: translateY(1px) translateZ(0);
+            box-shadow: 0 2px 10px rgba(74, 109, 229, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .cta-button {
+                padding: 0.6rem 1.5rem !important;
+                font-size: 0.9rem !important;
+            }
+            
+            .cta-button i {
+                margin-right: 0.5rem !important;
+            }
+        }
+        
+        /* Modern Navigation Styles */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 15px 0;
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            background: rgba(16, 22, 54, 0.98) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navbar-brand img {
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+        
+        .nav-link {
+            position: relative;
+            margin: 0 5px;
+            padding: 10px 15px !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(74, 109, 229, 0.2);
+            color: #fff !important;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 5px;
+            left: 50%;
+            background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover:after, .nav-link.active:after {
+            width: 70%;
+        }
+        
+        .offcanvas {
+            background-color: #1a1d20 !important;
+        }
+        
+        .offcanvas-body {
+            padding: 2rem;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%);
+            border: none;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 30px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 109, 229, 0.4);
+        }
+        
+        /* Services Section Styles */
+        #services {
+            padding: 100px 0;
+            background: #f8f9ff;
+        }
+        
+        .service-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            color: #fff;
+            font-size: 28px;
+            box-shadow: 0 10px 20px rgba(74, 109, 229, 0.3);
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        
+        .service-card p {
+            color: #718096;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .learn-more {
+            color: #4A6DE5;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .learn-more:hover {
+            color: #2E3192;
+            transform: translateX(5px);
+        }
+        
+        .learn-more i {
+            margin-left: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .learn-more:hover i {
+            margin-left: 10px;
+        }
+        
+        .header.scrolled {
+            padding: 10px 0;
+            background: rgba(16, 22, 54, 0.95);
+        }
+        
+        .navbar-dark .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+        
+        .navbar-dark .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #2E3192;
+        }
+        
+        .brand-text span {
+            color: #4A6DE5;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link {
+            color: #2E3192;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link:hover,
+        .navbar-dark .navbar-nav .nav-link.active {
+            background: rgba(74, 109, 229, 0.1);
+            color: #4A6DE5;
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 109, 229, 0.4);
+            color: white;
+        }
+        
+        /* Offcanvas Menu */
+        .offcanvas {
+            background: #2E3192;
+            color: white;
+        }
+        
+        .offcanvas-body .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            padding: 0.75rem 1.5rem !important;
+            margin: 0.25rem 0;
+            border-radius: 8px;
+        }
+        
+        .offcanvas-body .nav-link:hover,
+        .offcanvas-body .nav-link.active {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+        
+        .offcanvas-body .btn-gradient {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        /* Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Body padding to account for fixed header */
+        body {
+            padding-top: 80px;
+        }
+        
+        @media (max-width: 991.98px) {
+            body {
+                padding-top: 70px;
+            }
+            
+            .offcanvas-body {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Original Styles */
         html, body {
             margin: 0;
             padding: 0;
@@ -1136,7 +1688,6 @@
         const imagesToPreload = [
             'assets/FutureLaunch.png',
             'assets/3.png',
-            'assets/1.jpg', 
             'assets/kroll-preview.jpg',
             'assets/bildungsplan-preview.jpg'
         ];
@@ -1148,47 +1699,55 @@
 
         // Cookie Consent Implementation
         window.addEventListener('load', function() {
-            window.cookieconsent.initialise({
-                palette: {
-                    popup: {
-                        background: "#f8f9fa",
-                        text: "#212529"
+            if (window.cookieconsent) {
+                window.cookieconsent.initialise({
+                    palette: {
+                        popup: {
+                            background: "#f8f9fa",
+                            text: "#212529"
+                        },
+                        button: {
+                            background: "#0066cc",
+                            text: "#ffffff"
+                        }
                     },
-                    button: {
-                        background: "#0066cc",
-                        text: "#ffffff"
+                    content: {
+                        message: "Diese Website verwendet Cookies, um Ihnen die bestmögliche Erfahrung zu bieten.",
+                        dismiss: "Verstanden",
+                        link: "Mehr erfahren",
+                        href: "/datenschutz.html"
                     }
-                },
-                content: {
-                    message: "Diese Website verwendet Cookies, um Ihnen die bestmögliche Erfahrung zu bieten.",
-                    dismiss: "Verstanden",
-                    link: "Mehr erfahren",
-                    href: "/datenschutz.html"
-                },
-                dismissOnTimeout: false,
-                dismissOnScroll: false
-            });
+                });
+            }
         });
-    </script>    <script src="script/cookies.js" defer></script>
-    <script src="script/form-handler.js" defer></script>
-    <script src="script/main.js" defer></script>
-    <script src="script/splash-cursor.js" defer></script>
+    </script>
+</div>
 
-    <!-- Header Section -->
-    <header>
+    <header id="header">
         <div class="container header-container">
             <a href="/" class="logo">
                 <img src="assets/FutureLaunch.png" alt="FutureLaunch Logo" class="logo-image"/>
                 Future<span>Launch</span>
-            </a>
-            <div class="menu-toggle">&#9776;</div>
+            <div class="menu-toggle">
+                <a href="https://calendly.com/johannesbohn03/kostenloses-30-minutiges-strategiegesprach" class="cta-button" target="_blank" rel="noopener noreferrer" style="margin-left: auto;">
+                    <i class="fas fa-calendar-alt me-2"></i>Beratung
+                </a>
+            </div>
+            <div class="hostinger-badge" style="margin-left: 15px;">
+                <a href="https://hostinger.com?REFERRALCODE=WPFJOHANNAPI" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #2E3192; color: white; padding: 8px 15px; border-radius: 4px; font-size: 14px; text-decoration: none; font-weight: 600;">
+                    <i class="fas fa-server me-1"></i> Hosting
+                </a>
+            </div>
             <ul class="nav-links">
                 <li><a href="#services">Dienstleistungen</a></li>
                 <li><a href="#process">Prozess</a></li>
                 <li><a href="#case-studies">Referenzen</a></li>
                 <li><a href="#pricing">Preise</a></li>
-                <li><a href="#contact" class="cta-button">Jetzt 15-min Beratung sichern</a></li>
-                <li><a href="/website-analyse.html" class="cta-button">Website Analyse</a></li>
+                <li class="desktop-only">
+                    <a href="https://calendly.com/johannesbohn03/kostenloses-30-minutiges-strategiegesprach" class="cta-button" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-calendar-alt me-2"></i>Kostenlose Beratung
+                    </a>
+                </li>
             </ul>
         </div>
     </header>
@@ -1206,38 +1765,6 @@
                 <div class="hero-buttons">
                     <a href="/website-analyse.html" class="button button-primary">KOSTENLOSE Website-Analyse</a>
                     <a href="#contact" class="button button-secondary">Nachricht senden</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>Unsere Leistungen</h2>
-                <p>Innovative Softwarelösungen, die Ihr Unternehmen voranbringen. Entdecken Sie unser Angebot.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-code"></i></div>
-                    <h3>Webentwicklung</h3>
-                    <p>Moderne, responsive Websites und Webanwendungen, die genau auf Ihre Geschäftsbedürfnisse zugeschnitten sind.</p>
-                    <a href="#contact" class="learn-more">Kostenlosen Check erhalten &rarr;</a>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
-                    <h3>App-Entwicklung</h3>
-                    <p>Native und Cross-Plattform Apps für iOS und Android – leistungsstark, intuitiv und benutzerfreundlich.</p>
-                    <a href="#contact" class="learn-more">Kostenlosen Check erhalten &rarr;</a>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-robot"></i></div>
-                    <h3>KI & Big Data</h3>
-                    <p>Implementierung von künstlicher Intelligenz und datengetriebenen Lösungen zur Optimierung Ihrer Prozesse.</p>
-                    <a href="#contact" class="learn-more">Kostenlosen Check erhalten &rarr;</a>
                 </div>
             </div>
         </div>
@@ -1284,7 +1811,25 @@
     <section id="about">
         <div class="container about-container">
             <div class="about-image">
-                <img src="assets/1.jpg" alt="Über FutureLaunch">
+                <div class="about-image-container">
+                    <div class="about-image-content">
+                        <h3>Ihre digitale Zukunft beginnt hier</h3>
+                        <div class="about-features">
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Maßgeschneiderte Lösungen</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Modernste Technologien</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Erfahrenes Team</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="about-content">
                 <h2>Über FutureLaunch</h2>
@@ -1461,7 +2006,7 @@
                         <li><i class="fas fa-check"></i> 3 strategische CTAs</li>
                         <li><i class="fas fa-check"></i> 3 Monate Support</li>
                     </ul>
-                    <a href="#contact" class="service-button">Jetzt buchen</a>
+                    <a href="https://calendly.com/johannesbohn03/kostenloses-30-minutiges-strategiegesprach" class="service-button" target="_blank" rel="noopener noreferrer">Jetzt buchen</a>
                 </div>
 
                 <!-- Profi Paket -->
@@ -1485,7 +2030,7 @@
                         <li><i class="fas fa-check"></i> 5 CTAs + A/B-Testing</li>
                         <li><i class="fas fa-check"></i> 6 Monate Support</li>
                     </ul>
-                    <a href="#contact" class="service-button">Jetzt buchen</a>
+                    <a href="https://calendly.com/johannesbohn03/kostenloses-30-minutiges-strategiegesprach" class="service-button" target="_blank" rel="noopener noreferrer">Jetzt buchen</a>
                 </div>
 
                 <!-- Premium Paket -->
@@ -1508,7 +2053,7 @@
                         <li><i class="fas fa-check"></i> Individuelles Funnel</li>
                         <li><i class="fas fa-check"></i> 12 Monate Support</li>
                     </ul>
-                    <a href="#contact" class="service-button">Jetzt buchen</a>
+                    <a href="https://calendly.com/johannesbohn03/kostenloses-30-minutiges-strategiegesprach" class="service-button" target="_blank" rel="noopener noreferrer">Jetzt buchen</a>
                 </div>
             </div>
             
@@ -1516,7 +2061,7 @@
             <div class="custom-solution" style="background: linear-gradient(135deg, #4A6DE5 0%, #2E3192 100%); color: white; padding: 40px; border-radius: 15px; margin-top: 40px; text-align: center;">
                 <h3>Jetzt 30% Rabatt sichern!</h3>
                 <p>Unser Eröffnungsangebot ist nur für kurze Zeit gültig. Kontaktieren Sie uns jetzt und profitieren Sie von 30% Rabatt auf alle Pakete.</p>
-                <a href="#contact" class="button button-primary" style="background: white; color: #4A6DE5 !important; margin-top: 15px; display: inline-block; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">Jetzt Angebot anfragen</a>
+                <a href="https://calendly.com/johannesbohn03/kostenloses-30-minutiges-strategiegesprach" class="button button-primary" style="background: white; color: #4A6DE5 !important; margin-top: 15px; display: inline-block; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" target="_blank" rel="noopener noreferrer">Jetzt Angebot anfragen</a>
             </div>
             
             <div class="additional-services">
@@ -1562,7 +2107,7 @@
                 <div class="custom-solution-content" style="max-width: 800px; margin: 0 auto; text-align: center;">
                     <h3 style="color: white; font-size: 2rem; margin-bottom: 15px;">Individuelle Lösung benötigt?</h3>
                     <p style="font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9;">Jedes Unternehmen ist einzigartig. Kontaktieren Sie uns für ein maßgeschneidertes Angebot, das genau auf Ihre Anforderungen zugeschnitten ist.</p>
-                    <a href="#contact" class="button button-primary" style="display: inline-block; background-color: #e92b2b; color: white !important; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; font-size: 1.1rem;">Kostenlose Beratung</a>
+                    <a href="https://calendly.com/johannesbohn03/kostenloses-30-minutiges-strategiegesprach" class="button button-primary" style="display: inline-block; background-color: #e92b2b; color: white !important; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; font-size: 1.1rem;" target="_blank" rel="noopener noreferrer">Kostenlose Beratung</a>
                 </div>
             </div>
         </div>
@@ -1852,12 +2397,30 @@
         </div>
 
      
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Add confetti library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
         // Testimonial Slider Functionality
         let currentTestimonial = 0;
         const testimonials = document.querySelectorAll('.testimonial-slide');
@@ -2163,6 +2726,67 @@
     </script>
     
     <!-- Load our application scripts -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            // Update active nav link
+            const scrollPosition = window.scrollY + 100;
+            
+            document.querySelectorAll('section[id]').forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Close offcanvas when clicking on nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasNavbar'));
+                if (offcanvas) offcanvas.hide();
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+    
     <script src="js/app.js"></script>
     <!-- Confetti effect for animations -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
