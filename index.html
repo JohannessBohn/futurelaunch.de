@@ -7,25 +7,55 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="description" content="FutureLaunch - Innovative B2B Code-Dienstleistungen für Ihren digitalen Erfolg">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="css/critical.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/critical.css"></noscript>
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="apple-touch-icon" href="assets/favicon.ico">
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/services.css">
-    <link rel="stylesheet" href="css/case-studies.css">
     
-    <!-- Vendor CSS Files -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/glightbox@3.2.0/dist/css/glightbox.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/swiper@9.0.0/swiper-bundle.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Preload Fonts -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff740" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Deferred CSS -->
+    <link rel="preload" href="css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/header.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/services.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="css/case-studies.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- Preload External CSS -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- Fallback for non-JS -->
+    <noscript>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/header.css">
+        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="css/services.css">
+        <link rel="stylesheet" href="css/case-studies.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
+    </noscript>
+    
+    <!-- Deferred Non-Critical CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.2.0/dist/css/glightbox.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9.0.0/swiper-bundle.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" media="print" onload="this.media='all'">
+    
     <title>FutureLaunch | Innovative B2B Code-Dienstleistungen</title>
 
     <!-- Cookies -->
@@ -2396,10 +2426,52 @@
             </div>
         </div>
 
-     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- Preload Critical JS -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" as="script">
+    
+    <!-- Deferred JS -->
     <script>
+        // Load scripts with better performance
+        function loadScript(src, onload) {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            if (onload) script.onload = onload;
+            document.body.appendChild(script);
+        }
+        
+        // Load non-critical scripts after page load
+        window.addEventListener('load', function() {
+            // Load remaining scripts
+            loadScript('https://cdn.jsdelivr.net/npm/glightbox@3.2.0/dist/js/glightbox.min.js');
+            loadScript('https://cdn.jsdelivr.net/npm/swiper@9.0.0/swiper-bundle.min.js');
+            loadScript('https://unpkg.com/aos@2.3.1/dist/aos.js', function() {
+                AOS.init({ duration: 800, once: true });
+            });
+            
+            // Initialize GLightbox
+            loadScript('js/init-glightbox.js');
+            
+            // Lazy load images
+            if ('loading' in HTMLImageElement.prototype) {
+                const images = document.querySelectorAll('img[loading="lazy"]');
+                images.forEach(img => {
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                    }
+                    if (img.dataset.srcset) {
+                        img.srcset = img.dataset.srcset;
+                    }
+                });
+            }
+        });
+        
+        // Load Bootstrap after DOM is parsed but before window load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadScript('https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js');
+        });
+    </script>
+
         // Initialize AOS
         AOS.init({
             duration: 800,
@@ -2407,47 +2479,115 @@
             once: true
         });
 
-        // Smooth scrolling for navigation links
+        // Smooth scrolling for navigation links with null checks
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+            if (anchor) {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            }
         });
 
-        // Testimonial Slider Functionality
-        let currentTestimonial = 0;
-        const testimonials = document.querySelectorAll('.testimonial-slide');
-        const dots = document.querySelectorAll('.testimonial-dot');
-
-        function showTestimonial(index) {
-            testimonials.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
+        // Testimonial Slider Functionality with null checks
+        function initTestimonialSlider() {
+            const testimonials = document.querySelectorAll('.testimonial-item');
+            const dots = document.querySelectorAll('.testimonial-dot');
             
-            testimonials[index].classList.add('active');
-            dots[index].classList.add('active');
+            if (!testimonials.length || !dots.length) return;
+            
+            let currentTestimonial = 0;
+            const totalTestimonials = testimonials.length;
+            let testimonialInterval;
+
+            function showTestimonial(index) {
+                if (index >= totalTestimonials) {
+                    currentTestimonial = 0;
+                } else if (index < 0) {
+                    currentTestimonial = totalTestimonials - 1;
+                } else {
+                    currentTestimonial = index;
+                }
+
+
+                testimonials.forEach((testimonial, i) => {
+                    if (testimonial && testimonial.classList) {
+                        testimonial.classList.toggle('active', i === currentTestimonial);
+                    }
+                });
+
+                dots.forEach((dot, i) => {
+                    if (dot && dot.classList) {
+                        dot.classList.toggle('active', i === currentTestimonial);
+                    }
+                });
+            }
+
+
+            function changeTestimonial(direction) {
+                clearInterval(testimonialInterval);
+                showTestimonial(currentTestimonial + direction);
+                startAutoRotation();
+            }
+
+            function goToTestimonial(index) {
+                if (index >= 0 && index < totalTestimonials) {
+                    clearInterval(testimonialInterval);
+                    showTestimonial(index);
+                    startAutoRotation();
+                }
+            }
+
+
+            function startAutoRotation() {
+                clearInterval(testimonialInterval);
+                testimonialInterval = setInterval(() => {
+                    showTestimonial(currentTestimonial + 1);
+                }, 5000);
+            }
+
+
+            // Initialize first testimonial
+            showTestimonial(0);
+            startAutoRotation();
+
+            // Pause on hover
+            const testimonialContainer = document.querySelector('.testimonials-container');
+            if (testimonialContainer) {
+                testimonialContainer.addEventListener('mouseenter', () => {
+                    clearInterval(testimonialInterval);
+                });
+
+                testimonialContainer.addEventListener('mouseleave', startAutoRotation);
+            }
+
+
+            // Add click handlers for dots
+            dots.forEach((dot, index) => {
+                if (dot) {
+                    dot.addEventListener('click', () => goToTestimonial(index));
+                }
+            });
+
+            // Cleanup function
+            return () => {
+                clearInterval(testimonialInterval);
+                if (testimonialContainer) {
+                    testimonialContainer.removeEventListener('mouseenter', () => {});
+                    testimonialContainer.removeEventListener('mouseleave', startAutoRotation);
+                }
+            };
         }
 
-        function changeTestimonial(direction) {
-            currentTestimonial = (currentTestimonial + direction + testimonials.length) % testimonials.length;
-            showTestimonial(currentTestimonial);
-        }
 
-        function goToTestimonial(index) {
-            currentTestimonial = index;
-            showTestimonial(currentTestimonial);
-        }
-
-        // Auto-rotate testimonials
-        setInterval(() => {
-            changeTestimonial(1);
-        }, 5000);
+        // Initialize testimonial slider when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initTestimonialSlider);
 
         // Form Handling with Web3Forms
         const contactForm = document.getElementById('contactForm');
