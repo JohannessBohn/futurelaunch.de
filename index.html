@@ -1684,6 +1684,15 @@
         .process-steps .step:nth-child(4) { transition-delay: 0.4s; }
         .process-steps .step:nth-child(5) { transition-delay: 0.5s; }
     </style>
+    <!-- MailerLite Universal -->
+    <script>
+        (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+        .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+        n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+        (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+        ml('account', '1546457');
+    </script>
+    <!-- End MailerLite Universal -->
 </head>
 <body>
     <!-- Loading Screen -->
@@ -2440,14 +2449,21 @@
             document.body.appendChild(script);
         }
         
+        // Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+        }
+        
         // Load non-critical scripts after page load
         window.addEventListener('load', function() {
             // Load remaining scripts
             loadScript('https://cdn.jsdelivr.net/npm/glightbox@3.2.0/dist/js/glightbox.min.js');
             loadScript('https://cdn.jsdelivr.net/npm/swiper@9.0.0/swiper-bundle.min.js');
-            loadScript('https://unpkg.com/aos@2.3.1/dist/aos.js', function() {
-                AOS.init({ duration: 800, once: true });
-            });
+            loadScript('https://unpkg.com/aos@2.3.1/dist/aos.js');
             
             // Initialize GLightbox
             loadScript('js/init-glightbox.js');
@@ -2472,13 +2488,6 @@
         });
     </script>
 
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
-
         // Smooth scrolling for navigation links with null checks
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             if (anchor) {
@@ -2495,94 +2504,114 @@
             }
         });
 
-        // Testimonial Slider Functionality with null checks
+        // Testimonial Slider Functionality with enhanced error handling
         function initTestimonialSlider() {
-            const testimonials = document.querySelectorAll('.testimonial-item');
-            const dots = document.querySelectorAll('.testimonial-dot');
-            
-            if (!testimonials.length || !dots.length) return;
-            
-            let currentTestimonial = 0;
-            const totalTestimonials = testimonials.length;
-            let testimonialInterval;
-
-            function showTestimonial(index) {
-                if (index >= totalTestimonials) {
-                    currentTestimonial = 0;
-                } else if (index < 0) {
-                    currentTestimonial = totalTestimonials - 1;
-                } else {
-                    currentTestimonial = index;
+            try {
+                const testimonials = document.querySelectorAll('.testimonial-item');
+                const dots = document.querySelectorAll('.testimonial-dot');
+                
+                // Check if testimonials exist on the page
+                if (!testimonials || !testimonials.length) {
+                    console.log('No testimonials found on this page');
+                    return;
                 }
-
-
-                testimonials.forEach((testimonial, i) => {
-                    if (testimonial && testimonial.classList) {
-                        testimonial.classList.toggle('active', i === currentTestimonial);
+                
+                let currentTestimonial = 0;
+                const totalTestimonials = testimonials.length;
+                let testimonialInterval = null;
+                
+                function showTestimonial(index) {
+                    try {
+                        if (index >= totalTestimonials) {
+                            currentTestimonial = 0;
+                        } else if (index < 0) {
+                            currentTestimonial = totalTestimonials - 1;
+                        } else {
+                            currentTestimonial = index;
+                        }
+                        
+                        // Safely update testimonials
+                        testimonials.forEach((testimonial, i) => {
+                            try {
+                                if (testimonial && typeof testimonial.classList === 'object') {
+                                    testimonial.classList.toggle('active', i === currentTestimonial);
+                                }
+                            } catch (e) {
+                                console.error('Error updating testimonial:', e);
+                            }
+                        });
+                        
+                        // Safely update dots if they exist
+                        if (dots && dots.length) {
+                            dots.forEach((dot, i) => {
+                                try {
+                                    if (dot && typeof dot.classList === 'object') {
+                                        dot.classList.toggle('active', i === currentTestimonial);
+                                    }
+                                } catch (e) {
+                                    console.error('Error updating dot:', e);
+                                }
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Error in showTestimonial:', e);
                     }
-                });
-
-                dots.forEach((dot, i) => {
-                    if (dot && dot.classList) {
-                        dot.classList.toggle('active', i === currentTestimonial);
-                    }
-                });
-            }
-
-
-            function changeTestimonial(direction) {
-                clearInterval(testimonialInterval);
-                showTestimonial(currentTestimonial + direction);
-                startAutoRotation();
-            }
-
-            function goToTestimonial(index) {
-                if (index >= 0 && index < totalTestimonials) {
-                    clearInterval(testimonialInterval);
-                    showTestimonial(index);
+                }
+                
+                function changeTestimonial(direction) {
+                    if (testimonialInterval) clearInterval(testimonialInterval);
+                    showTestimonial(currentTestimonial + direction);
                     startAutoRotation();
                 }
-            }
-
-
-            function startAutoRotation() {
-                clearInterval(testimonialInterval);
-                testimonialInterval = setInterval(() => {
-                    showTestimonial(currentTestimonial + 1);
-                }, 5000);
-            }
-
-
-            // Initialize first testimonial
-            showTestimonial(0);
-            startAutoRotation();
-
-            // Pause on hover
-            const testimonialContainer = document.querySelector('.testimonials-container');
-            if (testimonialContainer) {
-                testimonialContainer.addEventListener('mouseenter', () => {
-                    clearInterval(testimonialInterval);
-                });
-
-                testimonialContainer.addEventListener('mouseleave', startAutoRotation);
-            }
-
-
-            // Add click handlers for dots
-            dots.forEach((dot, index) => {
-                if (dot) {
-                    dot.addEventListener('click', () => goToTestimonial(index));
+                
+                function goToTestimonial(index) {
+                    if (index >= 0 && index < totalTestimonials) {
+                        if (testimonialInterval) clearInterval(testimonialInterval);
+                        showTestimonial(index);
+                        startAutoRotation();
+                    }
                 }
-            });
-
-            // Cleanup function
-            return () => {
-                clearInterval(testimonialInterval);
+                
+                function startAutoRotation() {
+                    if (testimonialInterval) clearInterval(testimonialInterval);
+                    testimonialInterval = setInterval(() => {
+                        showTestimonial(currentTestimonial + 1);
+                    }, 5000);
+                }
+                
+                // Initialize first testimonial
+                showTestimonial(0);
+                startAutoRotation();
+                
+                // Pause on hover if container exists
+                const testimonialContainer = document.querySelector('.testimonials-container');
                 if (testimonialContainer) {
-                    testimonialContainer.removeEventListener('mouseenter', () => {});
-                    testimonialContainer.removeEventListener('mouseleave', startAutoRotation);
+                    testimonialContainer.addEventListener('mouseenter', () => {
+                        if (testimonialInterval) clearInterval(testimonialInterval);
+                    });
+                    testimonialContainer.addEventListener('mouseleave', startAutoRotation);
                 }
-            };
+                
+                // Add click handlers for dots if they exist
+                if (dots && dots.length) {
+                    dots.forEach((dot, index) => {
+                        if (dot && typeof dot.addEventListener === 'function') {
+                            dot.addEventListener('click', () => goToTestimonial(index));
+                        }
+                    });
+                }
+                
+                // Cleanup function
+                return () => {
+                    if (testimonialInterval) clearInterval(testimonialInterval);
+                    if (testimonialContainer) {
+                        testimonialContainer.removeEventListener('mouseenter', () => {});
+                        testimonialContainer.removeEventListener('mouseleave', startAutoRotation);
+                    }
+                };
+            } catch (e) {
+                console.error('Error initializing testimonial slider:', e);
+            }
         }
 
 
@@ -2935,10 +2964,20 @@
     <script src="js/newsletter.js"></script>
     <script src="js/newsletter-form.js"></script>
     
-    <!-- Dashboard Access Button -->
+    <!-- MailerLite Form Section -->
+    <section id="mailerlite-form-section" style="padding: 60px 20px; background-color: #f4f7fc; text-align: center;">
+        <div class="container">
+            <h2 style="color: #2E3192; margin-bottom: 20px; font-weight: 700;">Bleiben Sie auf dem Laufenden!</h2>
+            <p style="color: #4A6DE5; margin-bottom: 30px; font-size: 1.1em;">Melden Sie sich für unseren Newsletter an oder kontaktieren Sie uns direkt über das Formular.</p>
+            <div class="ml-embedded" data-form="mdjNuP" style="max-width: 600px; margin: 0 auto;"></div>
+        </div>
+    </section>
+    <!-- End MailerLite Form Section -->
+
+    <!-- Kontakt Button -->
     <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-        <a href="dashboard.html" class="btn btn-primary" style="padding: 12px 20px; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; align-items: center;">
-            <i class="fas fa-tachometer-alt" style="margin-right: 8px;"></i> Dashboard
+        <a href="tel:017662132706" class="btn btn-success" style="padding: 12px 20px; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: flex; align-items: center; background-color: #28a745 !important; border-color: #28a745 !important; color: white !important; text-decoration: none;">
+            <i class="fas fa-phone-alt" style="margin-right: 8px;"></i> Kontakt aufnehmen
         </a>
     </div>
 </body>
